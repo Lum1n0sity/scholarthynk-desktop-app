@@ -1,0 +1,15 @@
+{
+  "name": "vocab-trainer",
+  "version": "1.0.0",
+  "description": "A Vocabulary trainer.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Raphael Schuhmann <raphael221@outlook.de>",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^26.2.2",
+    "path": "^0.12.7"
+  }
+}
