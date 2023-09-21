@@ -6,8 +6,38 @@
         <title>Vocab-Trainer</title>
         <link rel="stylesheet" href="index.css">
         <script src="index.js"></script>
+
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     </head>
-    <body>
-        <p>Some new html dies das ananas</p>
+    <body>  
+        <div id="user_div">
+            <button id="login_button"><ion-icon name="log-in-outline"></ion-icon> Login</button>
+            <div id="user_logged_in_bg">
+                <img src="images/User.png" alt="User" id="user_logged_in">
+            </div>
+        </div>
+        <div id="header_div">
+            <button id="start_training">Training</button>
+        </div>
+        <div id="german_div">
+            <p id="german-p">German</p>
+            <input type="text" id="german-in">
+        </div>
+        <div id="english_div">
+            <p id="english-p">English</p>
+            <input type="text" id="english-in">
+        </div>
+        <button id="add_vocab"><ion-icon name="add-outline"></ion-icon> Add</button>
+        <div id="list_div">
+            <p>Vocab List</p>
+            <textarea id="vocab_list" cols="30" rows="10" readonly></textarea>
+        </div>
+        <div id="login_div">
+
+        </div>
+        <div id="register_div">
+
+        </div>
     </body>
 </html>
