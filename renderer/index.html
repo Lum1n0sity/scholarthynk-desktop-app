@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Vocab-Trainer</title>
         <link rel="stylesheet" href="index.css">
-        <script src="index.js"></script>
+        <script src="C:/DatenLokal/VScode/VBTrainer/javascript/index.js"></script>
 
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -33,11 +33,38 @@
             <p>Vocab List</p>
             <textarea id="vocab_list" cols="30" rows="10" readonly></textarea>
         </div>
-        <div id="login_div">
-
+        <button id="close_register" style="display: none;"><ion-icon name="close-outline"></ion-icon></button>
+        <button id="close_login"><ion-icon name="close-outline"></ion-icon></button>
+        <div class="login_div" id="login_div">
+            <h4>Login</h4>
+            <div id="transi_div">
+                <img src="images/login_transition.png" id="trans_img">
+                <button class="switch_lo" id="switch_lo">R<br>E<br>G<br>I<br>S<br>T<br>E<br>R</button>
+            </div>
+            <button class="login" id="login">Login</button>
+            <input type="text" id="username_input_lo" placeholder="Username...">
+            <input type="password" id="password_input_lo" placeholder="Password...">
+            <p id="username_title_lo">Username:</p>
+            <p id="password_title_lo">Password:</p>
+            <button id="password_view_lo"><ion-icon name="eye-outline"></ion-icon></button>
+            <button id="password_unview_lo"><ion-icon name="eye-off-outline"></ion-icon></button>
+            <p id="error_lo">Username or password wrong!</p>
         </div>
         <div id="register_div">
-
+            <h4>Register</h4>
+            <div id="transi_div_rg">
+                <img src="images/register_transition.png" id="trans_img_rg">
+                <button id="switch_rg">R<br>E<br>G<br>I<br>S<br>T<br>E<br>R</button>
+            </div>
+            <button id="register">Register</button>
+            <input type="text" id="username_input_rg" placeholder="Username...">
+            <input type="password" id="password_input_rg" placeholder="Password...">
+            <p id="username_title_rg">Username:</p>
+            <p id="password_title_rg">Password:</p>
+            <button id="password_view_rg"><ion-icon name="eye-outline"></ion-icon></button>
+            <button id="password_unview_rg"><ion-icon name="eye-off-outline"></ion-icon></button>
+            <p id="error_rg">Username already exists!</p>
         </div>
+        <p id="logged_in_message">Logged In!</p>
     </body>
 </html>

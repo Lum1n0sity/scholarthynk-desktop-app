@@ -11,5 +11,10 @@
   "dependencies": {
     "electron": "^26.2.2",
     "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "source-map-loader": "^4.0.1",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
   }
 }
