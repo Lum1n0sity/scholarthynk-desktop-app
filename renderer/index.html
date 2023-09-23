@@ -11,6 +11,7 @@
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     </head>
     <body>  
+        <p id="username_view">testUser</p>
         <div id="user_div">
             <button id="login_button"><ion-icon name="log-in-outline"></ion-icon> Login</button>
             <div id="user_logged_in_bg">
@@ -32,6 +33,10 @@
         <div id="list_div">
             <p>Vocab List</p>
             <textarea id="vocab_list" cols="30" rows="10" readonly></textarea>
+        </div>
+        <div id="warning_vocab_div">
+            <p>You already have that Vocabulary in your list!</p>
+            <button id="warning_vocab_ok">Ok</button>
         </div>
         <button id="close_register" style="display: none;"><ion-icon name="close-outline"></ion-icon></button>
         <button id="close_login"><ion-icon name="close-outline"></ion-icon></button>

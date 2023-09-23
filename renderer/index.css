@@ -147,6 +147,25 @@ body {
     color: var(--text-color-dark);
     font-size: var(--default-font-size);
     border-radius: 10px;
+    text-align: center;
+}
+
+#vocab_list::-webkit-scrollbar {
+    width: 5px;
+}
+
+#vocab_list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#vocab_list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+#vocab_list::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 #list_div p {
@@ -686,4 +705,48 @@ body {
     border-radius: 20px;
     padding: 10px;
     transition: .5s;
+}
+
+#warning_vocab_div {
+    grid-row: 4;
+    grid-column: 3;
+    background-color: var(--box-dark-hover);
+    width: 15vw;
+    height: 10vw;
+    justify-self: center;
+    text-align: center;
+    border-radius: 10px;
+    border: 2px solid var(--border-dark);
+    display: none;
+}
+
+#warning_vocab_div p {
+    margin-top: 1vw;
+    font-size: 1.2vw;
+}
+
+#warning_vocab_ok {
+    font-size: 1.2vw;
+    background-color: var(--box-dark);
+    color: var(--text-color-dark);
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+    margin-top: 2vw;
+    transition: .5s;
+}
+
+#warning_vocab_ok:hover {
+    font-size: 1.3vw;
+    transition: .5s;
+    background-color: var(--border-dark);
+}
+
+#username_view {
+    color: transparent;
+    cursor: default;
 }
