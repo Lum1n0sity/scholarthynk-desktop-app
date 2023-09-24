@@ -1,4 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    const api_address = '192.168.5.21';
+
+    const storedToken = localStorage.getItem('authToken');
+    const storedTokenObject =  JSON.parse(storedToken);
+    const token = storedTokenObject.value;
+
+    const dataToSendInit = { token };
+
+    console.log(dataToSendInit);
+
+    fetch(`http://${api_address}:3000/user/auth`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataToSendInit),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        const allowLogin = data.allowLogin;
+        const username_storage = document.getElementById('username_view');
+        const username = data.username;
+
+        username_storage.textContent = username;
+        
+        if (allowLogin == true)
+        {
+            login_button.style.display = 'none';
+            user_button.style.display = 'block';
+            loginField.style.display = 'none';
+            registerField.style.display = 'none';
+            close_login.style.display = 'none';
+            close_register.style.display = 'none';
+            list_div.style.display = 'block';
+            displayLoginMessage();
+            isLoggedIn = true;
+
+            loadVocab();
+
+            const data = { value: userToken };
+            localStorage.setItem('authToken', JSON.stringify(data));
+        }
+
+    })
+    .catch(error => {
+        console.log('Fetch error: ', error);
+    });
+
     const login_button = document.getElementById('login_button');
     const user_button = document.getElementById('user_logged_in_bg');
     const close_login = document.getElementById('close_login');
@@ -23,8 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const german_entry = document.getElementById('german-in');
     const english_entry = document.getElementById('english-in');
     const vocab_list = document.getElementById('vocab_list');
-
-    const api_address = '192.168.5.21';
 
     let isLoggedIn = false;
 
@@ -156,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const allowLogin = data.allowLogin;
             const username_storage = document.getElementById('username_view');
+            const userToken = data.token;
 
             username_storage.textContent = username;
             
@@ -171,6 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayLoginMessage();
                 isLoggedIn = true;
                 loadVocab();
+
+                const data = { value: userToken };
+                localStorage.setItem('authToken', JSON.stringify(data));
             }
         })
         .catch(error => {
@@ -208,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const accountCreated = data.accountCreated;
             const username_storage = document.getElementById('username_view');
+            const userToken = data.token;
             
             username_storage.textContent = username;
 
@@ -223,6 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayLoginMessage();
                 isLoggedIn = true;
                 loadVocab();
+
+                const data = { value: userToken };
+                localStorage.setItem('authToken', JSON.stringify(data));
             }
         })
         .catch(error => {
@@ -269,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     {
                         const formattedText = `${german_word} | ${english_word}`;
                     
-                        vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText; // Append with newline if necessary
+                        vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText;
                     }
                     else 
                     {
@@ -314,8 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const vocab = data.vocab;
     
             const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
-    
-            // Set the value of the textarea
+
             vocab_list.value = formattedText;
         })
         .catch(error => {
