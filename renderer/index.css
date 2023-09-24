@@ -750,3 +750,65 @@ body {
     color: transparent;
     cursor: default;
 }
+
+#vocab_load_error {
+    background-color: var(--box-dark);
+    grid-row: 4;
+    grid-column: 3;
+    justify-self: center;
+    align-self: start;
+    width: 15vw;
+    height: 10vw;
+    border-radius: 20px;
+    border: 2px solid var(--border-dark);
+    z-index: 25;
+    display: none;
+}
+
+#vocab_load_error p {
+    font-size: 1.2vw;
+    text-align: center;
+    margin-top: 1vw;
+}
+
+#try_again {
+    background-color: var(--background-dark);
+    color: var(--text-color-dark);
+    font-size: 1.2vw;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 2vw;
+    margin-top: 2.5vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#ok_vocab_load {
+    background-color: var(--background-dark);
+    color: var(--text-color-dark);
+    font-size: 1.2vw;
+    border: none;
+    outline: none;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    margin-left: 1vw;
+    margin-top: 2.5vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#try_again:hover {
+    font-size: 1.3vw;
+    background-color: var(--border-dark);
+    transition: .5s;
+}
+
+#ok_vocab_load:hover {
+    font-size: 1.3vw;
+    background-color: var(--border-dark);
+    transition: .5s;
+}
