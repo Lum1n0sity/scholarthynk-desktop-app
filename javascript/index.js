@@ -155,6 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data);
 
             const allowLogin = data.allowLogin;
+            const username_storage = document.getElementById('username_view');
+
+            username_storage.textContent = username;
             
             if (allowLogin == true)
             {
@@ -166,6 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 close_register.style.display = 'none';
                 list_div.style.display = 'block';
                 displayLoginMessage();
+                isLoggedIn = true;
+                loadVocab();
             }
         })
         .catch(error => {
@@ -202,7 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data);
 
             const accountCreated = data.accountCreated;
+            const username_storage = document.getElementById('username_view');
             
+            username_storage.textContent = username;
+
             if (accountCreated == true)
             {
                 login_button.style.display = 'none';
@@ -213,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 close_register.style.display = 'none';
                 list_div.style.display = 'block';
                 displayLoginMessage();
+                isLoggedIn = true;
+                loadVocab();
             }
         })
         .catch(error => {
@@ -229,5 +239,87 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(function() {
             message.style.right = '-15vw';
           }, 5000);
+    }
+
+    add_vocab.addEventListener('click', () => {
+        const german_word = german_entry.value;
+        const english_word = english_entry.value;
+    
+        const username = document.getElementById('username_view').textContent;
+    
+        if (isLoggedIn) 
+        {
+            if (german_word && english_word !== null) 
+            {
+                const dataToSendAddVocab = { word1: german_word, word2: english_word, username: username };
+    
+                fetch(`http://${api_address}:3000/vocab/add`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dataToSendAddVocab),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const added = data.added;
+    
+                    if (added) 
+                    {
+                        const formattedText = `${german_word} | ${english_word}`;
+                    
+                        vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText; // Append with newline if necessary
+                    }
+                    else 
+                    {
+                        const vocab_message = document.getElementById('warning_vocab_div');
+    
+                        vocab_message.style.display = 'block';
+    
+                        const vocab_message_ok = document.getElementById('warning_vocab_ok');
+    
+                        vocab_message_ok.addEventListener('click', () => {
+                            vocab_message.style.display = 'none';
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log('Fetch error: ', error);
+                });
+            }
+        }     
+        else {
+            openLogin();
+        }
+    });    
+
+    function loadVocab() 
+    {
+        const username = document.getElementById('username_view').textContent;
+    
+        const dataToSendLoad = ({ username: username });
+    
+        fetch(`http://${api_address}:3000/vocab/load`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataToSendLoad),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+    
+            const vocab = data.vocab;
+    
+            const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
+    
+            // Set the value of the textarea
+            vocab_list.value = formattedText;
+        })
+        .catch(error => {
+            console.log('Fetch error: ', error);
+        });
     }
 });
