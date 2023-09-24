@@ -3,51 +3,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const api_address = '192.168.5.21';
 
     const storedToken = localStorage.getItem('authToken');
-    const storedTokenObject =  JSON.parse(storedToken);
-    const token = storedTokenObject.value;
+    if (storedToken !== null)
+    {
+        const storedTokenObject =  JSON.parse(storedToken);
+        const token = storedTokenObject.value;
 
-    const dataToSendInit = { token };
+        const dataToSendInit = { token };
 
-    console.log(dataToSendInit);
+        console.log(dataToSendInit);
 
-    fetch(`http://${api_address}:3000/user/auth`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataToSendInit),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        const allowLogin = data.allowLogin;
-        const username_storage = document.getElementById('username_view');
-        const username = data.username;
+        fetch(`http://${api_address}:3000/user/auth`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataToSendInit),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const allowLogin = data.allowLogin;
+            const username_storage = document.getElementById('username_view');
+            const username = data.username;
 
-        username_storage.textContent = username;
-        
-        if (allowLogin == true)
-        {
-            login_button.style.display = 'none';
-            user_button.style.display = 'block';
-            loginField.style.display = 'none';
-            registerField.style.display = 'none';
-            close_login.style.display = 'none';
-            close_register.style.display = 'none';
-            list_div.style.display = 'block';
-            displayLoginMessage();
-            isLoggedIn = true;
+            username_storage.textContent = username;
 
-            loadVocab();
+            if (allowLogin == true)
+            {
+                login_button.style.display = 'none';
+                user_button.style.display = 'block';
+                loginField.style.display = 'none';
+                registerField.style.display = 'none';
+                close_login.style.display = 'none';
+                close_register.style.display = 'none';
+                list_div.style.display = 'block';
+                displayLoginMessage();
+                isLoggedIn = true;
 
-            const data = { value: userToken };
-            localStorage.setItem('authToken', JSON.stringify(data));
-        }
+                loadVocab();
 
-    })
-    .catch(error => {
-        console.log('Fetch error: ', error);
-    });
+                const data = { value: userToken };
+                localStorage.setItem('authToken', JSON.stringify(data));
+            }
+
+        })
+        .catch(error => {
+            console.log('Fetch error: ', error);
+        });
+    }
 
     const login_button = document.getElementById('login_button');
     const user_button = document.getElementById('user_logged_in_bg');
