@@ -1,3 +1,5 @@
+const { NONAME } = require("dns");
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const api_address = '192.168.5.21';
@@ -366,12 +368,34 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            const foundVocab = data.vocabFound;
     
-            const vocab = data.vocab;
+            if (foundVocab)
+            {
+                const vocab = data.vocab;
     
-            const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
+                const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
+    
+                vocab_list.value = formattedText;
+            }
+            else
+            {
+                const error_message = document.getElementById('vocab_load_error');
 
-            vocab_list.value = formattedText;
+                error_message.style.display = 'block';
+
+                const reload_button = document.getElementById('try_again');
+                const close_error_message = document.getElementById('ok_vocab_load');
+
+                reload_button.addEventListener('click', () => {
+                    error_message.style.display = 'none';
+                    loadVocab();
+                });
+
+                close_error_message.addEventListener('click', () => {
+                    error_message.style.display = 'none';
+                });
+            }
         })
         .catch(error => {
             console.log('Fetch error: ', error);
