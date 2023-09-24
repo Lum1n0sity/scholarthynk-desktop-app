@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 list_div.style.display = 'block';
                 displayLoginMessage();
                 isLoggedIn = true;
+                loadVocab();
             }
         })
         .catch(error => {
@@ -221,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 list_div.style.display = 'block';
                 displayLoginMessage();
                 isLoggedIn = true;
+                loadVocab();
             }
         })
         .catch(error => {
@@ -242,15 +244,15 @@ document.addEventListener('DOMContentLoaded', () => {
     add_vocab.addEventListener('click', () => {
         const german_word = german_entry.value;
         const english_word = english_entry.value;
-
+    
         const username = document.getElementById('username_view').textContent;
-
-        if (isLoggedIn)
+    
+        if (isLoggedIn) 
         {
-            if (german_word && english_word !== null)
+            if (german_word && english_word !== null) 
             {
-                const dataToSendAddVocab = ({ word1: german_word, word2: english_word, username: username });
-
+                const dataToSendAddVocab = { word1: german_word, word2: english_word, username: username };
+    
                 fetch(`http://${api_address}:3000/vocab/add`, {
                     method: "POST",
                     headers: {
@@ -262,24 +264,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     console.log(data);
                     const added = data.added;
-
-                    if (added)
+    
+                    if (added) 
                     {
                         const formattedText = `${german_word} | ${english_word}`;
-
-                        vocab_list.textContent += formattedText + "\n";
+                    
+                        vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText; // Append with newline if necessary
                     }
-                    else
+                    else 
                     {
                         const vocab_message = document.getElementById('warning_vocab_div');
-
+    
                         vocab_message.style.display = 'block';
-
+    
                         const vocab_message_ok = document.getElementById('warning_vocab_ok');
-
+    
                         vocab_message_ok.addEventListener('click', () => {
                             vocab_message.style.display = 'none';
-                        })
+                        });
                     }
                 })
                 .catch(error => {
@@ -287,9 +289,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }     
-        else
-        {
+        else {
             openLogin();
         }
-    });
+    });    
+
+    function loadVocab() 
+    {
+        const username = document.getElementById('username_view').textContent;
+    
+        const dataToSendLoad = ({ username: username });
+    
+        fetch(`http://${api_address}:3000/vocab/load`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataToSendLoad),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+    
+            const vocab = data.vocab;
+    
+            const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
+    
+            // Set the value of the textarea
+            vocab_list.value = formattedText;
+        })
+        .catch(error => {
+            console.log('Fetch error: ', error);
+        });
+    }
 });
