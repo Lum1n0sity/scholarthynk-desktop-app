@@ -74,7 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const english_entry = document.getElementById('english-in');
     const vocab_list = document.getElementById('vocab_list');
 
+    const user_info_button_container = document.getElementById('user_info_buttons');
+    const logout_button = document.getElementById('logout');
+    const settings_button = document.getElementById('settings');
+
     let isLoggedIn = false;
+    let isUserInfoOpen = false;
 
     login_button.addEventListener('click', () => {
         openLogin();
@@ -399,4 +404,37 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Fetch error: ', error);
         });
     }
+
+    user_button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (!isUserInfoOpen) 
+        {
+            user_info_button_container.style.display = 'block';
+            isUserInfoOpen = true;
+        }
+    });
+    
+    document.addEventListener('click', (event) => {
+        if (isUserInfoOpen) 
+        {
+            const isClickInsideDiv = user_info_button_container.contains(event.target);
+            if (!isClickInsideDiv) 
+            {
+                user_info_button_container.style.display = 'none';
+                isUserInfoOpen = false;
+            }
+        }
+    });
+    
+    logout_button.addEventListener('click', () => {
+        const username_storage = document.getElementById('username_view');
+
+        username_storage.textContent = null;
+        
+        login_button.style.display = 'block';
+        user_button.style.display = 'none';
+        user_info_button_container.style.display = 'none';
+        isLoggedIn = false;
+        localStorage.removeItem('authToken');
+    });
 });

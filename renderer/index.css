@@ -812,3 +812,56 @@ body {
     background-color: var(--border-dark);
     transition: .5s;
 }
+
+#user_info_buttons {
+    background-color: var(--box-dark);
+    grid-row: 4;
+    grid-column: 5;
+    width: 12vw;
+    height: 12vw;
+    justify-self: end;
+    align-self: end;
+    margin-right: 2vw;
+    margin-bottom: 8vw;
+    border-radius: 20px;
+    border: 2px solid var(--border-dark);
+    display: none;
+}
+
+#settings {
+    background-color: var(--box-dark-hover);
+    color: var(--text-color-dark);
+    font-size: 1.5vw;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 2vw;
+    margin-top: 2vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#logout {
+    background-color: var(--box-dark-hover);
+    color: var(--text-color-dark);
+    font-size: 1.5vw;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 2vw;
+    margin-top: 1.5vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#settings:hover {
+    background-color: var(--border-dark);
+    transition: .5s;
+}
+
+#logout:hover {
+    background-color: var(--border-dark);
+    transition: .5s;
+}
