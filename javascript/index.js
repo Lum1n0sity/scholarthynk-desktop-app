@@ -1,5 +1,3 @@
-const { NONAME } = require("dns");
-
 document.addEventListener('DOMContentLoaded', () => {
 
     const api_address = '192.168.5.21';
