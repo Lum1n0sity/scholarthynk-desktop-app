@@ -2,15 +2,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const api_address = '192.168.5.21';
 
+    let canConnectToServer = true;
+    let timeoutId;
+
+    const connection_error = document.getElementById('error_login');
+
+    const abortControllerInit = new AbortController();
+    const signal = abortControllerInit.signal;
+
+    let latestRequest = null;
+
     const storedToken = localStorage.getItem('authToken');
-    if (storedToken !== null)
-    {
-        const storedTokenObject =  JSON.parse(storedToken);
+    if (storedToken !== null) {
+        const storedTokenObject = JSON.parse(storedToken);
         const token = storedTokenObject.value;
 
         const dataToSendInit = { token };
 
         console.log(dataToSendInit);
+
+        timeoutId = setTimeout(function () {
+            displayConnectionError();
+
+            abortControllerInit.abort();
+        }, 30000);
 
         fetch(`http://${api_address}:3000/user/auth`, {
             method: "POST",
@@ -19,8 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(dataToSendInit),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (signal.aborted)
+            {
+                console.log('Request was canceled');
+                return Promise.reject('Request was canceled');                
+            }
+
+            return response.json();
+        })
         .then(data => {
+            clearTimeout(timeoutId);
+
             console.log(data);
             const allowLogin = data.allowLogin;
             const username_storage = document.getElementById('username_view');
@@ -28,8 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             username_storage.textContent = username;
 
-            if (allowLogin == true)
-            {
+            if (allowLogin == true) {
                 login_button.style.display = 'none';
                 user_button.style.display = 'block';
                 loginField.style.display = 'none';
@@ -46,9 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('authToken', JSON.stringify(data));
             }
 
+            latestRequest = "Init";
         })
         .catch(error => {
-            console.log('Fetch error: ', error);
+            displayConnectionError();
         });
     }
 
@@ -81,8 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const logout_button = document.getElementById('logout');
     const settings_button = document.getElementById('settings');
 
+    const try_again_login = document.getElementById('try_again_login');
+    const offline_login = document.getElementById('offline_login');
+
     let isLoggedIn = false;
     let isUserInfoOpen = false;
+    let isOffline = false;
 
     login_button.addEventListener('click', () => {
         openLogin();
@@ -184,6 +213,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function sendLogin()
     {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        timeoutId = setTimeout(function () {
+            displayConnectionError();
+
+            abortController.abort();
+        }, 30000);
+
         const username = document.getElementById('username_input_lo').value;
         const password = document.getElementById('password_input_lo').value;
 
@@ -203,6 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 login_error_message.style.display = 'block';
                 return;
+            }
+            else if (signal.aborted)
+            {
+                console.log('Request was canceled');
+                return Promise.reject('Request was canceled');                
             }
 
             return response.json();
@@ -235,11 +278,23 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.log('Fetch error: ', error);
+            displayConnectionError();
         });
+
+        latestRequest = "Login";
     }
 
     function sendRegister()
     {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        timeoutId = setTimeout(function () {
+            displayConnectionError();
+
+            abortController.abort();
+        }, 30000);
+
         const username = document.getElementById('username_input_rg').value;
         const password = document.getElementById('password_input_rg').value;
 
@@ -259,6 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 register_error_message.style.display = 'block';
                 return;
+            }
+            else if (signal.aborted) {
+                console.log('Request was canceled');
+                return Promise.reject('Request was canceled');
             }
 
             return response.json();
@@ -288,9 +347,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = { value: userToken };
                 localStorage.setItem('authToken', JSON.stringify(data));
             }
+
+            latestRequest = "Register";
         })
         .catch(error => {
             console.log('Fetch error: ', error);
+            displayConnectionError();
         });
     }
 
@@ -376,6 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data);
             const foundVocab = data.vocabFound;
     
+            latestRequest = "LoadVocab";
+
             if (foundVocab)
             {
                 const vocab = data.vocab;
@@ -440,4 +504,120 @@ document.addEventListener('DOMContentLoaded', () => {
         isLoggedIn = false;
         localStorage.removeItem('authToken');
     });
+
+    function tryAutoLogin()
+    {
+        const storedToken = localStorage.getItem('authToken');
+        if (storedToken !== null)
+        {
+            const storedTokenObject =  JSON.parse(storedToken);
+            const token = storedTokenObject.value;
+
+            const dataToSendInit = { token };
+
+            console.log(dataToSendInit);
+
+            fetch(`http://${api_address}:3000/user/auth`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataToSendInit),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const allowLogin = data.allowLogin;
+                const username_storage = document.getElementById('username_view');
+                const username = data.username;
+
+                username_storage.textContent = username;
+
+                if (allowLogin == true)
+                {
+                    login_button.style.display = 'none';
+                    user_button.style.display = 'block';
+                    loginField.style.display = 'none';
+                    registerField.style.display = 'none';
+                    close_login.style.display = 'none';
+                    close_register.style.display = 'none';
+                    list_div.style.display = 'block';
+                    displayLoginMessage();
+                    isLoggedIn = true;
+
+                    loadVocab();
+
+                    const data = { value: userToken };
+                    localStorage.setItem('authToken', JSON.stringify(data));
+                }
+
+                latestRequest = "Init";
+            })
+            .catch(error => {
+                console.log('Fetch error: ', error);
+                canConnectToServer = false;
+            });
+        }
+    }
+
+    function displayConnectionError()
+    {
+        console.log('Request timeout');
+        canConnectToServer = false;
+        const list_div = document.getElementById('list_div');
+        const login_div = document.getElementById('login_div');
+        const register_div = document.getElementById('register_div');
+        const close_register = document.getElementById('close_register');
+        const close_login = document.getElementById('close_login');
+
+        connection_error.style.display = 'block';
+        list_div.style.display = 'none';
+        register_div.style.display = 'none';
+        login_div.style.display = 'none';
+        close_login.style.display = 'none';
+        close_register.style.display = 'none';
+    }
+
+    try_again_login.addEventListener('click', () => {
+        console.log('latestRequest', latestRequest);
+        if (latestRequest === "Login")
+        {
+            console.log("Try Login Again");
+            sendLogin();
+        }
+        else if (latestRequest === "Register")
+        {
+            console.log("Try Register Again");
+            sendRegister();
+        }
+        else if (latestRequest === "LoadVocab")
+        {
+            console.log("Try LoadVocab Again");
+            loadVocab();
+        }
+        else if (latestRequest === "Init")
+        {
+            console.log("Try Init Again");
+            tryAutoLogin();
+        }
+    });
+
+    offline_login.addEventListener('click', () => {
+        connection_error.style.display = 'none';
+        displayOfflineMessage();
+        isOffline = true;
+    });
+
+    function displayOfflineMessage() 
+    {
+        const offline_message = document.getElementById('offline_message');
+
+        console.log('test');
+        list_div.style.display = 'block';
+        offline_message.style.right = '5vw';
+        offline_message.style.transition = '.5s';
+        setTimeout(function() {
+            offline_message.style.right = '-20vw';
+        }, 5000);
+    }
 });
