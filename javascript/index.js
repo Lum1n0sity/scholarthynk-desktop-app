@@ -3,51 +3,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const api_address = '192.168.5.21';
 
     const storedToken = localStorage.getItem('authToken');
-    const storedTokenObject =  JSON.parse(storedToken);
-    const token = storedTokenObject.value;
+    if (storedToken !== null)
+    {
+        const storedTokenObject =  JSON.parse(storedToken);
+        const token = storedTokenObject.value;
 
-    const dataToSendInit = { token };
+        const dataToSendInit = { token };
 
-    console.log(dataToSendInit);
+        console.log(dataToSendInit);
 
-    fetch(`http://${api_address}:3000/user/auth`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataToSendInit),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        const allowLogin = data.allowLogin;
-        const username_storage = document.getElementById('username_view');
-        const username = data.username;
+        fetch(`http://${api_address}:3000/user/auth`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataToSendInit),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const allowLogin = data.allowLogin;
+            const username_storage = document.getElementById('username_view');
+            const username = data.username;
 
-        username_storage.textContent = username;
-        
-        if (allowLogin == true)
-        {
-            login_button.style.display = 'none';
-            user_button.style.display = 'block';
-            loginField.style.display = 'none';
-            registerField.style.display = 'none';
-            close_login.style.display = 'none';
-            close_register.style.display = 'none';
-            list_div.style.display = 'block';
-            displayLoginMessage();
-            isLoggedIn = true;
+            username_storage.textContent = username;
 
-            loadVocab();
+            if (allowLogin == true)
+            {
+                login_button.style.display = 'none';
+                user_button.style.display = 'block';
+                loginField.style.display = 'none';
+                registerField.style.display = 'none';
+                close_login.style.display = 'none';
+                close_register.style.display = 'none';
+                list_div.style.display = 'block';
+                displayLoginMessage();
+                isLoggedIn = true;
 
-            const data = { value: userToken };
-            localStorage.setItem('authToken', JSON.stringify(data));
-        }
+                loadVocab();
 
-    })
-    .catch(error => {
-        console.log('Fetch error: ', error);
-    });
+                const data = { value: userToken };
+                localStorage.setItem('authToken', JSON.stringify(data));
+            }
+
+        })
+        .catch(error => {
+            console.log('Fetch error: ', error);
+        });
+    }
 
     const login_button = document.getElementById('login_button');
     const user_button = document.getElementById('user_logged_in_bg');
@@ -74,7 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const english_entry = document.getElementById('english-in');
     const vocab_list = document.getElementById('vocab_list');
 
+    const user_info_button_container = document.getElementById('user_info_buttons');
+    const logout_button = document.getElementById('logout');
+    const settings_button = document.getElementById('settings');
+
     let isLoggedIn = false;
+    let isUserInfoOpen = false;
 
     login_button.addEventListener('click', () => {
         openLogin();
@@ -399,4 +407,37 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Fetch error: ', error);
         });
     }
+
+    user_button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (!isUserInfoOpen) 
+        {
+            user_info_button_container.style.display = 'block';
+            isUserInfoOpen = true;
+        }
+    });
+    
+    document.addEventListener('click', (event) => {
+        if (isUserInfoOpen) 
+        {
+            const isClickInsideDiv = user_info_button_container.contains(event.target);
+            if (!isClickInsideDiv) 
+            {
+                user_info_button_container.style.display = 'none';
+                isUserInfoOpen = false;
+            }
+        }
+    });
+    
+    logout_button.addEventListener('click', () => {
+        const username_storage = document.getElementById('username_view');
+
+        username_storage.textContent = null;
+        
+        login_button.style.display = 'block';
+        user_button.style.display = 'none';
+        user_info_button_container.style.display = 'none';
+        isLoggedIn = false;
+        localStorage.removeItem('authToken');
+    });
 });
