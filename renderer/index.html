@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Vocab-Trainer</title>
         <link rel="stylesheet" href="index.css">
-        <script src="C:/DatenLokal/VScode/VBTrainer/javascript/index.js"></script>
+        <script src="C:\DatenLokal\VScode\VBTrainer\javascript\index.js"></script>
 
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -80,5 +80,17 @@
             <button id="settings"><ion-icon name="settings-outline"></ion-icon> Settings</button>
             <button id="logout"><ion-icon name="log-out-outline"></ion-icon> Logout</button>
         </div>
+        <div id="error_login">
+            <p>Unable to connect to server!</p>
+            <button id="try_again_login">Try Again</button>
+            <button id="offline_login">Continue offline</button>
+        </div>
+        <p id="offline_message">You are offline!</p>
+        <p id="offline_toggle_label">Offline Mode:</p>
+        <label id="offline_toggle">
+            <input type="checkbox" id="toggleSwitch_offline">
+            <span class="slider round"></span>
+        </label>
+        <button id="settings_offline"><ion-icon name="settings-outline"></ion-icon></button>
     </body>
 </html>

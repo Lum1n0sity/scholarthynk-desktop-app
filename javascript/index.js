@@ -1,16 +1,39 @@
+const fs = require('fs');
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const api_address = '192.168.5.21';
 
+    let canConnectToServer = true;
+    let timeoutId;
+
+    let isOffline = false;
+    let isOffline_MessageDisplayed = false;
+
+    const connection_error = document.getElementById('error_login');
+
+    const abortControllerInit = new AbortController();
+    const signal = abortControllerInit.signal;
+
+    let latestRequest = null;
+
     const storedToken = localStorage.getItem('authToken');
-    if (storedToken !== null)
-    {
-        const storedTokenObject =  JSON.parse(storedToken);
+    if (storedToken !== null) {
+        const storedTokenObject = JSON.parse(storedToken);
         const token = storedTokenObject.value;
 
         const dataToSendInit = { token };
 
         console.log(dataToSendInit);
+
+        timeoutId = setTimeout(function () {
+            if (!isOffline_MessageDisplayed)
+            {
+                displayConnectionError();
+            }
+
+            abortControllerInit.abort();
+        }, 30000);
 
         fetch(`http://${api_address}:3000/user/auth`, {
             method: "POST",
@@ -19,8 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(dataToSendInit),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (signal.aborted)
+            {
+                console.log('Request was canceled');
+                return Promise.reject('Request was canceled');                
+            }
+
+            return response.json();
+        })
         .then(data => {
+            clearTimeout(timeoutId);
+
             console.log(data);
             const allowLogin = data.allowLogin;
             const username_storage = document.getElementById('username_view');
@@ -28,8 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             username_storage.textContent = username;
 
-            if (allowLogin == true)
-            {
+            if (allowLogin == true) {
                 login_button.style.display = 'none';
                 user_button.style.display = 'block';
                 loginField.style.display = 'none';
@@ -46,9 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('authToken', JSON.stringify(data));
             }
 
+            latestRequest = "Init";
         })
         .catch(error => {
-            console.log('Fetch error: ', error);
+            displayConnectionError();
         });
     }
 
@@ -81,8 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const logout_button = document.getElementById('logout');
     const settings_button = document.getElementById('settings');
 
+    const try_again_login = document.getElementById('try_again_login');
+    const offline_login = document.getElementById('offline_login');
+
     let isLoggedIn = false;
     let isUserInfoOpen = false;
+
+    setInterval(handleOffline, 1000);
 
     login_button.addEventListener('click', () => {
         openLogin();
@@ -184,6 +222,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function sendLogin()
     {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        timeoutId = setTimeout(function () {
+            if (!isOffline_MessageDisplayed)
+            {
+                displayConnectionError();
+            }
+
+            abortController.abort();
+        }, 30000);
+
         const username = document.getElementById('username_input_lo').value;
         const password = document.getElementById('password_input_lo').value;
 
@@ -203,6 +253,11 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 login_error_message.style.display = 'block';
                 return;
+            }
+            else if (signal.aborted)
+            {
+                console.log('Request was canceled');
+                return Promise.reject('Request was canceled');                
             }
 
             return response.json();
@@ -235,11 +290,26 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.log('Fetch error: ', error);
+            displayConnectionError();
         });
+
+        latestRequest = "Login";
     }
 
     function sendRegister()
     {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        timeoutId = setTimeout(function () {
+            if (!isOffline_MessageDisplayed)
+            {
+                displayConnectionError();
+            }
+
+            abortController.abort();
+        }, 30000);
+
         const username = document.getElementById('username_input_rg').value;
         const password = document.getElementById('password_input_rg').value;
 
@@ -259,6 +329,10 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 register_error_message.style.display = 'block';
                 return;
+            }
+            else if (signal.aborted) {
+                console.log('Request was canceled');
+                return Promise.reject('Request was canceled');
             }
 
             return response.json();
@@ -288,9 +362,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = { value: userToken };
                 localStorage.setItem('authToken', JSON.stringify(data));
             }
+
+            latestRequest = "Register";
         })
         .catch(error => {
             console.log('Fetch error: ', error);
+            displayConnectionError();
         });
     }
 
@@ -302,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         message.style.transition = '.5s';
         setTimeout(function() {
             message.style.right = '-15vw';
-          }, 5000);
+        }, 5000);
     }
 
     add_vocab.addEventListener('click', () => {
@@ -313,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         if (isLoggedIn) 
         {
-            if (german_word && english_word !== null) 
+            if (german_word && english_word !== null && isOffline == false) 
             {
                 const dataToSendAddVocab = { word1: german_word, word2: english_word, username: username };
     
@@ -352,8 +429,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('Fetch error: ', error);
                 });
             }
-        }     
-        else {
+        }    
+        else if (isOffline) 
+        {
+            try 
+            {
+                const german_word = document.getElementById('german-in').value;
+                const english_word = document.getElementById('english-in').value;
+            
+                const inputData = `${german_word} | ${english_word} \n`;
+            
+                const filePath = '/home/raphael/Development/VBTrainer-Frontend/normal-user/javascript/test.txt';
+
+                fs.appendFile(filePath, inputData, 'utf8', (err) => {
+                  if (err) 
+                  {
+                    console.error('Error writing to the file:', err);
+                    return;
+                  }
+                });
+
+                fs.readFile(filePath, 'utf8', (err, data) => {
+                    if (err)
+                    {
+                        console.error('Error reading file: ', err);
+                        return;
+                    }
+                    
+                    vocab_list.textContent = data;
+                });
+            
+                console.log('Data saved to the file successfully.');
+              } 
+              catch (error) 
+              {
+                console.error('Error writing to file:', error);
+              }
+        }
+        else
+        {
             openLogin();
         }
     });    
@@ -376,6 +490,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data);
             const foundVocab = data.vocabFound;
     
+            latestRequest = "LoadVocab";
+
             if (foundVocab)
             {
                 const vocab = data.vocab;
@@ -440,4 +556,187 @@ document.addEventListener('DOMContentLoaded', () => {
         isLoggedIn = false;
         localStorage.removeItem('authToken');
     });
+
+    function tryAutoLogin()
+    {
+        const storedToken = localStorage.getItem('authToken');
+        if (storedToken !== null)
+        {
+            const storedTokenObject = JSON.parse(storedToken);
+            const token = storedTokenObject.value;
+    
+            const dataToSendInit = { token };
+    
+            console.log(dataToSendInit);
+    
+            timeoutId = setTimeout(function () {
+                if (!isOffline_MessageDisplayed)
+                {
+                    displayConnectionError();
+                }
+    
+                abortControllerInit.abort();
+            }, 30000);
+    
+            fetch(`http://${api_address}:3000/user/auth`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataToSendInit),
+            })
+            .then(response => {
+                if (signal.aborted)
+                {
+                    console.log('Request was canceled');
+                    return Promise.reject('Request was canceled');                
+                }
+    
+                return response.json();
+            })
+            .then(data => {
+                clearTimeout(timeoutId);
+    
+                console.log(data);
+                const allowLogin = data.allowLogin;
+                const username_storage = document.getElementById('username_view');
+                const username = data.username;
+    
+                username_storage.textContent = username;
+    
+                if (allowLogin == true) {
+                    login_button.style.display = 'none';
+                    user_button.style.display = 'block';
+                    loginField.style.display = 'none';
+                    registerField.style.display = 'none';
+                    close_login.style.display = 'none';
+                    close_register.style.display = 'none';
+                    list_div.style.display = 'block';
+                    displayLoginMessage();
+                    isLoggedIn = true;
+    
+                    loadVocab();
+    
+                    const data = { value: userToken };
+                    localStorage.setItem('authToken', JSON.stringify(data));
+                }
+    
+                latestRequest = "Init";
+            })
+            .catch(error => {
+                displayConnectionError();
+            });
+        }
+    }
+
+    function displayConnectionError()
+    {
+        console.log('Request timeout');
+        canConnectToServer = false;
+        const list_div = document.getElementById('list_div');
+        const login_div = document.getElementById('login_div');
+        const register_div = document.getElementById('register_div');
+        const close_register = document.getElementById('close_register');
+        const close_login = document.getElementById('close_login');
+
+        connection_error.style.display = 'block';
+        list_div.style.display = 'none';
+        register_div.style.display = 'none';
+        login_div.style.display = 'none';
+        close_login.style.display = 'none';
+        close_register.style.display = 'none';
+    }
+
+    try_again_login.addEventListener('click', () => {
+        console.log('latestRequest', latestRequest);
+        if (latestRequest === "Login")
+        {
+            console.log("Try Login Again");
+            sendLogin();
+        }
+        else if (latestRequest === "Register")
+        {
+            console.log("Try Register Again");
+            sendRegister();
+        }
+        else if (latestRequest === "LoadVocab")
+        {
+            console.log("Try LoadVocab Again");
+            loadVocab();
+        }
+        else if (latestRequest === "Init")
+        {
+            console.log("Try Init Again");
+            tryAutoLogin();
+        }
+    });
+
+    offline_login.addEventListener('click', () => {
+        connection_error.style.display = 'none';
+        displayOfflineMessage();
+        isOffline = true;
+        loadVocabOffline();
+    });
+
+    function displayOfflineMessage() 
+    {
+        const offline_message = document.getElementById('offline_message');
+
+        console.log('test');
+        list_div.style.display = 'block';
+        offline_message.style.right = '5vw';
+        offline_message.style.transition = '.5s';
+        setTimeout(function() {
+            offline_message.style.right = '-20vw';
+        }, 5000);
+
+        isOffline_MessageDisplayed = true;
+    }
+
+    function loadVocabOffline()
+    {
+        try 
+        {
+            const filePath = '/home/raphael/Development/VBTrainer-Frontend/normal-user/javascript/test.txt';
+
+            fs.readFile(filePath, 'utf8', (err, data) => {
+                if (err)
+                {
+                    console.error('Error reading file: ', err);
+                    return;
+                }
+                
+                vocab_list.textContent = data;
+            });
+        } 
+        catch (error) 
+        {
+          console.error('Error writing to file:', error);
+        }
+    }
+
+    function handleOffline() {
+        if (isOffline) {
+            const settings_offline = document.getElementById('');
+            const offline_toggle = document.getElementById('');
+
+            loadVocabOffline();
+            login_button.style.display = 'none';
+            user_button.style.display = 'none';
+            settings_offline.style.display = 'block';
+            offline_toggle.style.display = 'block';
+            offline_toggle.checked = true;
+
+            offline_toggle.addEventListener('change', function() {
+                if (this.checked) 
+                {
+                    
+                } 
+                else 
+                {
+                    statusParagraph.textContent = 'Switch is OFF';
+                }
+            });
+        }
+    }
 });
