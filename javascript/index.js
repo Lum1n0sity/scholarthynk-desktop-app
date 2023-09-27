@@ -1,9 +1,13 @@
+const fs = require('fs');
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const api_address = '192.168.5.21';
 
     let canConnectToServer = true;
     let timeoutId;
+
+    let isOffline = false;
 
     const connection_error = document.getElementById('error_login');
 
@@ -111,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isLoggedIn = false;
     let isUserInfoOpen = false;
-    let isOffline = false;
 
     login_button.addEventListener('click', () => {
         openLogin();
@@ -375,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         if (isLoggedIn) 
         {
-            if (german_word && english_word !== null) 
+            if (german_word && english_word !== null && isOffline == false) 
             {
                 const dataToSendAddVocab = { word1: german_word, word2: english_word, username: username };
     
@@ -414,8 +417,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('Fetch error: ', error);
                 });
             }
-        }     
-        else {
+        }    
+        else if (isOffline) 
+        {
+            try 
+            {
+                const german_word = document.getElementById('german-in').value;
+                const english_word = document.getElementById('english-in').value;
+            
+                const inputData = `${german_word} | ${english_word} \n`;
+            
+                const filePath = '/home/raphael/Development/VBTrainer-Frontend/normal-user/javascript/test.txt';
+
+                fs.appendFile(filePath, inputData, 'utf8', (err) => {
+                  if (err) 
+                  {
+                    console.error('Error writing to the file:', err);
+                    return;
+                  }
+                });
+
+                fs.readFile(filePath, 'utf8', (err, data) => {
+                    if (err)
+                    {
+                        console.error('Error reading file: ', err);
+                        return;
+                    }
+                    
+                    vocab_list.textContent = data;
+                });
+            
+                console.log('Data saved to the file successfully.');
+              } 
+              catch (error) 
+              {
+                console.error('Error writing to file:', error);
+              }
+        }
+        else
+        {
             openLogin();
         }
     });    
@@ -606,6 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
         connection_error.style.display = 'none';
         displayOfflineMessage();
         isOffline = true;
+        loadVocabOffline();
     });
 
     function displayOfflineMessage() 
@@ -619,5 +660,37 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(function() {
             offline_message.style.right = '-20vw';
         }, 5000);
+    }
+
+    function loadVocabOffline()
+    {
+        try 
+        {
+            const filePath = '/home/raphael/Development/VBTrainer-Frontend/normal-user/javascript/test.txt';
+
+            fs.readFile(filePath, 'utf8', (err, data) => {
+                if (err)
+                {
+                    console.error('Error reading file: ', err);
+                    return;
+                }
+                
+                vocab_list.textContent = data;
+            });
+        } 
+        catch (error) 
+        {
+          console.error('Error writing to file:', error);
+        }
+    }
+
+    if (isOffline)
+    {
+        loadVocabOffline();
+
+        login_button.style.display = 'none';
+        user_button.style.display = 'none';
+
+        
     }
 });
