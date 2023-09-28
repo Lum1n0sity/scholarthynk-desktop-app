@@ -1,9 +1,17 @@
+const fs = require('fs');
+const { ipcRenderer, remote } = require('electron');
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const api_address = '192.168.5.21';
 
     let canConnectToServer = true;
     let timeoutId;
+
+    let offlineInterval;
+    let isOffline = false;
+    let isOffline_MessageDisplayed = false;
+    let offlineFilePath = null;
 
     const connection_error = document.getElementById('error_login');
 
@@ -21,8 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(dataToSendInit);
 
+        latestRequest = "Init";
+
         timeoutId = setTimeout(function () {
-            displayConnectionError();
+            if (!isOffline_MessageDisplayed)
+            {
+                displayConnectionError();
+            }
 
             abortControllerInit.abort();
         }, 30000);
@@ -69,8 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = { value: userToken };
                 localStorage.setItem('authToken', JSON.stringify(data));
             }
-
-            latestRequest = "Init";
         })
         .catch(error => {
             displayConnectionError();
@@ -109,9 +120,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const try_again_login = document.getElementById('try_again_login');
     const offline_login = document.getElementById('offline_login');
 
+    const offline_toggle_checkbox = document.getElementById('toggleSwitch_offline');
+    const offline_toggle = document.getElementById('offline_toggle');
+
     let isLoggedIn = false;
     let isUserInfoOpen = false;
-    let isOffline = false;
+
+    offlineInterval = setInterval(() => {
+      handleOffline();
+    }, 1000);
+
+    function startOfflineCheckInterval() {
+      offlineInterval = setInterval(() => {
+        handleOffline();
+      }, 1000);
+    }
 
     login_button.addEventListener('click', () => {
         openLogin();
@@ -217,7 +240,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const signal = abortController.signal;
 
         timeoutId = setTimeout(function () {
-            displayConnectionError();
+            if (!isOffline_MessageDisplayed)
+            {
+                displayConnectionError();
+            }
 
             abortController.abort();
         }, 30000);
@@ -290,7 +316,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const signal = abortController.signal;
 
         timeoutId = setTimeout(function () {
-            displayConnectionError();
+            if (!isOffline_MessageDisplayed)
+            {
+                displayConnectionError();
+            }
 
             abortController.abort();
         }, 30000);
@@ -364,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         message.style.transition = '.5s';
         setTimeout(function() {
             message.style.right = '-15vw';
-          }, 5000);
+        }, 5000);
     }
 
     add_vocab.addEventListener('click', () => {
@@ -375,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         if (isLoggedIn) 
         {
-            if (german_word && english_word !== null) 
+            if (german_word && english_word !== null && isOffline == false) 
             {
                 const dataToSendAddVocab = { word1: german_word, word2: english_word, username: username };
     
@@ -414,8 +443,48 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('Fetch error: ', error);
                 });
             }
-        }     
-        else {
+        }    
+        else if (isOffline) 
+        {
+            if (offlineFilePath !== null)
+            {
+                try 
+                {  
+                    const german_word = document.getElementById('german-in').value;
+                    const english_word = document.getElementById('english-in').value;
+
+                    const inputData = `${german_word} | ${english_word} \n`;
+
+                    const filePath = offlineFilePath;
+
+                    fs.appendFile(filePath, inputData, 'utf8', (err) => {
+                        if (err) 
+                        {
+                          console.error('Error writing to the file:', err);
+                          return;
+                        }
+                      });
+
+                      fs.readFile(filePath, 'utf8', (err, data) => {
+                          if (err)
+                          {
+                              console.error('Error reading file: ', err);
+                              return;
+                          }
+
+                          vocab_list.textContent = data;
+                      });
+
+                      console.log('Data saved to the file successfully.');
+                } 
+                catch (error) 
+                {
+                  console.error('Error writing to file:', error);
+                }
+            }
+        }
+        else
+        {
             openLogin();
         }
     });    
@@ -510,13 +579,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const storedToken = localStorage.getItem('authToken');
         if (storedToken !== null)
         {
-            const storedTokenObject =  JSON.parse(storedToken);
+            const storedTokenObject = JSON.parse(storedToken);
             const token = storedTokenObject.value;
-
+    
             const dataToSendInit = { token };
-
+    
             console.log(dataToSendInit);
+    
+            latestRequest = "Init";
 
+            timeoutId = setTimeout(function () {
+                if (!isOffline_MessageDisplayed)
+                {
+                    displayConnectionError();
+                }
+    
+                abortControllerInit.abort();
+            }, 30000);
+    
             fetch(`http://${api_address}:3000/user/auth`, {
                 method: "POST",
                 headers: {
@@ -524,17 +604,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(dataToSendInit),
             })
-            .then(response => response.json())
+            .then(response => {
+                if (signal.aborted)
+                {
+                    console.log('Request was canceled');
+                    return Promise.reject('Request was canceled');                
+                }
+    
+                return response.json();
+            })
             .then(data => {
+                clearTimeout(timeoutId);
+    
                 console.log(data);
                 const allowLogin = data.allowLogin;
                 const username_storage = document.getElementById('username_view');
                 const username = data.username;
-
+    
                 username_storage.textContent = username;
-
-                if (allowLogin == true)
-                {
+    
+                if (allowLogin == true) {
                     login_button.style.display = 'none';
                     user_button.style.display = 'block';
                     loginField.style.display = 'none';
@@ -544,22 +633,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     list_div.style.display = 'block';
                     displayLoginMessage();
                     isLoggedIn = true;
-
+    
                     loadVocab();
-
+    
                     const data = { value: userToken };
                     localStorage.setItem('authToken', JSON.stringify(data));
                 }
-
-                latestRequest = "Init";
             })
             .catch(error => {
-                console.log('Fetch error: ', error);
-                canConnectToServer = false;
+                displayConnectionError();
             });
         }
     }
 
+    offline_toggle.addEventListener('change', function () 
+    {
+      if (this.checked) 
+      {
+        isOffline = true;
+        isLoggedIn = false;
+        console.log('isOffline', isOffline);
+      } 
+      else 
+      {
+        isOffline = false;
+        console.log('isOffline', isOffline);
+        unloadVocab();
+        login_button.style.display = 'block';
+        user_button.style.display = 'none';
+        tryAutoLogin();
+      }
+    });
+    // The Devil!!!!!!!!! DON DON DONNNNNN
     function displayConnectionError()
     {
         console.log('Request timeout');
@@ -606,18 +711,93 @@ document.addEventListener('DOMContentLoaded', () => {
         connection_error.style.display = 'none';
         displayOfflineMessage();
         isOffline = true;
+        isLoggedIn = false;
+        loadVocabOffline();
+        handleOffline();
     });
 
     function displayOfflineMessage() 
     {
         const offline_message = document.getElementById('offline_message');
 
-        console.log('test');
         list_div.style.display = 'block';
         offline_message.style.right = '5vw';
         offline_message.style.transition = '.5s';
         setTimeout(function() {
             offline_message.style.right = '-20vw';
         }, 5000);
+
+        isOffline_MessageDisplayed = true;
+    }
+
+    function loadVocabOffline()
+    {
+        if (offlineFilePath != null)
+        {
+            try 
+            {
+                const filePath = offlineFilePath;
+    
+                fs.readFile(filePath, 'utf8', (err, data) => {
+                    if (err)
+                    {
+                        console.error('Error reading file: ', err);
+                        return;
+                    }
+                    
+                    vocab_list.textContent = data;
+                });
+            } 
+            catch (error) 
+            {
+              console.error('Error writing to file:', error);
+            }
+        }        
+    }
+
+    function unloadVocab()
+    {
+        vocab_list.textContent = ' ';
+    }
+
+    function handleOffline() {
+        if (isOffline) {
+            clearInterval(offlineInterval);
+            
+            const offline_toggle_checkbox = document.getElementById('toggleSwitch_offline');
+            const offline_toggle = document.getElementById('offline_toggle');
+          
+            login_button.style.display = 'none';
+            user_button.style.display = 'none';
+
+            offline_toggle_checkbox.checked = true;
+          
+            ipcRenderer.send('open-file-dialog');
+          
+            ipcRenderer.on('selected-file', (event, filePath) => {
+              offlineFilePath = filePath;
+              loadVocabOffline();
+            });
+          
+            offline_toggle.addEventListener('change', function () 
+            {
+              if (this.checked) 
+              {
+                isOffline = true;
+                console.log('isOffline', isOffline);
+              } 
+              else 
+              {
+                isOffline = false;
+                console.log('isOffline', isOffline);
+                unloadVocab();
+                login_button.style.display = 'block';
+                user_button.style.display = 'none';
+                tryAutoLogin();
+              }
+            });
+          
+            return;
+        }
     }
 });
