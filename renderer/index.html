@@ -30,6 +30,7 @@
             <input type="text" id="english-in">
         </div>
         <button id="add_vocab"><ion-icon name="add-outline"></ion-icon> Add</button>
+        <button id="delete_vocab"><ion-icon name="trash-outline"></ion-icon> Delete</button>
         <div id="list_div">
             <p>Vocab List</p>
             <textarea id="vocab_list" cols="30" rows="10" readonly></textarea>
@@ -40,6 +41,7 @@
         </div>
         <button id="close_register" style="display: none;"><ion-icon name="close-outline"></ion-icon></button>
         <button id="close_login"><ion-icon name="close-outline"></ion-icon></button>
+        <button id="close_delete"><ion-icon name="close-outline"></ion-icon></button>
         <div class="login_div" id="login_div">
             <h4>Login</h4>
             <div id="transi_div">
@@ -92,5 +94,11 @@
             <span class="slider round"></span>
         </label>
         <button id="settings_offline"><ion-icon name="settings-outline"></ion-icon></button>
+        <div id="delete_vocab_div">
+            <h4>Delete Vocab</h4>
+            <input type="text" placeholder="German word..." id="delete_german">
+            <input type="text" placeholder="English word..." id="delete_english">
+            <button id="delete"><ion-icon name="trash-outline"></ion-icon> DELETE</button>
+        </div>
     </body>
 </html>

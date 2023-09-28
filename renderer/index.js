@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeoutId;
 
     let offlineInterval;
-    let isOffline = false;
+    let isOffline = true;
     let isOffline_MessageDisplayed = false;
     let offlineFilePath = null;
 
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let latestRequest = null;
 
     const storedToken = localStorage.getItem('authToken');
-    if (storedToken !== null) {
+    if (storedToken !== null && !isOffline) {
         const storedTokenObject = JSON.parse(storedToken);
         const token = storedTokenObject.value;
 
@@ -109,9 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const register = document.getElementById('register');
 
     const add_vocab = document.getElementById('add_vocab');
+    const delete_vocab = document.getElementById('delete_vocab');
     const german_entry = document.getElementById('german-in');
     const english_entry = document.getElementById('english-in');
     const vocab_list = document.getElementById('vocab_list');
+    const delete_vocab_win = document.getElementById('delete_vocab_div');
+    const delete_vocab_win_btn = document.getElementById('delete');
+    const close_vocab_win = document.getElementById('close_delete');
 
     const user_info_button_container = document.getElementById('user_info_buttons');
     const logout_button = document.getElementById('logout');
@@ -664,7 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tryAutoLogin();
       }
     });
-    // The Devil!!!!!!!!! DON DON DONNNNNN
+
     function displayConnectionError()
     {
         console.log('Request timeout');
@@ -674,13 +678,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const register_div = document.getElementById('register_div');
         const close_register = document.getElementById('close_register');
         const close_login = document.getElementById('close_login');
-
+        
         connection_error.style.display = 'block';
         list_div.style.display = 'none';
         register_div.style.display = 'none';
         login_div.style.display = 'none';
         close_login.style.display = 'none';
         close_register.style.display = 'none';
+        add_vocab.style.display = 'none';
+        delete_vocab.style.display = 'none';
     }
 
     try_again_login.addEventListener('click', () => {
@@ -714,6 +720,8 @@ document.addEventListener('DOMContentLoaded', () => {
         isLoggedIn = false;
         loadVocabOffline();
         handleOffline();
+        add_vocab.style.display = 'block';
+        delete_vocab.style.display = 'block';
     });
 
     function displayOfflineMessage() 
@@ -800,4 +808,71 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     }
+
+    delete_vocab.addEventListener('click', () => {
+        vocab_list.style.display = 'none';
+        
+        delete_vocab.style.display = 'none';
+        add_vocab.style.display = 'none';
+        delete_vocab_win.style.display = 'block';
+        close_vocab_win.style.display = 'block'; 
+    });
+
+    close_vocab_win.addEventListener('click', () => {
+        vocab_list.style.display = 'block';
+        delete_vocab.style.display = 'block';
+        add_vocab.style.display = 'block';
+        delete_vocab_win.style.display = 'none';
+        close_vocab_win.style.display = 'none'; 
+    });
+
+    delete_vocab_win_btn.addEventListener('click', () => {
+        const german_in = document.getElementById('delete_german').value;
+        const english_in = document.getElementById('delete_english').value;
+
+        if (german_in && english_in !== null)
+        {
+            if (isOffline)
+            {
+                let filePath = offlineFilePath;
+
+                fs.readFile(filePath, 'utf8', (err, data) => {
+                    if (err) {
+                      console.error('Error reading file:', err);
+                      return;
+                    }
+                    
+                    console.log('German in: ', german_in);
+                    console.log('English in: ', english_in);
+
+                    const rows = data.split('\n');
+                  
+                    const updatedRows = [];
+                  
+                    for (const row of rows) {
+                      const rowValues = row.split(' | ');
+                  
+                      console.log('Row Values', rowValues);
+
+                      if (!(rowValues.includes(german_in) && rowValues.includes(english_in))) {
+                        updatedRows.push(row);
+                      }
+                    }
+                  
+                    const newContent = updatedRows.join('\n');
+
+                    console.log('New Content', newContent);
+                  
+                    fs.writeFile(filePath, newContent, 'utf8', (err) => {
+                      if (err) {
+                        console.error('Error writing to file:', err);
+                        return;
+                      }
+                  
+                      console.log('Rows with matching values deleted.');
+                    });
+                });
+            }
+        }
+    });
 });
