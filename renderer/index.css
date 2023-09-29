@@ -138,6 +138,7 @@ body {
 }
 
 #vocab_list {
+    font-size: 2vw;
     resize: none;
     width: 30vw;
     height: 25vw;
@@ -146,7 +147,6 @@ body {
     border: none;
     background-color: var(--box-dark);
     color: var(--text-color-dark);
-    font-size: var(--default-font-size);
     border-radius: 10px;
     text-align: center;
 }
@@ -961,7 +961,9 @@ body {
     grid-column: 5;
     grid-row: 1;
     justify-self: end;
+    margin-right: 1vw;
     margin-top: 1.7vw;
+    align-self: center;
 }
 
 #offline_toggle {
@@ -974,6 +976,7 @@ body {
   display: inline-block;
   width: 60px;
   height: 34px;
+  align-self: center;
 }
 
 #offline_toggle input {
@@ -1037,8 +1040,9 @@ input:checked + .slider:before {
     background-color: var(--box-dark);
     border: var(--border-dark) 2px solid;
     color: var(--text-color-dark);
-    margin-top: 1.2vw;
-    margin-left: 3vw;
+    align-self: center;
+    margin-top: 1.7vw;
+    margin-left: 2vw;
     transition: .5s;
 }
 

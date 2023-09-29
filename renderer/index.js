@@ -429,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const formattedText = `${german_word} | ${english_word}`;
                     
                         vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText;
+                        vocab_list.scrollTop = vocab_list.scrollHeight;
                     }
                     else 
                     {
@@ -461,25 +462,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const filePath = offlineFilePath;
 
-                    fs.appendFile(filePath, inputData, 'utf8', (err) => {
-                        if (err) 
+                    console.log(inputData);
+
+                    fs.readFile(filePath, 'utf-8', (error, data) => {
+                        if (error)
                         {
-                          console.error('Error writing to the file:', err);
-                          return;
+                            console.error('Error reading file: ', error);
+                            return;
                         }
-                      });
 
-                      fs.readFile(filePath, 'utf8', (err, data) => {
-                          if (err)
-                          {
-                              console.error('Error reading file: ', err);
-                              return;
+                        const rows = data.split('\n');
+
+                        console.log('Rows: ', rows);
+    
+                        const updatedRows = [];
+                      
+                        for (const row of rows) 
+                        {
+                          const rowValues = row.split(' | ');
+                      
+                          console.log('Row Values', rowValues);
+    
+                          if ((rowValues.includes(german_word) && rowValues.includes(english_word))) 
+                          { 
+                            const vocab_message = document.getElementById('warning_vocab_div');
+    
+                            vocab_message.style.display = 'block';
+        
+                            const vocab_message_ok = document.getElementById('warning_vocab_ok');
+        
+                            vocab_message_ok.addEventListener('click', () => {
+                                vocab_message.style.display = 'none';
+                            });
+
+                            return;
                           }
+                          else
+                          {
+                            fs.appendFile(filePath, inputData, 'utf8', (err) => {
+                                if (err) 
+                                {
+                                  console.error('Error writing to the file:', err);
+                                  return;
+                                }
+                            });
+      
+                            fs.readFile(filePath, 'utf8', (err, data) => {
+                                if (err)
+                                {
+                                    console.error('Error reading file: ', err);
+                                    return;
+                                }
+    
+                                vocab_list.textContent = data;
+                                vocab_list.scrollTop = vocab_list.scrollHeight;
+                            });
+                          }
+                        }
+                    });
 
-                          vocab_list.textContent = data;
-                      });
-
-                      console.log('Data saved to the file successfully.');
+                    console.log('Data saved to the file successfully.');
                 } 
                 catch (error) 
                 {
@@ -650,21 +692,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    offline_toggle.addEventListener('change', function () 
+    offline_toggle_checkbox.addEventListener('change', function () 
     {
       if (this.checked) 
       {
         isOffline = true;
         isLoggedIn = false;
-        console.log('isOffline', isOffline);
+
+        ipcRenderer.send('open-file-dialog');
+          
+        ipcRenderer.on('selected-file', (event, filePath) => {
+          offlineFilePath = filePath;
+          loadVocabOffline();
+        });
       } 
       else 
       {
         isOffline = false;
-        console.log('isOffline', isOffline);
         unloadVocab();
+
         login_button.style.display = 'block';
         user_button.style.display = 'none';
+
         tryAutoLogin();
       }
     });
@@ -787,12 +836,19 @@ document.addEventListener('DOMContentLoaded', () => {
               loadVocabOffline();
             });
           
-            offline_toggle.addEventListener('change', function () 
+            offline_toggle_checkbox.addEventListener('change', function () 
             {
               if (this.checked) 
               {
                 isOffline = true;
-                console.log('isOffline', isOffline);
+                isLoggedIn = false;
+                
+                ipcRenderer.send('open-file-dialog');
+          
+                ipcRenderer.on('selected-file', (event, filePath) => {
+                  offlineFilePath = filePath;
+                  loadVocabOffline();
+                });
               } 
               else 
               {
@@ -811,7 +867,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     delete_vocab.addEventListener('click', () => {
         vocab_list.style.display = 'none';
-        
+        list_div.style.display = 'none';
         delete_vocab.style.display = 'none';
         add_vocab.style.display = 'none';
         delete_vocab_win.style.display = 'block';
@@ -820,6 +876,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     close_vocab_win.addEventListener('click', () => {
         vocab_list.style.display = 'block';
+        list_div.style.display = 'block';
         delete_vocab.style.display = 'block';
         add_vocab.style.display = 'block';
         delete_vocab_win.style.display = 'none';
@@ -837,7 +894,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 let filePath = offlineFilePath;
 
                 fs.readFile(filePath, 'utf8', (err, data) => {
-                    if (err) {
+                    if (err) 
+                    {
                       console.error('Error reading file:', err);
                       return;
                     }
@@ -846,15 +904,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('English in: ', english_in);
 
                     const rows = data.split('\n');
-                  
+
+                    console.log('Rows: ', rows);
+
                     const updatedRows = [];
                   
-                    for (const row of rows) {
+                    for (const row of rows) 
+                    {
                       const rowValues = row.split(' | ');
                   
                       console.log('Row Values', rowValues);
 
-                      if (!(rowValues.includes(german_in) && rowValues.includes(english_in))) {
+                      if (!(rowValues.includes(german_in) && rowValues.includes(english_in))) 
+                      {
                         updatedRows.push(row);
                       }
                     }
@@ -864,14 +926,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('New Content', newContent);
                   
                     fs.writeFile(filePath, newContent, 'utf8', (err) => {
-                      if (err) {
+                      if (err) 
+                      {
                         console.error('Error writing to file:', err);
                         return;
                       }
                   
                       console.log('Rows with matching values deleted.');
                     });
+
+                    vocab_list.textContent = newContent;
+
+                    vocab_list.style.display = 'block';
+                    list_div.style.display = 'block';
+                    delete_vocab.style.display = 'block';
+                    add_vocab.style.display = 'block';
+                    delete_vocab_win.style.display = 'none';
+                    close_vocab_win.style.display = 'none'; 
                 });
+            }
+            else if (!isOffline)
+            {
+                const dataToSendDeleteVocab = ({ german: german_in, english: english_in });
+
+                fetch(`http://${api_address}:3000/vocab/delete`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dataToSendDeleteVocab),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log('Fetch error: ', error);
+                }); 
             }
         }
     });
