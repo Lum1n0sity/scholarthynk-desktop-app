@@ -472,16 +472,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
 
                         const rows = data.split('\n');
-
-                        console.log('Rows: ', rows);
-    
-                        const updatedRows = [];
                       
                         for (const row of rows) 
                         {
                           const rowValues = row.split(' | ');
-                      
-                          console.log('Row Values', rowValues);
     
                           if ((rowValues.includes(german_word) && rowValues.includes(english_word))) 
                           { 
@@ -520,8 +514,6 @@ document.addEventListener('DOMContentLoaded', () => {
                           }
                         }
                     });
-
-                    console.log('Data saved to the file successfully.');
                 } 
                 catch (error) 
                 {
