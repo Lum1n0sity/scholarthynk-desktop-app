@@ -821,12 +821,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             offline_toggle_checkbox.checked = true;
           
-            ipcRenderer.send('open-file-dialog');
-          
-            ipcRenderer.on('selected-file', (event, filePath) => {
-              offlineFilePath = filePath;
-              loadVocabOffline();
-            });
+            //ipcRenderer.send('open-file-dialog');
+          //
+            //ipcRenderer.on('selected-file', (event, filePath) => {
+            //  offlineFilePath = filePath;
+            //  loadVocabOffline();
+            //});
           
             offline_toggle_checkbox.addEventListener('change', function () 
             {
@@ -958,4 +958,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-});
+}); 
