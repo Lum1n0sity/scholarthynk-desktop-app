@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('username_view').textContent;
     
         const dataToSendLoad = ({ username: username });
-    
+
         fetch(`http://${api_address}:3000/vocab/load`, {
             method: "POST",
             headers: {
@@ -596,6 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 close_error_message.addEventListener('click', () => {
                     error_message.style.display = 'none';
+                    unloadVocab();
                 });
             }
         })
@@ -635,6 +636,7 @@ document.addEventListener('DOMContentLoaded', () => {
         user_info_button_container.style.display = 'none';
         isLoggedIn = false;
         localStorage.removeItem('authToken');
+        unloadVocab();
     });
 
     function tryAutoLogin()
@@ -1200,4 +1202,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-}); 
+});
