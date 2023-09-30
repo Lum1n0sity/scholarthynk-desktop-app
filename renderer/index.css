@@ -854,6 +854,20 @@ body {
     display: none;
 }
 
+#feedback {
+    background-color: var(--box-dark-hover);
+    color: var(--text-color-dark);
+    font-size: 1.5vw;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 1vw;
+    margin-top: .7vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
 #settings {
     background-color: var(--box-dark-hover);
     color: var(--text-color-dark);
@@ -862,8 +876,8 @@ body {
     outline: none;
     border-radius: 10px;
     padding: 10px;
-    margin-left: 2vw;
-    margin-top: 2vw;
+    margin-left: 1vw;
+    margin-top: 1vw;
     cursor: pointer;
     transition: .5s;
 }
@@ -876,9 +890,14 @@ body {
     outline: none;
     border-radius: 10px;
     padding: 10px;
-    margin-left: 2vw;
-    margin-top: 1.5vw;
+    margin-left: 1vw;
+    margin-top: 1vw;
     cursor: pointer;
+    transition: .5s;
+}
+
+#feedback:hover {
+    background-color: var(--border-dark);
     transition: .5s;
 }
 
@@ -890,6 +909,21 @@ body {
 #logout:hover {
     background-color: var(--border-dark);
     transition: .5s;
+}
+
+#feedback ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#settings ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#logout ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
 }
 
 #error_login {
