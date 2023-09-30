@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let latestRequest = null;
 
     const storedToken = localStorage.getItem('authToken');
-    if (storedToken !== null) {
+    if (storedToken !== null && !isOffline) {
         const storedTokenObject = JSON.parse(storedToken);
         const token = storedTokenObject.value;
 
@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             username_storage.textContent = username;
 
+            hideConnectionError();
+
             if (allowLogin == true) {
                 login_button.style.display = 'none';
                 user_button.style.display = 'block';
@@ -109,9 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const register = document.getElementById('register');
 
     const add_vocab = document.getElementById('add_vocab');
+    const delete_vocab = document.getElementById('delete_vocab');
     const german_entry = document.getElementById('german-in');
     const english_entry = document.getElementById('english-in');
     const vocab_list = document.getElementById('vocab_list');
+    const delete_vocab_win = document.getElementById('delete_vocab_div');
+    const delete_vocab_win_btn = document.getElementById('delete');
+    const close_vocab_win = document.getElementById('close_delete');
 
     const user_info_button_container = document.getElementById('user_info_buttons');
     const logout_button = document.getElementById('logout');
@@ -285,6 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             username_storage.textContent = username;
             
+            hideConnectionError();
+
             if (allowLogin == true)
             {
                 login_button.style.display = 'none';
@@ -360,6 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             username_storage.textContent = username;
 
+            hideConnectionError();
+
             if (accountCreated == true)
             {
                 login_button.style.display = 'none';
@@ -420,11 +430,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(data);
                     const added = data.added;
     
+                    hideConnectionError();
+
                     if (added) 
                     {
                         const formattedText = `${german_word} | ${english_word}`;
                     
                         vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText;
+                        vocab_list.scrollTop = vocab_list.scrollHeight;
                     }
                     else 
                     {
@@ -457,25 +470,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const filePath = offlineFilePath;
 
-                    fs.appendFile(filePath, inputData, 'utf8', (err) => {
-                        if (err) 
+                    console.log(inputData);
+
+                    fs.readFile(filePath, 'utf-8', (error, data) => {
+                        if (error)
                         {
-                          console.error('Error writing to the file:', err);
-                          return;
+                            console.error('Error reading file: ', error);
+                            return;
                         }
-                      });
 
-                      fs.readFile(filePath, 'utf8', (err, data) => {
-                          if (err)
-                          {
-                              console.error('Error reading file: ', err);
-                              return;
+                        const rows = data.split('\n');
+                      
+                        for (const row of rows) 
+                        {
+                          const rowValues = row.split(' | ');
+    
+                          if ((rowValues.includes(german_word) && rowValues.includes(english_word))) 
+                          { 
+                            const vocab_message = document.getElementById('warning_vocab_div');
+    
+                            vocab_message.style.display = 'block';
+        
+                            const vocab_message_ok = document.getElementById('warning_vocab_ok');
+        
+                            vocab_message_ok.addEventListener('click', () => {
+                                vocab_message.style.display = 'none';
+                            });
+
+                            return;
                           }
-
-                          vocab_list.textContent = data;
-                      });
-
-                      console.log('Data saved to the file successfully.');
+                          else
+                          {
+                            fs.appendFile(filePath, inputData, 'utf8', (err) => {
+                                if (err) 
+                                {
+                                  console.error('Error writing to the file:', err);
+                                  return;
+                                }
+                            });
+      
+                            fs.readFile(filePath, 'utf8', (err, data) => {
+                                if (err)
+                                {
+                                    console.error('Error reading file: ', err);
+                                    return;
+                                }
+    
+                                vocab_list.textContent = data;
+                                vocab_list.scrollTop = vocab_list.scrollHeight;
+                            });
+                          }
+                        }
+                    });
                 } 
                 catch (error) 
                 {
@@ -508,6 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const foundVocab = data.vocabFound;
     
             latestRequest = "LoadVocab";
+
+            hideConnectionError();
 
             if (foundVocab)
             {
@@ -623,6 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 username_storage.textContent = username;
     
+                hideConnectionError();
+
                 if (allowLogin == true) {
                     login_button.style.display = 'none';
                     user_button.style.display = 'block';
@@ -646,25 +696,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    offline_toggle.addEventListener('change', function () 
+    offline_toggle_checkbox.addEventListener('change', function () 
     {
       if (this.checked) 
       {
         isOffline = true;
         isLoggedIn = false;
-        console.log('isOffline', isOffline);
+
+        ipcRenderer.send('open-file-dialog');
+          
+        ipcRenderer.on('selected-file', (event, filePath) => {
+          offlineFilePath = filePath;
+          loadVocabOffline();
+        });
       } 
       else 
       {
         isOffline = false;
-        console.log('isOffline', isOffline);
         unloadVocab();
+
         login_button.style.display = 'block';
         user_button.style.display = 'none';
+
         tryAutoLogin();
       }
     });
-    // The Devil!!!!!!!!! DON DON DONNNNNN
+
     function displayConnectionError()
     {
         console.log('Request timeout');
@@ -674,13 +731,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const register_div = document.getElementById('register_div');
         const close_register = document.getElementById('close_register');
         const close_login = document.getElementById('close_login');
-
+        
         connection_error.style.display = 'block';
         list_div.style.display = 'none';
         register_div.style.display = 'none';
         login_div.style.display = 'none';
         close_login.style.display = 'none';
         close_register.style.display = 'none';
+        add_vocab.style.display = 'none';
+        delete_vocab.style.display = 'none';
+    }
+
+    function hideConnectionError()
+    {
+        canConnectToServer = true;
+        const list_div = document.getElementById('list_div');
+        const login_div = document.getElementById('login_div');
+        const register_div = document.getElementById('register_div');
+        const close_register = document.getElementById('close_register');
+        const close_login = document.getElementById('close_login');
+        
+        connection_error.style.display = 'none';
+        list_div.style.display = 'block';
+        add_vocab.style.display = 'block';
+        delete_vocab.style.display = 'block';
     }
 
     try_again_login.addEventListener('click', () => {
@@ -714,6 +788,8 @@ document.addEventListener('DOMContentLoaded', () => {
         isLoggedIn = false;
         loadVocabOffline();
         handleOffline();
+        add_vocab.style.display = 'block';
+        delete_vocab.style.display = 'block';
     });
 
     function displayOfflineMessage() 
@@ -773,18 +849,25 @@ document.addEventListener('DOMContentLoaded', () => {
             offline_toggle_checkbox.checked = true;
           
             ipcRenderer.send('open-file-dialog');
-          
+              
             ipcRenderer.on('selected-file', (event, filePath) => {
               offlineFilePath = filePath;
               loadVocabOffline();
             });
           
-            offline_toggle.addEventListener('change', function () 
+            offline_toggle_checkbox.addEventListener('change', function () 
             {
               if (this.checked) 
               {
                 isOffline = true;
-                console.log('isOffline', isOffline);
+                isLoggedIn = false;
+                
+                ipcRenderer.send('open-file-dialog');
+          
+                ipcRenderer.on('selected-file', (event, filePath) => {
+                  offlineFilePath = filePath;
+                  loadVocabOffline();
+                });
               } 
               else 
               {
@@ -800,4 +883,132 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     }
-});
+
+    delete_vocab.addEventListener('click', () => {
+        vocab_list.style.display = 'none';
+        list_div.style.display = 'none';
+        delete_vocab.style.display = 'none';
+        add_vocab.style.display = 'none';
+        delete_vocab_win.style.display = 'block';
+        close_vocab_win.style.display = 'block'; 
+    });
+
+    close_vocab_win.addEventListener('click', () => {
+        vocab_list.style.display = 'block';
+        list_div.style.display = 'block';
+        delete_vocab.style.display = 'block';
+        add_vocab.style.display = 'block';
+        delete_vocab_win.style.display = 'none';
+        close_vocab_win.style.display = 'none'; 
+    });
+
+    delete_vocab_win_btn.addEventListener('click', () => {
+        const german_in = document.getElementById('delete_german').value;
+        const english_in = document.getElementById('delete_english').value;
+
+        if (german_in && english_in !== null)
+        {
+            if (isOffline)
+            {
+                let filePath = offlineFilePath;
+
+                fs.readFile(filePath, 'utf8', (err, data) => {
+                    if (err) 
+                    {
+                      console.error('Error reading file:', err);
+                      return;
+                    }
+                    
+                    console.log('German in: ', german_in);
+                    console.log('English in: ', english_in);
+
+                    const rows = data.split('\n');
+
+                    console.log('Rows: ', rows);
+
+                    const updatedRows = [];
+                  
+                    for (const row of rows) 
+                    {
+                      const rowValues = row.split(' | ');
+                  
+                      console.log('Row Values', rowValues);
+
+                      if (!(rowValues.includes(german_in) && rowValues.includes(english_in))) 
+                      {
+                        updatedRows.push(row);
+                      }
+                    }
+                  
+                    const newContent = updatedRows.join('\n');
+
+                    console.log('New Content', newContent);
+                  
+                    fs.writeFile(filePath, newContent, 'utf8', (err) => {
+                      if (err) 
+                      {
+                        console.error('Error writing to file:', err);
+                        return;
+                      }
+                  
+                      console.log('Rows with matching values deleted.');
+                    });
+
+                    vocab_list.textContent = newContent;
+
+                    vocab_list.style.display = 'block';
+                    list_div.style.display = 'block';
+                    delete_vocab.style.display = 'block';
+                    add_vocab.style.display = 'block';
+                    delete_vocab_win.style.display = 'none';
+                    close_vocab_win.style.display = 'none'; 
+                });
+            }
+            else if (!isOffline)
+            {
+                const username_storage = document.getElementById('username_view');
+                const username = username_storage.textContent;
+
+                const dataToSendDeleteVocab = ({ german: german_in, english: english_in, username: username });
+
+                console.log(dataToSendDeleteVocab);
+
+                fetch(`http://${api_address}:3000/vocab/delete`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dataToSendDeleteVocab),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const isDeleted = data.deleted;
+
+                    let valueToRemove = `${german_in} | ${english_in}`;
+
+                    if (isDeleted)
+                    {
+                        vocab_list.style.display = 'block';
+                        list_div.style.display = 'block';
+                        delete_vocab.style.display = 'block';
+                        add_vocab.style.display = 'block';
+                        delete_vocab_win.style.display = 'none';
+                        close_vocab_win.style.display = 'none'; 
+
+                        let currentValue = vocab_list.value;
+                        const lines = currentValue.split('\n');
+
+                        const filteredLines = lines.filter(line => line.trim() !== valueToRemove);
+
+                        currentValue = filteredLines.join('\n');
+
+                        vocab_list.value = currentValue;
+                    }
+                })
+                .catch(error => {
+                    console.log('Fetch error: ', error);
+                }); 
+            }
+        }
+    });
+}); 
