@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeoutId;
 
     let offlineInterval;
-    let isOffline = true;
+    let isOffline = false;
     let isOffline_MessageDisplayed = false;
     let offlineFilePath = null;
 
@@ -65,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const username = data.username;
 
             username_storage.textContent = username;
+
+            hideConnectionError();
 
             if (allowLogin == true) {
                 login_button.style.display = 'none';
@@ -289,6 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             username_storage.textContent = username;
             
+            hideConnectionError();
+
             if (allowLogin == true)
             {
                 login_button.style.display = 'none';
@@ -364,6 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             username_storage.textContent = username;
 
+            hideConnectionError();
+
             if (accountCreated == true)
             {
                 login_button.style.display = 'none';
@@ -424,6 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(data);
                     const added = data.added;
     
+                    hideConnectionError();
+
                     if (added) 
                     {
                         const formattedText = `${german_word} | ${english_word}`;
@@ -547,6 +555,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
             latestRequest = "LoadVocab";
 
+            hideConnectionError();
+
             if (foundVocab)
             {
                 const vocab = data.vocab;
@@ -661,6 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 username_storage.textContent = username;
     
+                hideConnectionError();
+
                 if (allowLogin == true) {
                     login_button.style.display = 'none';
                     user_button.style.display = 'block';
@@ -728,6 +740,21 @@ document.addEventListener('DOMContentLoaded', () => {
         close_register.style.display = 'none';
         add_vocab.style.display = 'none';
         delete_vocab.style.display = 'none';
+    }
+
+    function hideConnectionError()
+    {
+        canConnectToServer = true;
+        const list_div = document.getElementById('list_div');
+        const login_div = document.getElementById('login_div');
+        const register_div = document.getElementById('register_div');
+        const close_register = document.getElementById('close_register');
+        const close_login = document.getElementById('close_login');
+        
+        connection_error.style.display = 'none';
+        list_div.style.display = 'block';
+        add_vocab.style.display = 'block';
+        delete_vocab.style.display = 'block';
     }
 
     try_again_login.addEventListener('click', () => {
@@ -939,10 +966,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             else if (!isOffline)
             {
-                const dataToSendDeleteVocab = ({ german: german_in, english: english_in });
+                const username_storage = document.getElementById('username_view');
+                const username = username_storage.textContent;
+
+                const dataToSendDeleteVocab = ({ german: german_in, english: english_in, username: username });
+
+                console.log(dataToSendDeleteVocab);
 
                 fetch(`http://${api_address}:3000/vocab/delete`, {
-                    method: "POST",
+                    method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
                     },
@@ -950,7 +982,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    const isDeleted = data.deleted;
+
+                    let valueToRemove = `${german_in} | ${english_in}`;
+
+                    if (isDeleted)
+                    {
+                        vocab_list.style.display = 'block';
+                        list_div.style.display = 'block';
+                        delete_vocab.style.display = 'block';
+                        add_vocab.style.display = 'block';
+                        delete_vocab_win.style.display = 'none';
+                        close_vocab_win.style.display = 'none'; 
+
+                        let currentValue = vocab_list.value;
+                        const lines = currentValue.split('\n');
+
+                        const filteredLines = lines.filter(line => line.trim() !== valueToRemove);
+
+                        currentValue = filteredLines.join('\n');
+
+                        vocab_list.value = currentValue;
+                    }
                 })
                 .catch(error => {
                     console.log('Fetch error: ', error);
