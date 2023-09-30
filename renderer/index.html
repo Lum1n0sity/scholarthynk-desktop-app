@@ -42,6 +42,7 @@
         <button id="close_register" style="display: none;"><ion-icon name="close-outline"></ion-icon></button>
         <button id="close_login"><ion-icon name="close-outline"></ion-icon></button>
         <button id="close_delete"><ion-icon name="close-outline"></ion-icon></button>
+        <button id="close_feedback"><ion-icon name="close-outline"></ion-icon></button>
         <div class="login_div" id="login_div">
             <h4>Login</h4>
             <div id="transi_div">
@@ -79,6 +80,7 @@
             <button id="ok_vocab_load">Ok</button>
         </div>
         <div id="user_info_buttons">
+            <button id="feedback"><ion-icon name="chatbox-ellipses-outline"></ion-icon> Feedback</button>
             <button id="settings"><ion-icon name="settings-outline"></ion-icon> Settings</button>
             <button id="logout"><ion-icon name="log-out-outline"></ion-icon> Logout</button>
         </div>
@@ -100,5 +102,28 @@
             <input type="text" placeholder="English word..." id="delete_english">
             <button id="delete"><ion-icon name="trash-outline"></ion-icon> DELETE</button>
         </div>
+        <div id="feedback_win">
+            <button id="feedback-win">Feedback</button>
+            <button id="bug-report">Problems</button>
+            <div id="feedback-sub">
+                <h4 id="feedback-title">Feedback</h4>
+                <textarea id="feedback-win-text" cols="30" rows="10"></textarea>
+                <button id="feedback-send">Send <ion-icon name="send-outline"></ion-icon></button>
+            </div>
+            <div id="bug-report-sub">
+                <h4 id="bug-title">Problems</h4>
+                <select id="select-problem">
+                    <option value="login">Unable to login</option>
+                    <option value="register">Unable to register</option>
+                    <option value="add_vocab">Cant add new Vocab</option>
+                    <option value="delete_vocab">Cant delete Vocab</option>
+                    <option value="other">Other...</option>
+                </select>
+                <p id="problem-description-p">Describe your Problem in detail:</p>
+                <textarea id="problem-description" cols="30" rows="10"></textarea>
+                <button id="report"><ion-icon name="bug-outline"></ion-icon> Report</button>
+            </div>
+        </div>
+        <button id="offline_feedback"><ion-icon name="thumbs-up-outline"></ion-icon></button>
     </body>
 </html>

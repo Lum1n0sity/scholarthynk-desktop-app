@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { ipcRenderer, remote } = require('electron');
+const nodemailer = require('nodemailer');
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -127,7 +128,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const offline_login = document.getElementById('offline_login');
 
     const offline_toggle_checkbox = document.getElementById('toggleSwitch_offline');
-    const offline_toggle = document.getElementById('offline_toggle');
+
+    const feedback_win = document.getElementById('feedback_win');
+    const feedback_open = document.getElementById('feedback');
+    const feedback_close = document.getElementById('close_feedback');
+    const feedback_sub = document.getElementById('feedback-sub');
+    const problem_sub = document.getElementById('bug-report-sub');
+    const feedback_tab = document.getElementById('feedback-win');
+    const problem_tab = document.getElementById('bug-report');
+    const feedback_send = document.getElementById('feedback-send');
+    const report_send = document.getElementById('report');
+    const offline_feedback = document.getElementById('offline_feedback');
+
+    let isFeedbackWinOpen = false;
+    let isInFeedbackTab = true;
+    let isInProblemTab = false;
 
     let isLoggedIn = false;
     let isUserInfoOpen = false;
@@ -1010,5 +1025,179 @@ document.addEventListener('DOMContentLoaded', () => {
                 }); 
             }
         }
+    });
+
+    offline_feedback.addEventListener('click', () => {
+        if (!isFeedbackWinOpen)
+        {
+            feedback_win.style.display = 'block';
+            feedback_sub.style.display = 'block';
+            feedback_close.style.display = 'block';
+            
+            list_div.style.display = 'none';
+            user_info_button_container.style.display = 'none';
+
+            isFeedbackWinOpen = true;
+        }
+    });
+
+    feedback_open.addEventListener('click', () => {
+        if (!isFeedbackWinOpen)
+        {
+            feedback_win.style.display = 'block';
+            feedback_sub.style.display = 'block';
+            feedback_close.style.display = 'block';
+            
+            list_div.style.display = 'none';
+            user_info_button_container.style.display = 'none';
+
+            isFeedbackWinOpen = true;
+        }
+    });
+
+    feedback_close.addEventListener('click', () => {
+        if (isFeedbackWinOpen)
+        {
+            feedback_win.style.display = 'none';
+            feedback_sub.style.display = 'none';
+            feedback_close.style.display = 'none';
+            
+            list_div.style.display = 'block';
+
+            isFeedbackWinOpen = false; 
+        }
+    });
+
+    feedback_tab.addEventListener('mouseover', () => {
+        if (isInProblemTab)
+        {
+            feedback_tab.style.backgroundColor = '#151922';
+            feedback_tab.style.transition = '.5s';
+        }
+    });
+
+    feedback_tab.addEventListener('mouseout', () => {
+        if (isInProblemTab)
+        {
+            feedback_tab.style.backgroundColor = '#222b38';
+            feedback_tab.style.transition = '.5s';
+        }
+    });
+
+    feedback_tab.addEventListener('click', () => {
+        if (isFeedbackWinOpen && isInProblemTab)
+        {
+            feedback_sub.style.display = 'block'
+            problem_sub.style.display = 'none';
+
+            feedback_tab.style.backgroundColor = '#151922';
+            problem_tab.style.backgroundColor = '#222b38';
+
+            isInProblemTab = false;
+            isInFeedbackTab = true;
+        }
+    });
+
+    problem_tab.addEventListener('mouseover', () => {
+        if (isInFeedbackTab)
+        {
+            problem_tab.style.backgroundColor = '#151922';
+            problem_tab.style.transition = '.5s';
+        }
+    });
+
+    problem_tab.addEventListener('mouseout', () => {
+        if (isInFeedbackTab)
+        {
+            problem_tab.style.backgroundColor = '#222b38';
+            problem_tab.style.transition = '.5s';
+        }
+    });
+
+    problem_tab.addEventListener('click', () => {
+        if (isFeedbackWinOpen && isInFeedbackTab)
+        {
+            feedback_sub.style.display = 'none'
+            problem_sub.style.display = 'block';
+
+            feedback_tab.style.backgroundColor = '#222b38';
+            problem_tab.style.backgroundColor = '#151922';
+
+            isInFeedbackTab = false;
+            isInProblemTab = true;
+        }
+    });
+
+    feedback_send.addEventListener('click', () => {
+        const transporter_feedback = nodemailer.createTransport({
+           service: 'Outlook' ,
+           auth: {
+            user: 'vocabTrainer@outlook.com',
+            pass: 'n6T</b]+M&fi&T}eq7{$j0vjXIiaoG'
+           },
+        });
+
+        const feedback_text = document.getElementById('feedback-win-text').value;
+
+        const mailOptions = {
+            from: 'vocabTrainer@outlook.com',
+            to: 'vocabTrainer@outlook.com',
+            subject: 'Feedback',
+            text: feedback_text
+        };
+
+        transporter_feedback.sendMail(mailOptions, (error) => {
+            if (error) 
+            {
+                console.error('Error sending email:', error);
+            } 
+            else 
+            {
+                feedback_win.style.display = 'none';
+                feedback_sub.style.display = 'none';
+                feedback_close.style.display = 'none';
+                
+                list_div.style.display = 'block';
+    
+                isFeedbackWinOpen = false; 
+            }
+        });
+    });
+
+    report_send.addEventListener('click', () => {
+        const transporter_report = nodemailer.createTransport({
+            service: 'Outlook',
+            auth: {
+                user: 'vocabTrainer@outlook.com',
+                pass: 'n6T</b]+M&fi&T}eq7{$j0vjXIiaoG'
+            },
+        });
+
+        const subject_problem = document.getElementById('select-problem').value;
+        const report_text = document.getElementById('problem-description').value;
+
+        const mailOptions = {
+            from: 'vocabTrainer@outlook.com',
+            to: 'vocabTrainer@outlook.com',
+            subject: `Problem: ${subject_problem}`,
+            text: report_text
+        };
+
+        transporter_report.sendMail(mailOptions, (error) => {
+            if (error)
+            {
+                console.error('Error sending email:', error);
+            }
+            else
+            {
+                feedback_win.style.display = 'none';
+                feedback_sub.style.display = 'none';
+                feedback_close.style.display = 'none';
+                
+                list_div.style.display = 'block';
+    
+                isFeedbackWinOpen = false;  
+            }
+        });
     });
 }); 

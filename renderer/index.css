@@ -854,6 +854,20 @@ body {
     display: none;
 }
 
+#feedback {
+    background-color: var(--box-dark-hover);
+    color: var(--text-color-dark);
+    font-size: 1.5vw;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 1vw;
+    margin-top: .7vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
 #settings {
     background-color: var(--box-dark-hover);
     color: var(--text-color-dark);
@@ -862,8 +876,8 @@ body {
     outline: none;
     border-radius: 10px;
     padding: 10px;
-    margin-left: 2vw;
-    margin-top: 2vw;
+    margin-left: 1vw;
+    margin-top: 1vw;
     cursor: pointer;
     transition: .5s;
 }
@@ -876,9 +890,14 @@ body {
     outline: none;
     border-radius: 10px;
     padding: 10px;
-    margin-left: 2vw;
-    margin-top: 1.5vw;
+    margin-left: 1vw;
+    margin-top: 1vw;
     cursor: pointer;
+    transition: .5s;
+}
+
+#feedback:hover {
+    background-color: var(--border-dark);
     transition: .5s;
 }
 
@@ -890,6 +909,21 @@ body {
 #logout:hover {
     background-color: var(--border-dark);
     transition: .5s;
+}
+
+#feedback ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#settings ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#logout ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
 }
 
 #error_login {
@@ -1154,4 +1188,262 @@ input:checked + .slider:before {
 #close_delete ion-icon {
         vertical-align: middle;
         transform: translateY(-9%);
+}
+
+#feedback_win {
+    background-color: var(--box-dark);
+    width: 25vw;
+    height: 20vw;
+    justify-self: center;
+    grid-column: 3;
+    grid-row: 3;
+    border-radius: 20px;
+    border: var(--border-dark) 2px solid;
+    z-index: 30;
+    display: none;
+}
+
+#feedback-win {
+    background-color: var(--background-dark);
+    font-size: 1.2vw;
+    border: none;
+    outline: none;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    margin-top: 1vw;
+    margin-left: 6vw;
+    padding-left: 20px;
+    color: var(--text-color-dark);
+    cursor: pointer;
+    transition: .5s;
+}
+
+#bug-report {
+    background-color: var(--box-dark-hover);
+    font-size: 1.2vw;
+    border: none;
+    outline: none;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    padding-right: 20px;
+    padding-left: 10px;
+    color: var(--text-color-dark);
+    cursor: pointer;
+    transition: .5s;
+}
+
+#feedback-sub {
+    background-color: transparent;
+    width: 23vw;
+    height: 15vw;
+    margin-left: 1vw;
+    margin-top: 1.5vw;
+    display: block;
+}
+
+#feedback-title {
+    font-size: 1.5vw;
+    margin-left: 8.5vw;
+    margin-bottom: .5vw;
+}
+
+#feedback-win-text {
+    resize: none;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 1vw;
+    height: 8vw;
+    background-color: var(--background-dark);
+    color: var(--text-color-dark);
+    margin-left: 4vw;
+}
+
+#feedback-win-text::-webkit-scrollbar {
+    width: 5px;
+}
+
+#feedback-win-text::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#feedback-win-text::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+#feedback-win-text::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#feedback-send {
+    background-color: var(--background-dark);
+    font-size: 1.2vw;
+    color: var(--text-color-dark);
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    padding: 10px;
+    margin-left: 9vw;
+    margin-top: 1vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#feedback-send:hover {
+    transition: .5s;
+    background-color: var(--border-dark);
+}
+
+#feedback-send ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#bug-report-sub {
+    background-color: transparent;
+    width: 23vw;
+    height: 15vw;
+    margin-left: 1vw;
+    margin-top: 1.5vw;
+    display: none;
+}
+
+#bug-title {
+    font-size: 1.5vw;
+    margin-left: 8.5vw;
+    margin-bottom: 1vw;
+}
+
+#select-problem {
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: var(--background-dark);
+    color: var(--text-color-dark);
+    outline: none;
+    font-size: 1vw;
+    margin-left: 6vw;
+    cursor: pointer;
+}
+
+#problem-description-p {
+    font-size: 1vw;
+    margin-left: 4vw;
+    margin-top: 1vw;
+    margin-bottom: .1vw;
+}
+
+#problem-description {
+    resize: none;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 1vw;
+    height: 5vw;
+    background-color: var(--background-dark);
+    color: var(--text-color-dark);
+    margin-left: 4vw;
+}
+
+#problem-description::-webkit-scrollbar {
+    width: 5px;
+}
+
+#problem-description::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#problem-description::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+#problem-description::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#report {
+    background-color: var(--background-dark);
+    font-size: 1.2vw;
+    color: var(--text-color-dark);
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    padding: 10px;
+    margin-left: 8.5vw;
+    margin-top: .5vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#report:hover {
+    transition: .5s;
+    background-color: var(--border-dark);
+}
+
+#report ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#close_feedback {
+    grid-row: 3;
+    grid-column: 2;
+    width: 3vw;
+    height: 3vw;
+    font-size: 1.5vw;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    z-index: 35;
+    transition: .5s;
+    background-color: transparent;
+    color: var(--text-color-dark);
+    justify-self: center;
+    margin-left: 10vw;
+    margin-top: .3vw;
+    display: none;
+}
+
+#close_feedback:hover {
+    background-color: var(--box-dark-hover);
+    transition: .5s;
+}
+
+#close_feedback ion-icon {
+        vertical-align: middle;
+        transform: translateY(-9%);
+}
+
+#offline_feedback {
+    grid-column: 1;
+    grid-row: 4;
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    background-color: var(--box-dark);
+    color: var(--text-color-dark);
+    transition: .5s;
+    cursor: pointer;
+    align-self: end;
+    justify-self: start;
+    margin-left: 2vw;
+    margin-bottom: 2vw;
+}
+
+#offline_feedback ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#offline_feedback:hover {
+    background-color: var(--box-dark-hover);
+    transition: .5s;
 }
