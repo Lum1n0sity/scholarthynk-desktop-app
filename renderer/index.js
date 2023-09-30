@@ -132,6 +132,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedback_win = document.getElementById('feedback_win');
     const feedback_open = document.getElementById('feedback');
     const feedback_close = document.getElementById('close_feedback');
+    const feedback_sub = document.getElementById('feedback-sub');
+    const problem_sub = document.getElementById('bug-report-sub');
+    const feedback_tab = document.getElementById('feedback-win');
+    const problem_tab = document.getElementById('bug-report');
+    const feedback_send = document.getElementById('feedback-send');
+    const report_send = document.getElementById('report');
+    const offline_feedback = document.getElementById('offline_feedback');
+
+    let isFeedbackWinOpen = false;
+    let isInFeedbackTab = true;
+    let isInProblemTab = false;
 
     let isLoggedIn = false;
     let isUserInfoOpen = false;
@@ -1015,18 +1026,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
-    let isFeedbackWinOpen = false;
-    let isInFeedbackTab = true;
-    let isInProblemTab = false;
-
-    const feedback_sub = document.getElementById('feedback-sub');
-    const problem_sub = document.getElementById('bug-report-sub');
-    const feedback_tab = document.getElementById('feedback-win');
-    const problem_tab = document.getElementById('bug-report');
-    const feedback_send = document.getElementById('feedback-send');
-    const report_send = document.getElementById('report');
-    const offline_feedback = document.getElementById('offline_feedback');
 
     offline_feedback.addEventListener('click', () => {
         if (!isFeedbackWinOpen)
