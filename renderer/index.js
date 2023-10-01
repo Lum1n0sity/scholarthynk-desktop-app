@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer } = require('electron');
 const nodemailer = require('nodemailer');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const signal = abortControllerInit.signal;
 
     let latestRequest = null;
+
+    loadLogs();
 
     const storedToken = localStorage.getItem('authToken');
     if (storedToken !== null && !isOffline) {
@@ -1293,8 +1295,6 @@ document.addEventListener('DOMContentLoaded', () => {
         change_log_bg.style.display = 'block';
         change_log_close.style.display = 'block';
         list_div.style.display = 'none';
-
-        loadLogs();   
     });
 
     change_log_close.addEventListener('click', () => {
