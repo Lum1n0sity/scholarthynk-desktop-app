@@ -1483,7 +1483,7 @@ input:checked + .slider:before {
 }
 
 #change_log_container {
-    background-color: var(--box-dark);
+    background-color: var(--background-dark);
     border-left: var(--border-dark) 2px solid;
     border-right: var(--border-dark) 2px solid;
     float: center;
@@ -1494,6 +1494,25 @@ input:checked + .slider:before {
     top: 0vh;
     left: 25vw;
     display: none;
+    overflow-y: auto;
+}
+
+#change_log_container::-webkit-scrollbar {
+    width: 5px;
+}
+
+#change_log_container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#change_log_container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+#change_log_container::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 #close_log {
@@ -1531,6 +1550,10 @@ input:checked + .slider:before {
     position: fixed;
     left: 0vw;
     top: 0vh;
+    display: none;
+}
+
+#nothing_there {
     display: none;
 }
 
