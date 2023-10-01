@@ -10,120 +10,132 @@
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     </head>
-    <body>  
-        <p id="username_view">testUser</p>
-        <div id="user_div">
-            <button id="login_button"><ion-icon name="log-in-outline"></ion-icon> Login</button>
-            <div id="user_logged_in_bg">
-                <img src="images/User.png" alt="User" id="user_logged_in">
+    <body> 
+        <div id="main_grid">
+            <p id="username_view">testUser</p>
+            <div id="user_div">
+                <button id="login_button"><ion-icon name="log-in-outline"></ion-icon> Login</button>
+                <div id="user_logged_in_bg">
+                    <img src="images/User.png" alt="User" id="user_logged_in">
+                </div>
             </div>
-        </div>
-        <div id="header_div">
-            <button id="start_training">Training</button>
-        </div>
-        <div id="german_div">
-            <p id="german-p">German</p>
-            <input type="text" id="german-in">
-        </div>
-        <div id="english_div">
-            <p id="english-p">English</p>
-            <input type="text" id="english-in">
-        </div>
-        <button id="add_vocab"><ion-icon name="add-outline"></ion-icon> Add</button>
-        <button id="delete_vocab"><ion-icon name="trash-outline"></ion-icon> Delete</button>
-        <div id="list_div">
-            <p>Vocab List</p>
-            <textarea id="vocab_list" cols="30" rows="10" readonly></textarea>
-        </div>
-        <div id="warning_vocab_div">
-            <p>You already have that Vocabulary in your list!</p>
-            <button id="warning_vocab_ok">Ok</button>
-        </div>
-        <button id="close_register" style="display: none;"><ion-icon name="close-outline"></ion-icon></button>
-        <button id="close_login"><ion-icon name="close-outline"></ion-icon></button>
-        <button id="close_delete"><ion-icon name="close-outline"></ion-icon></button>
-        <button id="close_feedback"><ion-icon name="close-outline"></ion-icon></button>
-        <div class="login_div" id="login_div">
-            <h4>Login</h4>
-            <div id="transi_div">
-                <img src="images/login_transition.png" id="trans_img">
-                <button class="switch_lo" id="switch_lo">R<br>E<br>G<br>I<br>S<br>T<br>E<br>R</button>
+            <div id="header_div">
+                <button id="start_training">Training</button>
             </div>
-            <button class="login" id="login">Login</button>
-            <input type="text" id="username_input_lo" placeholder="Username...">
-            <input type="password" id="password_input_lo" placeholder="Password...">
-            <p id="username_title_lo">Username:</p>
-            <p id="password_title_lo">Password:</p>
-            <button id="password_view_lo"><ion-icon name="eye-outline"></ion-icon></button>
-            <button id="password_unview_lo"><ion-icon name="eye-off-outline"></ion-icon></button>
-            <p id="error_lo">Username or password wrong!</p>
-        </div>
-        <div id="register_div">
-            <h4>Register</h4>
-            <div id="transi_div_rg">
-                <img src="images/register_transition.png" id="trans_img_rg">
-                <button id="switch_rg">R<br>E<br>G<br>I<br>S<br>T<br>E<br>R</button>
+            <div id="german_div">
+                <p id="german-p">German</p>
+                <input type="text" id="german-in">
             </div>
-            <button id="register">Register</button>
-            <input type="text" id="username_input_rg" placeholder="Username...">
-            <input type="password" id="password_input_rg" placeholder="Password...">
-            <p id="username_title_rg">Username:</p>
-            <p id="password_title_rg">Password:</p>
-            <button id="password_view_rg"><ion-icon name="eye-outline"></ion-icon></button>
-            <button id="password_unview_rg"><ion-icon name="eye-off-outline"></ion-icon></button>
-            <p id="error_rg">Username already exists!</p>
-        </div>
-        <p id="logged_in_message">Logged In!</p>
-        <div id="vocab_load_error">
-            <p>Unable to load your Vocabulary!</p>
-            <button id="try_again">Try Again</button>
-            <button id="ok_vocab_load">Ok</button>
-        </div>
-        <div id="user_info_buttons">
-            <button id="feedback"><ion-icon name="chatbox-ellipses-outline"></ion-icon> Feedback</button>
-            <button id="settings"><ion-icon name="settings-outline"></ion-icon> Settings</button>
-            <button id="logout"><ion-icon name="log-out-outline"></ion-icon> Logout</button>
-        </div>
-        <div id="error_login">
-            <p>Unable to connect to server!</p>
-            <button id="try_again_login">Try Again</button>
-            <button id="offline_login">Continue offline</button>
-        </div>
-        <p id="offline_message">You are offline!</p>
-        <p id="offline_toggle_label">Offline Mode:</p>
-        <label id="offline_toggle">
-            <input type="checkbox" id="toggleSwitch_offline">
-            <span class="slider round"></span>
-        </label>
-        <button id="settings_offline"><ion-icon name="settings-outline"></ion-icon></button>
-        <div id="delete_vocab_div">
-            <h4>Delete Vocab</h4>
-            <input type="text" placeholder="German word..." id="delete_german">
-            <input type="text" placeholder="English word..." id="delete_english">
-            <button id="delete"><ion-icon name="trash-outline"></ion-icon> DELETE</button>
-        </div>
-        <div id="feedback_win">
-            <button id="feedback-win">Feedback</button>
-            <button id="bug-report">Problems</button>
-            <div id="feedback-sub">
-                <h4 id="feedback-title">Feedback</h4>
-                <textarea id="feedback-win-text" cols="30" rows="10"></textarea>
-                <button id="feedback-send">Send <ion-icon name="send-outline"></ion-icon></button>
+            <div id="english_div">
+                <p id="english-p">English</p>
+                <input type="text" id="english-in">
             </div>
-            <div id="bug-report-sub">
-                <h4 id="bug-title">Problems</h4>
-                <select id="select-problem">
-                    <option value="login">Unable to login</option>
-                    <option value="register">Unable to register</option>
-                    <option value="add_vocab">Cant add new Vocab</option>
-                    <option value="delete_vocab">Cant delete Vocab</option>
-                    <option value="other">Other...</option>
-                </select>
-                <p id="problem-description-p">Describe your Problem in detail:</p>
-                <textarea id="problem-description" cols="30" rows="10"></textarea>
-                <button id="report"><ion-icon name="bug-outline"></ion-icon> Report</button>
+            <button id="add_vocab"><ion-icon name="add-outline"></ion-icon> Add</button>
+            <button id="delete_vocab"><ion-icon name="trash-outline"></ion-icon> Delete</button>
+            <div id="list_div">
+                <p>Vocab List</p>
+                <textarea id="vocab_list" cols="30" rows="10" readonly></textarea>
             </div>
+            <div id="warning_vocab_div">
+                <p>You already have that Vocabulary in your list!</p>
+                <button id="warning_vocab_ok">Ok</button>
+            </div>
+            <button id="close_register" style="display: none;"><ion-icon name="close-outline"></ion-icon></button>
+            <button id="close_login"><ion-icon name="close-outline"></ion-icon></button>
+            <button id="close_delete"><ion-icon name="close-outline"></ion-icon></button>
+            <button id="close_feedback"><ion-icon name="close-outline"></ion-icon></button>
+            <div class="login_div" id="login_div">
+                <h4>Login</h4>
+                <div id="transi_div">
+                    <img src="images/login_transition.png" id="trans_img">
+                    <button class="switch_lo" id="switch_lo">R<br>E<br>G<br>I<br>S<br>T<br>E<br>R</button>
+                </div>
+                <button class="login" id="login">Login</button>
+                <input type="text" id="username_input_lo" placeholder="Username...">
+                <input type="password" id="password_input_lo" placeholder="Password...">
+                <p id="username_title_lo">Username:</p>
+                <p id="password_title_lo">Password:</p>
+                <button id="password_view_lo"><ion-icon name="eye-outline"></ion-icon></button>
+                <button id="password_unview_lo"><ion-icon name="eye-off-outline"></ion-icon></button>
+                <p id="error_lo">Username or password wrong!</p>
+            </div>
+            <div id="register_div">
+                <h4>Register</h4>
+                <div id="transi_div_rg">
+                    <img src="images/register_transition.png" id="trans_img_rg">
+                    <button id="switch_rg">R<br>E<br>G<br>I<br>S<br>T<br>E<br>R</button>
+                </div>
+                <button id="register">Register</button>
+                <input type="text" id="username_input_rg" placeholder="Username...">
+                <input type="password" id="password_input_rg" placeholder="Password...">
+                <p id="username_title_rg">Username:</p>
+                <p id="password_title_rg">Password:</p>
+                <button id="password_view_rg"><ion-icon name="eye-outline"></ion-icon></button>
+                <button id="password_unview_rg"><ion-icon name="eye-off-outline"></ion-icon></button>
+                <p id="error_rg">Username already exists!</p>
+            </div>
+            <p id="logged_in_message">Logged In!</p>
+            <div id="vocab_load_error">
+                <p>Unable to load your Vocabulary!</p>
+                <button id="try_again">Try Again</button>
+                <button id="ok_vocab_load">Ok</button>
+            </div>
+            <div id="user_info_buttons">
+                <button id="feedback"><ion-icon name="chatbox-ellipses-outline"></ion-icon> Feedback</button>
+                <button id="settings"><ion-icon name="settings-outline"></ion-icon> Settings</button>
+                <button id="logout"><ion-icon name="log-out-outline"></ion-icon> Logout</button>
+            </div>
+            <div id="error_login">
+                <p>Unable to connect to server!</p>
+                <button id="try_again_login">Try Again</button>
+                <button id="offline_login">Continue offline</button>
+            </div>
+            <p id="offline_message">You are offline!</p>
+            <p id="offline_toggle_label">Offline Mode:</p>
+            <label id="offline_toggle">
+                <input type="checkbox" id="toggleSwitch_offline">
+                <span class="slider round"></span>
+            </label>
+            <button id="settings_offline"><ion-icon name="settings-outline"></ion-icon></button>
+            <div id="delete_vocab_div">
+                <h4>Delete Vocab</h4>
+                <input type="text" placeholder="German word..." id="delete_german">
+                <input type="text" placeholder="English word..." id="delete_english">
+                <button id="delete"><ion-icon name="trash-outline"></ion-icon> DELETE</button>
+            </div>
+            <div id="feedback_win">
+                <button id="feedback-win">Feedback</button>
+                <button id="bug-report">Problems</button>
+                <div id="feedback-sub">
+                    <h4 id="feedback-title">Feedback</h4>
+                    <textarea id="feedback-win-text" cols="30" rows="10"></textarea>
+                    <button id="feedback-send">Send <ion-icon name="send-outline"></ion-icon></button>
+                </div>
+                <div id="bug-report-sub">
+                    <h4 id="bug-title">Problems</h4>
+                    <select id="select-problem">
+                        <option value="login">Unable to login</option>
+                        <option value="register">Unable to register</option>
+                        <option value="add_vocab">Cant add new Vocab</option>
+                        <option value="delete_vocab">Cant delete Vocab</option>
+                        <option value="other">Other...</option>
+                    </select>
+                    <p id="problem-description-p">Describe your Problem in detail:</p>
+                    <textarea id="problem-description" cols="30" rows="10"></textarea>
+                    <button id="report"><ion-icon name="bug-outline"></ion-icon> Report</button>
+                </div>
+            </div>
+            <button id="offline_feedback"><ion-icon name="thumbs-up-outline"></ion-icon></button>
+            <button id="change-log-open"><ion-icon name="reader-outline"></ion-icon></button>
+        </div> 
+        <button id="close_log"><ion-icon name="close-outline"></ion-icon></button>
+        <div id="change_log_bg"></div>
+        <div id="change_log_container">
+            <div id="nothing_there">
+                <ion-icon name="desktop-outline" id="change-log-empty-icon"></ion-icon>
+                <p id="change-log-empty">Nothing here yet...</p>
+            </div>
+            <!-- This is where all Change-Logs will appear! -->
         </div>
-        <button id="offline_feedback"><ion-icon name="thumbs-up-outline"></ion-icon></button>
     </body>
 </html>

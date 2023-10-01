@@ -9,6 +9,7 @@
   "author": "Raphael Schuhmann <raphael221@outlook.de>",
   "license": "ISC",
   "dependencies": {
+    "crypto": "^1.0.1",
     "electron": "^26.2.2",
     "nodemailer": "^6.9.5",
     "path": "^0.12.7"

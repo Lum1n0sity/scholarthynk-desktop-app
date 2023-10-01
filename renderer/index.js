@@ -140,6 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const report_send = document.getElementById('report');
     const offline_feedback = document.getElementById('offline_feedback');
 
+    const change_log_container = document.getElementById('change_log_container');
+    const change_log_open = document.getElementById('change-log-open');
+    const change_log_close = document.getElementById('close_log');
+    const change_log_bg = document.getElementById('change_log_bg');
+
     let isFeedbackWinOpen = false;
     let isInFeedbackTab = true;
     let isInProblemTab = false;
@@ -555,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('username_view').textContent;
     
         const dataToSendLoad = ({ username: username });
-    
+
         fetch(`http://${api_address}:3000/vocab/load`, {
             method: "POST",
             headers: {
@@ -596,6 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 close_error_message.addEventListener('click', () => {
                     error_message.style.display = 'none';
+                    unloadVocab();
                 });
             }
         })
@@ -635,6 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
         user_info_button_container.style.display = 'none';
         isLoggedIn = false;
         localStorage.removeItem('authToken');
+        unloadVocab(); 
     });
 
     function tryAutoLogin()
@@ -1200,4 +1207,100 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-}); 
+
+    function loadLogs()
+    {
+        const nothing_there = document.getElementById('nothing_there');
+
+        fetch(`http://${api_address}:3000/webportal/change_log/load`, {
+            method: "GET"
+        })
+        .then(response => {
+            if (response.status === 404)
+            {
+                nothing_there.style.display = 'block';
+                return;
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+
+            const logs = data.logs;
+
+            nothing_there.style.display = 'none';
+
+            logs.forEach(log => {
+                const logDiv = document.createElement('div');
+                logDiv.id = 'log-entry';
+
+                const logTitle = document.createElement('h3');
+                logTitle.textContent = log.title;
+
+                const logTimestamp = document.createElement('p');
+                const formattedDate = formatData(log.timestamp)
+                logTimestamp.textContent = formattedDate;
+
+                const logText = document.createElement('pre');
+                logText.textContent = log.text;
+
+                logDiv.style.backgroundColor = '#1b232e';
+                logDiv.style.width = '90%';
+                logDiv.style.height = 'auto';
+                logDiv.style.marginLeft = '5%';
+                logDiv.style.marginTop = '5%';
+                logDiv.style.paddingBottom = '1vw';
+                logDiv.style.borderRadius = '5px';
+                logDiv.style.color = '#ffffff';
+
+                logTitle.style.fontSize = '3vw';
+                logTitle.style.marginTop = '1vw';
+                logTitle.style.marginLeft = '1vw';
+
+                logTimestamp.style.fontSize = '1.2vw';
+                logTimestamp.style.marginLeft = '1vw';
+
+                logText.style.fontSize = '1.2vw';
+                logText.style.marginTop = '.5vw';
+                logText.style.marginLeft = '1vw';
+
+                logDiv.appendChild(logTitle);
+                logDiv.appendChild(logTimestamp);
+                logDiv.appendChild(logText);
+            
+                change_log_container.appendChild(logDiv);
+
+                change_log_container.scrollTop = change_log_container.scrollHeight;
+            })
+        })
+        .catch(error => {
+            console.error(error);
+        })
+    }
+
+    function formatData(timestamp)
+    {
+        const date = new Date(timestamp);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    change_log_open.addEventListener('click', () => {
+        change_log_container.style.display = 'block';
+        change_log_bg.style.display = 'block';
+        change_log_close.style.display = 'block';
+        list_div.style.display = 'none';
+
+        loadLogs();   
+    });
+
+    change_log_close.addEventListener('click', () => {
+        change_log_container.style.display = 'none';
+        change_log_bg.style.display = 'none';
+        change_log_close.style.display = 'none';
+        list_div.style.display = 'block';
+    });
+});
