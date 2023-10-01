@@ -140,6 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const report_send = document.getElementById('report');
     const offline_feedback = document.getElementById('offline_feedback');
 
+    const change_log_container = document.getElementById('change_log_container');
+    const change_log_open = document.getElementById('change-log-open');
+    const change_log_close = document.getElementById('close_log');
+    const change_log_bg = document.getElementById('change_log_bg');
+
     let isFeedbackWinOpen = false;
     let isInFeedbackTab = true;
     let isInProblemTab = false;
@@ -636,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
         user_info_button_container.style.display = 'none';
         isLoggedIn = false;
         localStorage.removeItem('authToken');
-        unloadVocab();
+        unloadVocab(); 
     });
 
     function tryAutoLogin()
@@ -1202,4 +1207,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    change_log_open.addEventListener('click', () => {
+        change_log_container.style.display = 'block';
+        change_log_bg.style.display = 'block';
+        change_log_close.style.display = 'block';
+        list_div.style.display = 'none';
+    });
+
+    change_log_close.addEventListener('click', () => {
+        change_log_container.style.display = 'none';
+        change_log_bg.style.display = 'none';
+        change_log_close.style.display = 'none';
+        list_div.style.display = 'block';
+    });
+
+
 });

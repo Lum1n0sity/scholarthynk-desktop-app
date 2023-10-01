@@ -19,11 +19,16 @@
 body {
     background-color: var(--background-dark);
     color: var(--text-color-dark);
+}
+
+#main_grid {
     display: grid;
     grid-template-columns: 1fr 1fr 7.9vw 1fr 1fr;
     grid-template-rows: repeat(4, 1fr);
     height: 100vh;
+    width: 100vw;
     grid-gap: 10px;
+    overflow-x: hidden;
     overflow-y: hidden;
 }
 
@@ -1446,4 +1451,96 @@ input:checked + .slider:before {
 #offline_feedback:hover {
     background-color: var(--box-dark-hover);
     transition: .5s;
+}
+
+#change-log-open {
+    grid-column: 1;
+    grid-row: 4;
+    font-size: 2vw;
+    width: 4vw;
+    height: 4vw;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    background-color: var(--box-dark);
+    color: var(--text-color-dark);
+    transition: .5s;
+    cursor: pointer;
+    align-self: end;
+    justify-self: start;
+    margin-left: 2vw;
+    margin-bottom: 6.5vw;
+}
+
+#change-log-open ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#change-log-open:hover {
+    background-color: var(--box-dark-hover);
+    transition: .5s;
+}
+
+#change_log_container {
+    background-color: var(--box-dark);
+    border-left: var(--border-dark) 2px solid;
+    border-right: var(--border-dark) 2px solid;
+    float: center;
+    width: 50vw;
+    height: 100vh;
+    z-index: 30;
+    position: absolute;
+    top: 0vh;
+    left: 25vw;
+    display: none;
+}
+
+#close_log {
+    display: none;
+    position: absolute;
+    top: 1vh;
+    right: 26vw;
+    z-index: 100;
+    font-size: 1.2vw;
+    width: 2vw;
+    height: 2vw;
+    background-color: transparent;
+    color: var(--text-color-dark);
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    transition: .5s;
+    cursor: pointer;
+}
+
+#close_log:hover {
+    background-color: var(--box-dark-hover);
+    transition: .5s;
+}
+
+#close_log ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#change_log_bg {
+    background-color: rgba(0, 0, 0, 0.281);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0vw;
+    top: 0vh;
+    display: none;
+}
+
+#change-log-empty-icon {
+    font-size: 8vw;
+    margin-left: 40%;
+    margin-top: 30%;
+}
+
+#change-log-empty {
+    font-size: 2vw;
+    margin-left: 32%;
 }
