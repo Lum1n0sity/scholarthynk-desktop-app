@@ -19,6 +19,7 @@
 body {
     background-color: var(--background-dark);
     color: var(--text-color-dark);
+    overflow-x: hidden;
 }
 
 #main_grid {
@@ -1567,3 +1568,191 @@ input:checked + .slider:before {
     font-size: 2vw;
     margin-left: 32%;
 }
+
+#training_con {
+    background-color: var(--box-dark);
+    width: 30vw;
+    height: 70vh;
+    border-radius: 20px;
+    border: var(--border-dark) 2px solid;
+    position: absolute;
+    top: 12vh;
+    left: 35vw;
+    display: none;
+}
+
+#training_title {
+    font-size: 3vw;
+    margin-top: 1vw;
+    margin-left: 9vw;
+}
+
+#difficulty-display-p {
+    font-size: 1.5vw;
+    margin-top: 1vw;
+    margin-left: 2vw;
+}
+
+#difficulty-display-easy {
+    margin-top: -2.1vw;
+    margin-left: 9vw;
+    font-size: 1.5vw;
+    background-color: rgba(0, 128, 0, 0.26);
+    border: 2px solid rgba(0, 128, 0, 0.63);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 6vw;
+    display: none;
+}
+
+#difficulty-display-medium {
+    margin-top: -2.1vw;
+    margin-left: 9vw;
+    font-size: 1.5vw;
+    background-color: rgba(255, 255, 0, 0.185);
+    border: 2px solid rgba(255, 255, 0, 0.63);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 6vw;
+    display: none;
+}
+
+#difficulty-display-hard {
+    margin-top: -2.1vw;
+    margin-left: 9vw;
+    font-size: 1.5vw;
+    background-color: rgba(255, 0, 0, 0.171);
+    border: 2px solid rgba(255, 0, 0, 0.63);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 6vw;
+    display: none;
+}
+
+#difficulty-display-done {
+    margin-top: -2.1vw;
+    margin-left: 9vw;
+    font-size: 1.5vw;
+    background-color: rgba(38, 255, 0, 0.171);
+    border: 2px solid rgba(38, 255, 0, 0.63);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 6vw;
+    display: none;
+}
+
+#splitter {
+    background-color: var(--border-dark);
+    width: 98%;
+    height: .1vw;
+    margin-left: 1%;
+    margin-top: 2vw;
+}
+
+#close_training {
+    display: none;
+    position: absolute;
+    top: 13vh;
+    left: 35.5vw;
+    z-index: 100;
+    font-size: 1.5vw;
+    width: 2vw;
+    height: 2vw;
+    background-color: transparent;
+    color: var(--text-color-dark);
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    transition: .5s;
+    cursor: pointer;
+    z-index: 50;
+}
+
+#question_container {
+    background-color: transparent;
+    width: 100%;
+    height: 70%;
+}
+
+#next_block {
+    font-size: 1.5vw;
+    background-color: var(--background-dark);
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    color: var(--text-color-dark);
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 1vw;
+    right: 1vw;
+    transition: .5s;
+}
+
+#next_block ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+#next_block:hover {
+    background-color: var(--border-dark);
+    transition: .5s;
+}
+
+#close_training:hover {
+    background-color: var(--box-dark-hover);
+    transition: .5s;
+}
+
+#close_training ion-icon {
+    vertical-align: middle;
+    transform: translateY(-9%);
+}
+
+/*
+
+#loader {
+    border: 1vw solid var(--box-dark);
+    border-top: 1vw solid transparent;
+    border-radius: 50%;
+    width: 10vw;
+    height: 10vw;
+    animation: spin 1s linear infinite;
+    transition: .5s;
+    position: absolute;
+    top: 35vh;
+    left: 45vw;
+    display: block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loader-bg {
+    background-color: rgba(0, 0, 0, 0.281);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0vw;
+    top: 0vh;
+    display: block;
+}
+*/

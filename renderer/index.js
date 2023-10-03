@@ -1,6 +1,8 @@
 const fs = require('fs');
 const { ipcRenderer } = require('electron');
 const nodemailer = require('nodemailer');
+const { error, group } = require('console');
+const { container } = require('webpack');
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -1303,4 +1305,371 @@ document.addEventListener('DOMContentLoaded', () => {
         change_log_close.style.display = 'none';
         list_div.style.display = 'block';
     });
+
+    //function displayLoading()
+    //{
+    //    const loader = document.getElementById('loader');
+    //    const loader_bg = document.getElementById('loader-bg');
+//
+    //    loader.style.display = 'block';
+    //    loader_bg.style.display = 'block';
+    //}
+//
+    //function hideLoading()
+    //{
+    //    const loader = document.getElementById('loader');
+    //    const loader_bg = document.getElementById('loader-bg');
+//
+    //    loader.style.display = 'none';
+    //    loader_bg.style.display = 'none';
+    //}
+
+    function saveLocal(identifier, variable)
+    {
+        localStorage.setItem(identifier, variable);
+    }
+
+    function loadLocal(identifier)
+    {
+        return localStorage.getItem(identifier);
+    }
+
+    const start_training = document.getElementById('start_training');
+    const training_div = document.getElementById('training_con');
+    const close_training = document.getElementById('close_training');
+
+    const questionContainer = document.getElementById('question_container');
+    const next_button = document.getElementById('next_block');
+
+    const easyMode = document.getElementById('difficulty-display-easy');
+    const mediumMode = document.getElementById('difficulty-display-medium');
+    const hardMode = document.getElementById('difficulty-display-hard');      
+
+    const doneMode = document.getElementById('difficulty-display-done');
+
+    let isInTrainingMode = false;
+    let isEasyWordsDone = false;
+    let isMediumWordsDone = false;
+    let isHardWordsDone = false;
+
+    let easyGroups;
+    let mediumGroups;
+    let hardGroups;
+    let currentDifficulty = 'Easy';
+    let groupIndex = 0;
+
+    const easyInputs = [];
+    const mediumInputs = [];
+    const hardInputs = [];
+
+    start_training.addEventListener('click', () => {
+        training_div.style.display = 'block';
+        close_training.style.display = 'block';
+        isInTrainingMode = true;
+        questionContainer.innerHTML = '';
+        loadData();
+    });
+
+    close_training.addEventListener('click', () => {
+        training_div.style.display = 'none';
+        close_training.style.display = 'none';
+        isInTrainingMode = false;
+    });
+    
+    function updateDifficulty(difficulty)
+    {
+        const dataToSendUpdateDifficulty = ({ difficulty: difficulty });
+
+        fetch(`http://${api_address}:3000/trainer/vocab/update`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataToSendUpdateDifficulty)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    function loadData()
+    {
+        const vocab = vocab_list.value;
+
+        if (vocab !== null)
+        {
+            isLoadingTraining = true;
+
+            const username_storage = document.getElementById('username_view');
+            const username = username_storage.textContent;    
+
+            const dataToSendGetDifficulty = ({ username: username });
+
+            fetch(`http://${api_address}:3000/vocab/get/difficulty`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataToSendGetDifficulty),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const dataArray = data.difficulty;
+
+                console.log(dataArray);
+
+                if (Array.isArray(dataArray))
+                {
+                    const easyWords = [];
+                    const mediumWords = [];
+                    const hardWords = [];
+
+                    dataArray.forEach(item => {
+                        if (item.difficulty === 'Easy')
+                        {
+                            easyWords.push(item);
+                        }
+                        else if (item.difficulty === 'Medium')
+                        {
+                            mediumWords.push(item);
+                        }
+                        else if (item.difficulty === 'Hard')
+                        {
+                            hardWords.push(item);
+                        }
+                    })
+                     
+                    easyGroups = splitArrayIntoGroups(easyWords, 5);
+                    mediumGroups = splitArrayIntoGroups(mediumWords, 5);
+                    hardGroups = splitArrayIntoGroups(hardWords, 5);
+
+                    initializeTrainingMode();
+                }
+                else 
+                {
+                    console.error('Data is not an array');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+    }
+
+    function initializeTrainingMode() {
+        currentDifficulty = 'Easy';
+        groupIndex = 0;
+
+        questionContainer.textContent = '';
+        easyMode.style.display = 'none';
+        mediumMode.style.display = 'none';
+        hardMode.style.display = 'none';
+        doneMode.style.display = 'none';
+
+        next_button.textContent = 'Start ';
+        
+        const ionIcon = document.createElement('ion-icon');
+        ionIcon.setAttribute('name', 'play-forward-outline');
+        next_button.appendChild(ionIcon);
+    }
+
+    next_button.addEventListener('click', () => {
+        next_button.textContent = 'Next ';
+        
+        const ionIcon = document.createElement('ion-icon');
+        ionIcon.setAttribute('name', 'play-forward-outline');
+        next_button.appendChild(ionIcon);
+
+        if (!isInTrainingMode)
+        {
+            training_div.style.display = 'none';
+            close_training.style.display = 'none';
+            isInTrainingMode = false;
+        }
+
+        transitionToNextDifficulty();
+    });
+
+function transitionToNextDifficulty() {
+        switch (currentDifficulty) {
+          case 'Easy':
+            questionContainer.textContent = '';
+            if (groupIndex < easyGroups.length) 
+            {
+                questionContainer.textContent = '';
+                easyMode.style.display = 'block';
+                generateQuestionsForGroup(easyGroups[groupIndex], questionContainer);
+                groupIndex++;
+            } 
+            else 
+            {
+                easyMode.style.display = 'none';
+                currentDifficulty = 'Medium';
+                groupIndex = 0;
+            }
+            break;
+      
+          case 'Medium':
+            if (groupIndex < mediumGroups.length)
+            {
+                questionContainer.textContent = '';
+                mediumMode.style.display = 'block';
+                generateQuestionsForGroup(mediumGroups[groupIndex], questionContainer);
+                groupIndex++;
+            } 
+            else 
+            {
+                mediumMode.style.display = 'none';
+                currentDifficulty = 'Hard';
+                groupIndex = 0;
+            }
+            break;
+      
+          case 'Hard':
+            if (groupIndex < hardGroups.length) 
+            {
+                questionContainer.textContent = '';
+                hardMode.style.display = 'block';
+                generateQuestionsForGroup(hardGroups[groupIndex], questionContainer);
+                groupIndex++;
+            } 
+            else 
+            {
+                groupIndex = 0;
+                questionContainer.textContent = '';
+                hardMode.style.display = 'none';
+                doneMode.style.display = 'block';
+
+                next_button.textContent = 'Done ';
+        
+                const ionIcon = document.createElement('ion-icon');
+                ionIcon.setAttribute('name', 'checkmark-done-outline');
+                next_button.appendChild(ionIcon);
+
+                isInTrainingMode = false;
+
+                console.log(easyInputs);
+                console.log(mediumInputs);
+                console.log(hardInputs);
+            }
+            break;
+        }
+    }
+
+    function generateQuestionsForGroup(group, questionContainer, maxQuestions = 5) 
+    {
+        const groupContainer = document.createElement('div');
+        groupContainer.classList.add('word-group');
+      
+        let questionCount = 0;
+      
+        for (let i = 0; i < group.length && questionCount < maxQuestions; i++) 
+        {
+            const wordPair = group[i];
+            const wordPairContainer = document.createElement('div');
+            
+            const inputAndWordContainer = document.createElement('div');
+            inputAndWordContainer.style.display = 'flex';
+            inputAndWordContainer.style.alignItems = 'center';
+            
+            const inputFieldGerman = document.createElement('input');
+            inputFieldGerman.type = 'text';
+            inputFieldGerman.placeholder = 'German';
+            inputFieldGerman.style.width = '15vw';
+            inputFieldGerman.style.fontSize = '1.5vw';
+            inputFieldGerman.style.outline = 'none';
+            inputFieldGerman.style.border = 'none';
+            inputFieldGerman.style.backgroundColor = '#151922';
+            inputFieldGerman.style.color = '#ffffff';
+            inputFieldGerman.style.borderRadius = '5px';
+            inputFieldGerman.style.padding = '10px';
+            inputFieldGerman.style.marginTop = '.5vw';
+            inputFieldGerman.style.marginLeft = '1vw';
+            inputFieldGerman.style.marginRight = '1vw';
+            
+            const inputFieldEnglish = document.createElement('input');
+            inputFieldEnglish.type = 'text';
+            inputFieldEnglish.placeholder = 'English';
+            inputFieldEnglish.style.width = '15vw';
+            inputFieldEnglish.style.fontSize = '1.5vw';
+            inputFieldEnglish.style.outline = 'none';
+            inputFieldEnglish.style.border = 'none';
+            inputFieldEnglish.style.backgroundColor = '#151922';
+            inputFieldEnglish.style.color = '#ffffff';
+            inputFieldEnglish.style.borderRadius = '5px';
+            inputFieldEnglish.style.padding = '10px';
+            inputFieldEnglish.style.marginTop = '.5vw';
+            inputFieldEnglish.style.marginLeft = '1vw';
+            
+            const germanWord = document.createElement('p');
+            germanWord.textContent = wordPair.german + ' ';
+            germanWord.style.fontSize = '1.5vw';
+            germanWord.style.marginLeft = '1vw';
+            germanWord.style.marginRight = '1vw';
+            
+            const englishWord = document.createElement('p');
+            englishWord.textContent = wordPair.english;
+            englishWord.style.fontSize = '1.5vw';
+            englishWord.style.marginLeft = '1vw';
+            
+            const separator = document.createElement('span');
+            separator.textContent = ' | ';
+            separator.style.fontSize = '1.5vw';
+            
+            if (Math.random() < 0.5) 
+            {
+              inputAndWordContainer.appendChild(inputFieldGerman);
+              inputAndWordContainer.appendChild(separator);
+              inputAndWordContainer.appendChild(englishWord);
+            } 
+            else 
+            {
+              inputAndWordContainer.appendChild(germanWord);
+              inputAndWordContainer.appendChild(separator);
+              inputAndWordContainer.appendChild(inputFieldEnglish);
+            }
+          
+            wordPairContainer.appendChild(inputAndWordContainer);
+            groupContainer.appendChild(wordPairContainer);
+            questionCount++;
+
+            inputFieldGerman.addEventListener('input', (event) => {
+                storeInputValue(currentDifficulty, event.target.value);
+            });
+
+            inputFieldEnglish.addEventListener('input', (event) => {
+                storeInputValue(currentDifficulty, event.target.value);
+            });
+        }
+      
+        questionContainer.appendChild(groupContainer);
+    }
+    
+    function storeInputValue(difficulty, value) {
+        switch (difficulty) {
+            case 'Easy':
+                easyInputs.push(value);
+                break;
+            case 'Medium':
+                mediumInputs.push(value);
+                break;
+            case 'Hard':
+                hardInputs.push(value);
+                break;
+        }
+    }
+
+    function splitArrayIntoGroups(array, groupSize)
+    {
+        const groups = [];
+        for (let i = 0; i < array.length; i += groupSize)
+        {
+            groups.push(array.slice(i, i + groupSize));
+        }
+        return groups;
+    }
 });

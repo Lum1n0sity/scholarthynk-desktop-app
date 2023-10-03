@@ -10,7 +10,7 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: true, // Allow DevTools to open with Ctrl + Shift + I
+      devTools: true,
     },
   });
 
@@ -19,7 +19,7 @@ function createMainWindow() {
   mainWindow.maximize();
   mainWindow.show();
   mainWindow.setMinimumSize(1000, 600);
-  mainWindow.menuBarVisible = false;
+  mainWindow.menuBarVisible = true;
 }
 
 function openFileDialog() {
