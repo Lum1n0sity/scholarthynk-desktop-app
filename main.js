@@ -26,6 +26,7 @@ function openFileDialog() {
   const options = {
     title: 'Select a File',
     filters: [
+      { name: 'JSON Files', extensions: ['json'] },
       { name: 'Text Files', extensions: ['txt'] },
       { name: 'All Files', extensions: ['*'] },
     ],

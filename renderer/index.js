@@ -1,9 +1,6 @@
 const fs = require('fs');
 const { ipcRenderer } = require('electron');
 const nodemailer = require('nodemailer');
-const { error, group, time } = require('console');
-const { container } = require('webpack');
-const { fail } = require('assert');
 const { clearInterval } = require('timers');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let canConnectToServer = true;
     let timeoutId;
 
-    let offlineInterval;
     let isOffline = false;
     let isOffline_MessageDisplayed = false;
     let offlineFilePath = null;
@@ -151,24 +147,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const change_log_close = document.getElementById('close_log');
     const change_log_bg = document.getElementById('change_log_bg');
 
-    const currentDate = new Date();
-
     let isFeedbackWinOpen = false;
     let isInFeedbackTab = true;
     let isInProblemTab = false;
 
     let isLoggedIn = false;
     let isUserInfoOpen = false;
-
-    offlineInterval = setInterval(() => {
-      handleOffline();
-    }, 1000);
-
-    function startOfflineCheckInterval() {
-      offlineInterval = setInterval(() => {
-        handleOffline();
-      }, 1000);
-    }
 
     login_button.addEventListener('click', () => {
         openLogin();
@@ -493,61 +477,72 @@ document.addEventListener('DOMContentLoaded', () => {
                 {  
                     const german_word = document.getElementById('german-in').value;
                     const english_word = document.getElementById('english-in').value;
+                    const difficulty = getDifficulty(english_word);
 
-                    const inputData = `${german_word} | ${english_word} \n`;
+                    let exists = false;
+
+                    const newData = { german: german_word, english: english_word, difficulty: difficulty };
 
                     const filePath = offlineFilePath;
 
-                    console.log(inputData);
-
-                    fs.readFile(filePath, 'utf-8', (error, data) => {
-                        if (error)
+                    fs.readFile(filePath, 'utf8', (error, data) => {
+                        if (error) 
                         {
                             console.error('Error reading file: ', error);
                             return;
                         }
-
-                        const rows = data.split('\n');
-                      
-                        for (const row of rows) 
+                    
+                        try 
                         {
-                          const rowValues = row.split(' | ');
-    
-                          if ((rowValues.includes(german_word) && rowValues.includes(english_word))) 
-                          { 
-                            const vocab_message = document.getElementById('warning_vocab_div');
-    
-                            vocab_message.style.display = 'block';
-        
-                            const vocab_message_ok = document.getElementById('warning_vocab_ok');
-        
-                            vocab_message_ok.addEventListener('click', () => {
-                                vocab_message.style.display = 'none';
-                            });
+                            let existingData = JSON.parse(data);
+                    
+                            exists = existingData.some(item => (
+                                item.german === newData.german || item.english === newData.english
+                            ))
 
-                            return;
-                          }
-                          else
-                          {
-                            fs.appendFile(filePath, inputData, 'utf8', (err) => {
-                                if (err) 
+                            if (!exists)
+                            {
+                                if (!Array.isArray(existingData)) 
                                 {
-                                  console.error('Error writing to the file:', err);
-                                  return;
+                                    existingData = [];
                                 }
-                            });
-      
-                            fs.readFile(filePath, 'utf8', (err, data) => {
-                                if (err)
-                                {
-                                    console.error('Error reading file: ', err);
-                                    return;
-                                }
-    
-                                vocab_list.textContent = data;
+                        
+                                existingData.push(newData);
+                        
+                                const updatedData = JSON.stringify(existingData, null, 2);
+                        
+                                fs.writeFile(filePath, updatedData, 'utf8', (err) => {
+                                    if (err) 
+                                    {
+                                        console.error(err);
+                                    } 
+                                    else 
+                                    {
+                                        console.log('Data inserted');
+                                    }
+                                })
+                                
+                                const formattedText = `${german_word} | ${english_word}`;
+                    
+                                vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText;
                                 vocab_list.scrollTop = vocab_list.scrollHeight;
-                            });
-                          }
+                            }
+                            else
+                            {
+                                const vocab_message = document.getElementById('warning_vocab_div');
+    
+                                vocab_message.style.display = 'block';
+            
+                                const vocab_message_ok = document.getElementById('warning_vocab_ok');
+            
+                                vocab_message_ok.addEventListener('click', () => {
+                                    vocab_message.style.display = 'none';
+                                });
+                            }
+                        } 
+                        catch (erro) 
+                        {
+                            console.error('Error parsing JSON:', erro);
                         }
                     });
                 } 
@@ -728,28 +723,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     offline_toggle_checkbox.addEventListener('change', function () 
     {
-      if (this.checked) 
-      {
-        isOffline = true;
-        isLoggedIn = false;
+        if (this.checked) 
+        {   
+            isOffline = true;
+            handleOffline();
+        } 
+        else 
+        {
+            isOffline = false;
+            unloadVocab();
 
-        ipcRenderer.send('open-file-dialog');
-          
-        ipcRenderer.on('selected-file', (event, filePath) => {
-          offlineFilePath = filePath;
-          loadVocabOffline();
-        });
-      } 
-      else 
-      {
-        isOffline = false;
-        unloadVocab();
+            login_button.style.display = 'block';
+            user_button.style.display = 'none';
 
-        login_button.style.display = 'block';
-        user_button.style.display = 'none';
-
-        tryAutoLogin();
-      }
+            tryAutoLogin();
+        }
     });
 
     function displayConnectionError()
@@ -844,19 +832,40 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 const filePath = offlineFilePath;
     
-                fs.readFile(filePath, 'utf8', (err, data) => {
+                fs.readFile(filePath, 'utf-8', (err, data) => {
                     if (err)
                     {
                         console.error('Error reading file: ', err);
                         return;
                     }
                     
-                    vocab_list.textContent = data;
+                    try 
+                    {
+                        const rawData = JSON.parse(data);
+
+                        const processedData = [];
+                        
+                        rawData.forEach(item => {
+                            const germanW = item.german;
+                            const englishW = item.english;
+                        
+                            const wordR = `${germanW} | ${englishW}`;
+                            processedData.push(wordR);
+                        });
+
+                        const sanitizedData = processedData.map(item => item.replace(/,/g, ''));
+
+                        vocab_list.textContent = sanitizedData.join('\n');
+                    }
+                    catch(e)
+                    {
+                        console.error('Error parsing JSON: ', e);
+                    }
                 });
             } 
             catch (error) 
             {
-              console.error('Error writing to file:', error);
+              console.error('Error reading to file:', error);
             }
         }        
     }
@@ -868,49 +877,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleOffline() {
         if (isOffline) {
-            clearInterval(offlineInterval);
-            
-            const offline_toggle_checkbox = document.getElementById('toggleSwitch_offline');
-            const offline_toggle = document.getElementById('offline_toggle');
-          
-            login_button.style.display = 'none';
-            user_button.style.display = 'none';
-
-            offline_toggle_checkbox.checked = true;
-          
-            ipcRenderer.send('open-file-dialog');
-              
-            ipcRenderer.on('selected-file', (event, filePath) => {
-              offlineFilePath = filePath;
-              loadVocabOffline();
-            });
-          
-            offline_toggle_checkbox.addEventListener('change', function () 
+            try 
             {
-              if (this.checked) 
-              {
-                isOffline = true;
-                isLoggedIn = false;
+                const offline_toggle_checkbox = document.getElementById('toggleSwitch_offline');
+                const offline_toggle = document.getElementById('offline_toggle');
+                
+                login_button.style.display = 'none';
+                user_button.style.display = 'none';
+
+                offline_toggle_checkbox.checked = true;
                 
                 ipcRenderer.send('open-file-dialog');
-          
+                
                 ipcRenderer.on('selected-file', (event, filePath) => {
                   offlineFilePath = filePath;
                   loadVocabOffline();
                 });
-              } 
-              else 
-              {
-                isOffline = false;
-                console.log('isOffline', isOffline);
-                unloadVocab();
-                login_button.style.display = 'block';
-                user_button.style.display = 'none';
-                tryAutoLogin();
-              }
-            });
-          
-            return;
+            
+                offline_toggle_checkbox.addEventListener('change', function () 
+                {
+                  if (this.checked) 
+                  {
+                    isOffline = true;
+                    isLoggedIn = false;
+
+                    ipcRenderer.send('open-file-dialog');
+                
+                    ipcRenderer.on('selected-file', (event, filePath) => {
+                      offlineFilePath = filePath;
+                      loadVocabOffline();
+                    });
+                  } 
+                  else 
+                  {
+                    isOffline = false;
+                    console.log('isOffline', isOffline);
+                    unloadVocab();
+                    login_button.style.display = 'block';
+                    user_button.style.display = 'none';
+                    tryAutoLogin();
+                  }
+                });
+            
+                return;
+            } 
+            catch (error) 
+            {
+                console.error("Error clearing offlineInterval:", error);
+            }
+        }
+        else
+        {
+            console.log("isOffline = false");
         }
     }
 
@@ -1370,7 +1388,14 @@ document.addEventListener('DOMContentLoaded', () => {
         close_training.style.display = 'block';
         isInTrainingMode = true;
         questionContainer.innerHTML = '';
-        loadData();
+        if (!isOffline)
+        {
+            loadData();
+        }
+        else
+        {
+            loadDataOffline();
+        }
     });
 
     close_training.addEventListener('click', () => {
@@ -1445,6 +1470,58 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error(error);
+            });
+        }
+    }
+
+    function loadDataOffline()
+    {
+        const vocab = vocab_list.value;
+
+        if (vocab !== null)
+        {
+            const filePath = offlineFilePath;
+
+            fs.readFile(filePath, (err, data) => {
+                if (error)
+                {
+                    console.error('Error reading file: ', error);
+                    return;
+                }
+
+                console.log(data);
+
+                if (Array.isArray(data))
+                {
+                    const easyWords = [];
+                    const mediumWords = [];
+                    const hardWords = [];
+
+                    data.forEach(item => {
+                        if (item.difficulty === 'Easy')
+                        {
+                            easyWords.push(item);
+                        }
+                        else if (item.difficulty === 'Medium')
+                        {
+                            mediumWords.push(item);
+                        }
+                        else if (item.difficulty === 'Hard')
+                        {
+                            hardWords.push(item);
+                        }
+                    });
+
+                    easyGroups = splitArrayIntoGroups(easyWords, 5);
+                    mediumGroups = splitArrayIntoGroups(mediumWords, 5);
+                    hardGroups = splitArrayIntoGroups(hardWords, 5);
+
+                    initializeTrainingMode();
+                }
+                else
+                {
+                    console.error('Data is not an array');
+                }
             });
         }
     }
@@ -1766,5 +1843,214 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return { start, stop };
+    }
+
+    function getDifficulty(word)
+    {
+        const wordLength = word.length;
+        const isCommon = isCommonWord(word);
+        const syllables = countSyllables(word);
+
+        if (wordLength >= 1 && wordLength <= 4)
+        {
+            if (isCommon && syllables <= 2)
+            {
+                return "Easy";
+            }
+            else if (!isCommon && syllables <= 3)
+            {
+                return "Medium";
+            }
+            else
+            {
+                return "Hard";
+            }
+        }
+        else if (wordLength >= 5 && wordLength <= 7)
+        {
+            if (isCommon && syllables <= 3)
+            {
+                return "Medium";
+            }
+            else
+            {
+                return "Hard";
+            }
+        }
+        else if (wordLength >= 8)
+        {
+            return "Hard";
+        }
+
+        return "Medium";
+    }
+
+    function isCommonWord(word) 
+    {
+        const commonWords = [
+            "the",
+            "and",
+            "of",
+            "to",
+            "in",
+            "that",
+            "it",
+            "is",
+            "was",
+            "for",
+            "you",
+            "he",
+            "she",
+            "we",
+            "they",
+            "with",
+            "on",
+            "at",
+            "by",
+            "this",
+            "but",
+            "from",
+            "or",
+            "not",
+            "an",
+            "as",
+            "if",
+            "will",
+            "can",
+            "are",
+            "have",
+            "has",
+            "do",
+            "what",
+            "who",
+            "which",
+            "where",
+            "when",
+            "why",
+            "how",
+            "your",
+            "there",
+            "their",
+            "here",
+            "been",
+            "more",
+            "than",
+            "so",
+            "up",
+            "down",
+            "out",
+            "into",
+            "just",
+            "now",
+            "then",
+            "time",
+            "over",
+            "would",
+            "could",
+            "should",
+            "many",
+            "some",
+            "other",
+            "most",
+            "all",
+            "any",
+            "no",
+            "good",
+            "new",
+            "old",
+            "first",
+            "last",
+            "way",
+            "day",
+            "use",
+            "man",
+            "woman",
+            "child",
+            "work",
+            "home",
+            "life",
+            "place",
+            "thing",
+            "world",
+            "great",
+            "small",
+            "big",
+            "high",
+            "low",
+            "right",
+            "left",
+            "long",
+            "short",
+            "high",
+            "low",
+            "near",
+            "far",
+            "next",
+            "best",
+            "better",
+            "early",
+            "late",
+            "often",
+            "always",
+            "sometimes",
+            "never",
+            "every",
+            "many",
+            "few",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten"
+        ];      
+
+        return commonWords.includes(word.toLowerCase());
+    }
+
+    function countSyllables(word)
+    {
+        word = word.toLowerCase().replace(/[^a-z]/g, '');
+
+        if (word.length <= 3)
+        {
+            return 1; // * Single-syllable for short words
+        }    
+
+        const vowels = ['a', 'e', 'i', 'o', 'u'];
+        let syllableCount = 0;
+        let isPrevCharVowel = false;
+
+        for (let i = 0; i < word.length; i++)
+        {
+            if (vowels.includes(word[i]))
+            {
+                if (!isPrevCharVowel)
+                {
+                    syllableCount++
+                    isPrevCharVowel = true;
+                }
+            }
+            else
+            {
+                isPrevCharVowel = false;
+            }
+        }
+
+        // * Adjust syllable count for common cases
+        if (word.endsWith('e'))
+        {
+            syllableCount--;
+        }
+        if (syllableCount === 0)
+        {
+            syllableCount = 1;
+        }
+
+        return syllableCount;
     }
 });

@@ -1,0 +1,17 @@
+[
+  {
+    "german": "neu",
+    "english": "new",
+    "difficulty": "Easy"
+  },
+  {
+    "german": "Auto",
+    "english": "car",
+    "difficulty": "Medium"
+  },
+  {
+    "german": "Haus",
+    "english": "house",
+    "difficulty": "Hard"
+  }
+]
