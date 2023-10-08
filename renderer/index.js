@@ -1,8 +1,10 @@
 const fs = require('fs');
 const { ipcRenderer } = require('electron');
 const nodemailer = require('nodemailer');
-const { error, group } = require('console');
+const { error, group, time } = require('console');
 const { container } = require('webpack');
+const { fail } = require('assert');
+const { clearInterval } = require('timers');
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -148,6 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const change_log_open = document.getElementById('change-log-open');
     const change_log_close = document.getElementById('close_log');
     const change_log_bg = document.getElementById('change_log_bg');
+
+    const currentDate = new Date();
 
     let isFeedbackWinOpen = false;
     let isInFeedbackTab = true;
@@ -1348,9 +1352,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const doneMode = document.getElementById('difficulty-display-done');
 
     let isInTrainingMode = false;
-    let isEasyWordsDone = false;
-    let isMediumWordsDone = false;
-    let isHardWordsDone = false;
 
     let easyGroups;
     let mediumGroups;
@@ -1361,6 +1362,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const easyInputs = [];
     const mediumInputs = [];
     const hardInputs = [];
+    const inputsTrainer = [];
+    const failedWords = [];
 
     start_training.addEventListener('click', () => {
         training_div.style.display = 'block';
@@ -1374,27 +1377,13 @@ document.addEventListener('DOMContentLoaded', () => {
         training_div.style.display = 'none';
         close_training.style.display = 'none';
         isInTrainingMode = false;
+        currentDifficulty = "Easy";
+        easyInputs.length = 0;
+        mediumInputs.length = 0;
+        hardInputs.length = 0;
+        inputsTrainer.length = 0;
+        failedWords.length = 0;
     });
-    
-    function updateDifficulty(difficulty)
-    {
-        const dataToSendUpdateDifficulty = ({ difficulty: difficulty });
-
-        fetch(`http://${api_address}:3000/trainer/vocab/update`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSendUpdateDifficulty)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    }
 
     function loadData()
     {
@@ -1494,7 +1483,7 @@ document.addEventListener('DOMContentLoaded', () => {
         transitionToNextDifficulty();
     });
 
-function transitionToNextDifficulty() {
+    function transitionToNextDifficulty() {
         switch (currentDifficulty) {
           case 'Easy':
             questionContainer.textContent = '';
@@ -1510,6 +1499,16 @@ function transitionToNextDifficulty() {
                 easyMode.style.display = 'none';
                 currentDifficulty = 'Medium';
                 groupIndex = 0;
+
+                console.table(inputsTrainer);
+                console.log(inputsTrainer.length);
+        
+                if (inputsTrainer.length > 0) 
+                {
+                    easyInputs.push(...inputsTrainer);
+
+                    inputsTrainer.length = 0;
+                }
             }
             break;
       
@@ -1523,9 +1522,20 @@ function transitionToNextDifficulty() {
             } 
             else 
             {
+                questionContainer.textContent = '';
                 mediumMode.style.display = 'none';
                 currentDifficulty = 'Hard';
                 groupIndex = 0;
+
+                console.table(inputsTrainer);
+                console.log(inputsTrainer.length);
+
+                if (inputsTrainer.length > 0) 
+                {
+                    mediumInputs.push(...inputsTrainer);
+
+                    inputsTrainer.length = 0;
+                }
             }
             break;
       
@@ -1552,9 +1562,43 @@ function transitionToNextDifficulty() {
 
                 isInTrainingMode = false;
 
-                console.log(easyInputs);
-                console.log(mediumInputs);
-                console.log(hardInputs);
+                console.table(inputsTrainer);
+                console.log(inputsTrainer.length);
+
+                if (inputsTrainer.length > 0) 
+                {
+                    hardInputs.push(...inputsTrainer);
+
+                    inputsTrainer.length = 0;
+                }
+        
+                console.log("Easy", easyInputs);
+                console.log("Medium", mediumInputs);
+                console.log("Hard", hardInputs);
+                console.log("Failed: ", failedWords);
+
+                const dataToSendDifficulty = ({ easy: easyInputs, medium: mediumInputs, hard: hardInputs, failed: failedWords });
+
+                console.log(dataToSendDifficulty);
+
+                fetch(`http://${api_address}:3000/vocab/update/difficulty`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dataToSendDifficulty),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    easyInputs.length = 0;
+                    mediumInputs.length = 0;
+                    hardInputs.length = 0;
+                    failedWords.length = 0;
+                })
+                .catch(err => {
+                    throw err;
+                });
             }
             break;
         }
@@ -1590,6 +1634,7 @@ function transitionToNextDifficulty() {
             inputFieldGerman.style.marginTop = '.5vw';
             inputFieldGerman.style.marginLeft = '1vw';
             inputFieldGerman.style.marginRight = '1vw';
+            inputFieldGerman.id = 'trainerInputGerman';
             
             const inputFieldEnglish = document.createElement('input');
             inputFieldEnglish.type = 'text';
@@ -1604,6 +1649,7 @@ function transitionToNextDifficulty() {
             inputFieldEnglish.style.padding = '10px';
             inputFieldEnglish.style.marginTop = '.5vw';
             inputFieldEnglish.style.marginLeft = '1vw';
+            inputFieldEnglish.id = 'trainerInputEnglish';
             
             const germanWord = document.createElement('p');
             germanWord.textContent = wordPair.german + ' ';
@@ -1625,42 +1671,64 @@ function transitionToNextDifficulty() {
               inputAndWordContainer.appendChild(inputFieldGerman);
               inputAndWordContainer.appendChild(separator);
               inputAndWordContainer.appendChild(englishWord);
+
+              const counterGerman = counter();
+
+              inputFieldGerman.addEventListener('focus', () => {
+                counterGerman.start();
+              });
+
+              inputFieldGerman.addEventListener('blur', () => {
+                const endResultGerman = counterGerman.stop();
+
+                if (inputFieldGerman.value !== "")
+                {
+                    const langG = "german"
+                    inputsTrainer.push(inputFieldGerman.value, englishWord.textContent, endResultGerman, langG);
+                }
+                else
+                {
+                    failedWords.push(germanWord.textContent);
+                }
+
+                inputFieldGerman.disabled = true;
+              });
             } 
             else 
             {
-              inputAndWordContainer.appendChild(germanWord);
-              inputAndWordContainer.appendChild(separator);
-              inputAndWordContainer.appendChild(inputFieldEnglish);
+                inputAndWordContainer.appendChild(germanWord);
+                inputAndWordContainer.appendChild(separator);
+                inputAndWordContainer.appendChild(inputFieldEnglish);
+                
+                const counterEnglish = counter();
+
+                inputFieldEnglish.addEventListener('focus', () => {
+                    counterEnglish.start();
+                });
+
+                inputFieldEnglish.addEventListener('blur', () => {
+                    const endResultEnglish = counterEnglish.stop();
+
+                    if (inputFieldEnglish.value !== "")
+                    {
+                        const langE = "english"
+                        inputsTrainer.push(inputFieldEnglish.value, germanWord.textContent, endResultEnglish, langE);
+                    }
+                    else
+                    {
+                        failedWords.push(englishWord.textContent);
+                    }
+
+                    inputFieldEnglish.disabled = true;
+                });
             }
           
             wordPairContainer.appendChild(inputAndWordContainer);
             groupContainer.appendChild(wordPairContainer);
             questionCount++;
-
-            inputFieldGerman.addEventListener('input', (event) => {
-                storeInputValue(currentDifficulty, event.target.value);
-            });
-
-            inputFieldEnglish.addEventListener('input', (event) => {
-                storeInputValue(currentDifficulty, event.target.value);
-            });
         }
       
         questionContainer.appendChild(groupContainer);
-    }
-    
-    function storeInputValue(difficulty, value) {
-        switch (difficulty) {
-            case 'Easy':
-                easyInputs.push(value);
-                break;
-            case 'Medium':
-                mediumInputs.push(value);
-                break;
-            case 'Hard':
-                hardInputs.push(value);
-                break;
-        }
     }
 
     function splitArrayIntoGroups(array, groupSize)
@@ -1671,5 +1739,32 @@ function transitionToNextDifficulty() {
             groups.push(array.slice(i, i + groupSize));
         }
         return groups;
+    }
+
+    function counter()
+    {
+        let count = 0;
+
+        let timer = setInterval(() => {
+            count++
+        }, 1000);
+
+        function start()
+        {
+            timer = setInterval(() => {
+                count++
+            }, 1000);
+        }
+
+        function stop()
+        {
+            clearInterval(timer);
+
+            const endResult = count;
+
+            return endResult;
+        }
+
+        return { start, stop };
     }
 });
