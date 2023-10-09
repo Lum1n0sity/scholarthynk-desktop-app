@@ -38,9 +38,14 @@ function openFileDialog() {
     .then((result) => {
       if (!result.canceled) {
         const filePath = result.filePaths[0];
-        console.log('Selected file:', filePath);
 
         mainWindow.webContents.send('selected-file', filePath);
+      }
+      else
+      {
+        console.log("Canceled");
+
+        mainWindow.webContents.send('file-dialog-canceled');
       }
     })
     .catch((err) => {

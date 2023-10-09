@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const { ipcRenderer } = require('electron');
 const nodemailer = require('nodemailer');
 const { clearInterval } = require('timers');
@@ -146,6 +147,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const change_log_open = document.getElementById('change-log-open');
     const change_log_close = document.getElementById('close_log');
     const change_log_bg = document.getElementById('change_log_bg');
+
+    const start_training = document.getElementById('start_training');
+    const training_div = document.getElementById('training_con');
+    const close_training = document.getElementById('close_training');
+
+    const questionContainer = document.getElementById('question_container');
+    const next_button = document.getElementById('next_block');
+
+    const easyMode = document.getElementById('difficulty-display-easy');
+    const mediumMode = document.getElementById('difficulty-display-medium');
+    const hardMode = document.getElementById('difficulty-display-hard');      
+
+    const doneMode = document.getElementById('difficulty-display-done');
+
+    const easyInputs = [];
+    const mediumInputs = [];
+    const hardInputs = [];
+    const inputsTrainer = [];
+    const failedWords = [];
+
+    let isInTrainingMode = false;
+
+    let easyGroups;
+    let mediumGroups;
+    let hardGroups;
+    let currentDifficulty = 'Easy';
+    let groupIndex = 0;
 
     let isFeedbackWinOpen = false;
     let isInFeedbackTab = true;
@@ -890,8 +918,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 ipcRenderer.send('open-file-dialog');
                 
                 ipcRenderer.on('selected-file', (event, filePath) => {
-                  offlineFilePath = filePath;
-                  loadVocabOffline();
+                    offlineFilePath = filePath;
+
+                    loadVocabOffline();
+                });
+
+                ipcRenderer.on('file-dialog-canceled', (event) => {
+                    const jsonData = [];
+
+                    const fileName = 'vocab.json';
+
+                    fs.writeFile(fileName, JSON.stringify(jsonData, null, 2), (err) => {
+                        if (err) 
+                        {
+                            console.error('Error writing JSON file:', err);
+                        } 
+                        else 
+                        {
+                            console.log('JSON file created and initialized with an empty array.');
+                            console.log('File Path:', fileName);
+                        }
+                    });
                 });
             
                 offline_toggle_checkbox.addEventListener('change', function () 
@@ -904,8 +951,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ipcRenderer.send('open-file-dialog');
                 
                     ipcRenderer.on('selected-file', (event, filePath) => {
-                      offlineFilePath = filePath;
-                      loadVocabOffline();
+                        offlineFilePath = filePath;
+                        loadVocabOffline();
                     });
                   } 
                   else 
@@ -1328,61 +1375,6 @@ document.addEventListener('DOMContentLoaded', () => {
         list_div.style.display = 'block';
     });
 
-    //function displayLoading()
-    //{
-    //    const loader = document.getElementById('loader');
-    //    const loader_bg = document.getElementById('loader-bg');
-//
-    //    loader.style.display = 'block';
-    //    loader_bg.style.display = 'block';
-    //}
-//
-    //function hideLoading()
-    //{
-    //    const loader = document.getElementById('loader');
-    //    const loader_bg = document.getElementById('loader-bg');
-//
-    //    loader.style.display = 'none';
-    //    loader_bg.style.display = 'none';
-    //}
-
-    function saveLocal(identifier, variable)
-    {
-        localStorage.setItem(identifier, variable);
-    }
-
-    function loadLocal(identifier)
-    {
-        return localStorage.getItem(identifier);
-    }
-
-    const start_training = document.getElementById('start_training');
-    const training_div = document.getElementById('training_con');
-    const close_training = document.getElementById('close_training');
-
-    const questionContainer = document.getElementById('question_container');
-    const next_button = document.getElementById('next_block');
-
-    const easyMode = document.getElementById('difficulty-display-easy');
-    const mediumMode = document.getElementById('difficulty-display-medium');
-    const hardMode = document.getElementById('difficulty-display-hard');      
-
-    const doneMode = document.getElementById('difficulty-display-done');
-
-    let isInTrainingMode = false;
-
-    let easyGroups;
-    let mediumGroups;
-    let hardGroups;
-    let currentDifficulty = 'Easy';
-    let groupIndex = 0;
-
-    const easyInputs = [];
-    const mediumInputs = [];
-    const hardInputs = [];
-    const inputsTrainer = [];
-    const failedWords = [];
-
     start_training.addEventListener('click', () => {
         training_div.style.display = 'block';
         close_training.style.display = 'block';
@@ -1482,22 +1474,24 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             const filePath = offlineFilePath;
 
-            fs.readFile(filePath, (err, data) => {
-                if (error)
+            fs.readFile(filePath, 'utf-8', (err, data) => {
+                if (err)
                 {
                     console.error('Error reading file: ', error);
                     return;
                 }
 
-                console.log(data);
+                const outPutData = JSON.parse(data);
 
-                if (Array.isArray(data))
+                console.log(outPutData);
+
+                if (Array.isArray(outPutData))
                 {
                     const easyWords = [];
                     const mediumWords = [];
                     const hardWords = [];
 
-                    data.forEach(item => {
+                    outPutData.forEach(item => {
                         if (item.difficulty === 'Easy')
                         {
                             easyWords.push(item);
@@ -1560,7 +1554,7 @@ document.addEventListener('DOMContentLoaded', () => {
         transitionToNextDifficulty();
     });
 
-    function transitionToNextDifficulty() {
+    async function transitionToNextDifficulty() {
         switch (currentDifficulty) {
           case 'Easy':
             questionContainer.textContent = '';
@@ -1654,28 +1648,267 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Hard", hardInputs);
                 console.log("Failed: ", failedWords);
 
-                const dataToSendDifficulty = ({ easy: easyInputs, medium: mediumInputs, hard: hardInputs, failed: failedWords });
+                if (!isOffline)
+                {
+                    
+                    const dataToSendDifficulty = ({ easy: easyInputs, medium: mediumInputs, hard: hardInputs, failed: failedWords });
 
-                console.log(dataToSendDifficulty);
+                    console.log(dataToSendDifficulty);
 
-                fetch(`http://${api_address}:3000/vocab/update/difficulty`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(dataToSendDifficulty),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    easyInputs.length = 0;
-                    mediumInputs.length = 0;
-                    hardInputs.length = 0;
-                    failedWords.length = 0;
-                })
-                .catch(err => {
-                    throw err;
-                });
+                    fetch(`http://${api_address}:3000/vocab/update/difficulty`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(dataToSendDifficulty),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        easyInputs.length = 0;
+                        mediumInputs.length = 0;
+                        hardInputs.length = 0;
+                        failedWords.length = 0;
+                    })
+                    .catch(err => {
+                        throw err;
+                    });
+                }
+                else
+                {
+                    const easyInputData = [];
+                    const mediumInputData = [];
+                    const hardInputData = [];
+
+                    for (var i = 0; i < easyInputs.length; i += 4)
+                    {
+                        const word = easyInputs[i];
+                        const word2 = easyInputs[i + 1];
+                        const time = easyInputs[i + 2];
+                        const lang = easyInputs[i + 3];
+
+                        easyInputData.push({ word, word2, time, lang });
+                    }
+
+                    for (var i = 0; i < hardInputs.length; i += 4)
+                    {
+                        const word = mediumInputs[i];
+                        const word2 = mediumInputs[i + 1];
+                        const time = mediumInputs[i + 2];
+                        const lang = mediumInputs[i + 3];
+
+                        mediumInputData.push({ word, word2, time, lang });
+                    }
+
+                    for (var i = 0; i < hardInputs.length; i += 4)
+                    {
+                        const word = hardInputs[i];
+                        const word2 = hardInputs[i + 1];
+                        const time = hardInputs[i + 2];
+                        const lang = hardInputs[i + 3];
+
+                        hardInputData.push({ word, word2, time, lang });
+                    }
+
+                    try 
+                    {
+                        const easyUpdated = await getUpdatedDifficulty(easyInputData);
+                        const mediumUpdated = await getUpdatedDifficulty(mediumInputData);
+                        const hardUpdated = await getUpdatedDifficulty(hardInputData);
+
+                        const numUpdatesCompleted = { value: 0 };
+                        const totalUpdates = easyUpdated.length + mediumUpdated.length + hardUpdated.length + failedWords.length;
+                    
+                        const filePath = offlineFilePath;
+
+                        if (failedWords.length > 0)
+                        {
+                            updateFailedWordsWithJson(failedWords, filePath, "Hard");
+                        }
+                        else
+                        {
+                            console.log("NO failed words to update.");
+                            handleUpdateResponse();
+                        }
+
+                        function updateFailedWordsWithJson(failedWords, jsonFilePath, difficulty) 
+                        {
+                            fs.readFile(jsonFilePath, 'utf-8', (err, data) => {
+                                if (err) 
+                                {
+                                    console.error('Error reading JSON file:', err);
+                                    handleUpdateResponse();
+                                    return;
+                                }
+                                try 
+                                {
+                                    const jsonData = JSON.parse(data);
+                                
+                                    let updated = false;
+                                
+                                    for (const item of failedWords) 
+                                    {
+                                        const index = jsonData.findIndex(
+                                          (row) =>
+                                            row.german.trim().toLowerCase() === item.trim().toLowerCase() ||
+                                            row.english.trim().toLowerCase() === item.trim().toLowerCase()
+                                        );
+                                        
+                                        if (index !== -1) 
+                                        {
+                                          jsonData[index].difficulty = difficulty;
+                                          updated = true;
+                                        } 
+                                        else 
+                                        {
+                                          console.log('FAILED WORD NOT FOUND:', item);
+                                        }
+                                    }
+                                
+                                    if (updated) 
+                                    {
+                                      fs.writeFile(jsonFilePath, JSON.stringify(jsonData, null, 2), (writeErr) => {
+                                        if (writeErr) 
+                                        {
+                                          console.error('Error writing JSON file:', writeErr);
+                                        } 
+                                        else 
+                                        {
+                                          console.log('Updated failed words difficulty successfully!');
+                                        }
+                                        handleUpdateResponse();
+                                      });
+                                    } 
+                                    else 
+                                    {
+                                      console.log('No words were updated.');
+                                      handleUpdateResponse();
+                                    }
+                                } 
+                                catch (parseError) 
+                                {
+                                  console.error('Error parsing JSON data:', parseError);
+                                  handleUpdateResponse();
+                                }
+                            });
+                        }
+
+                        function updateDifficulty(entry, vocabData) {
+                            const { word, word2, difficulty } = entry;
+                          
+                            const closestMatchForWord = findClosestMatch(word, vocabData.map((row) => row.german));
+                          
+                            const closestMatchForWord2 = findClosestMatch(word2, vocabData.map((row) => row.english));
+                          
+                            const germanToUpdate = closestMatchForWord ? closestMatchForWord : word;
+                            const englishToUpdate = closestMatchForWord2 ? closestMatchForWord2 : word2;
+                          
+                            for (const row of vocabData) {
+                              if (row.german.trim().toLowerCase() === germanToUpdate.trim().toLowerCase() && row.english.trim().toLowerCase() === englishToUpdate.trim().toLowerCase()) {
+                                row.difficulty = difficulty;
+                              }
+                            }
+                          
+                            fs.writeFile(filePath, JSON.stringify(vocabData, null, 2), (writeErr) => {
+                              if (writeErr) 
+                              {
+                                console.error('Error writing JSON file:', writeErr);
+                              } 
+                              else 
+                              {
+                                console.log(`Updated difficulty for ${germanToUpdate} and ${englishToUpdate} to ${difficulty}`);
+                              }
+                              
+                              handleUpdateResponse();
+                            });
+                        }
+                    
+                        function findClosestMatch(word, array) 
+                        {
+                            let closestMatch = null;
+                            let minDistance = Infinity;
+                            
+                            for (const item of array) 
+                            {
+                                const distance = calculateLevenshtein(word, item);
+                                if (distance < minDistance) 
+                                {
+                                    minDistance = distance;
+                                    closestMatch = item;
+                                }
+                            }
+                          
+                            return closestMatch;
+                        }
+
+                        const vocabData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                        
+                        for (const entry of easyUpdated)
+                        {
+                            updateDifficulty(entry, vocabData);
+                        }
+
+                        for (const entry of mediumUpdated)
+                        {
+                            updateDifficulty(entry, vocabData);
+                        }
+
+                        for (const entry of hardUpdated)
+                        {
+                            updateDifficulty(entry, vocabData);
+                        }
+
+                        function handleUpdateResponse() 
+                        {
+                            numUpdatesCompleted.value++;
+                            if (numUpdatesCompleted.value === totalUpdates) 
+                            {
+                                // * All updates are completed, send the response
+                                if (numUpdatesCompleted.value === totalUpdates) 
+                                {
+                                    isInTrainingMode = false;
+
+                                    easyInputs.length = 0;
+                                    mediumInputs.length = 0;
+                                    hardInputs.length = 0;
+                                    failedWords.length = 0;
+
+                                    fs.readFile(filePath, 'utf-8', (err, data) => {
+                                        if (err) 
+                                        {
+                                            console.error('Error reading JSON file:', err);
+                                            return;
+                                        }
+            
+                                        if (data.endsWith(']]')) 
+                                        {
+                                            const correctedData = data.slice(0, data.lastIndexOf(']')) + data.slice(data.lastIndexOf(']') + 1);
+            
+                                            fs.writeFile(filePath, correctedData, (writeErr) => {
+                                                if (writeErr) 
+                                                {
+                                                    console.error('Error writing JSON file:', writeErr);
+                                                } 
+                                                else 
+                                                {
+                                                    console.log('Fixed JSON file: Removed extra "]" character.');
+                                                }
+                                            });
+                                        } 
+                                        else 
+                                        {
+                                            console.log('JSON file is already in the correct format.');
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    catch (error) 
+                    {
+                      throw error;
+                    }
+                }
             }
             break;
         }
@@ -2052,5 +2285,185 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return syllableCount;
+    }
+
+    async function getUpdatedDifficulty(inputs) 
+    {
+        const updatedDifficulty = [];
+    
+        for (const input of inputs) 
+        {
+          const word = input.word;
+          const word2 = input.word2;
+          const lang = input.lang;
+          const time = input.time;
+        
+          let difficultyTime = 0;
+        
+          if (time < 7) 
+          {
+            difficultyTime = 1;
+          } 
+          else if (time >= 7 && time <= 14) 
+          {
+            difficultyTime = 2;
+          } 
+          else 
+          {
+            difficultyTime = 3;
+          }
+      
+          try 
+          {
+            const similarity = await checkSimilarity(word, word2, lang);
+        
+            const difficultyNum = difficultyTime + similarity;
+        
+            let difficulty = '';
+            if (difficultyNum === 2) 
+            {
+              difficulty = "Easy";
+            } 
+            else if (difficultyNum === 3) 
+            {
+              difficulty = "Medium";
+            } 
+            else 
+            {
+              difficulty = "Hard";
+            }
+        
+            updatedDifficulty.push({ word, word2, difficulty });
+          } 
+          catch (error) 
+          {
+            console.error("Error: ", error);
+          }
+        }
+    
+        return updatedDifficulty;
+    }  
+
+    function checkSimilarity(word, word2, lang) 
+    {
+        return new Promise((resolve, reject) => {
+            const filePath = offlineFilePath;
+
+            if (word && word2 !== null || word.length && word2.length !== 0)
+            {
+                fs.readFile(filePath, "utf-8", (err, data) => {
+                    if (err) 
+                    {
+                      console.log("Error reading file: ", err);
+                      reject(err);
+                      return;
+                    }
+                  
+                    try 
+                    {
+                      const selectedWords = JSON.parse(data);
+                      
+                      if (selectedWords.length === 0) 
+                      {
+                        console.log("Table is empty!");
+                        reject(new Error("Table is empty"));
+                        return;
+                      }
+                    
+                      let correctWord = null;
+                    
+                      if (lang === 'german') 
+                      {
+                        correctWord = selectedWords.find((row) => row.english.trim().toLowerCase() === word2.trim().toLowerCase());
+                        if (correctWord) 
+                        {
+                            correctWord = correctWord.german;
+                            console.log("CorrectWord german: ", correctWord);
+                        }
+                      } 
+                      else if (lang === 'english') 
+                      {
+                        correctWord = selectedWords.find((row) => row.german.trim().toLowerCase() === word2.trim().toLowerCase());
+                        if (correctWord) 
+                        {
+                            correctWord = correctWord.english;
+                            console.log("CorrectWord english: ", correctWord);
+                        }
+                      }
+      
+                      console.log("CorrectWord after assignment: ", correctWord);
+                    
+                      if (correctWord) 
+                      {
+                        const editDistance = calculateLevenshtein(word, correctWord);
+                        const roundedEditDistance = parseFloat(editDistance.toFixed(2));
+                      
+                        let difficultyLevel;
+                        if (roundedEditDistance === 0) 
+                        {
+                          difficultyLevel = 1; // Perfect
+                        }
+                        else if (roundedEditDistance < 0.5) 
+                        {
+                          difficultyLevel = 2; // Almost
+                        } 
+                        else 
+                        {
+                          difficultyLevel = 3; // NOT Perfect
+                        }
+                      
+                        resolve(difficultyLevel);
+                      } 
+                      else 
+                      {
+                        console.log("Word not found in the table!", correctWord);
+                        reject(new Error("Word not found in the table"));
+                      }
+                    } 
+                    catch (parseError) 
+                    {
+                      console.log("Error parsing JSON data: ", parseError);
+                      reject(parseError);
+                    }
+                  });    
+            }
+            else
+            {
+                reject(new Error("Array emtpy!"));
+            }
+        });
+    }      
+
+    function calculateLevenshtein(a, b) 
+    {
+        const matrix = [];
+
+        for (let i = 0; i <= a.length; i++) 
+        {
+            matrix[i] = [i];
+        }
+
+        for (let j = 0; j <= b.length; j++) 
+        {
+            matrix[0][j] = j;
+        }
+
+        for (let i = 1; i <= a.length; i++) 
+        {
+            for (let j = 1; j <= b.length; j++) 
+            {
+                const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                const deletion = matrix[i - 1][j] + 1;
+                const insertion = matrix[i][j - 1] + 1;
+                const substitution = matrix[i - 1][j - 1] + cost;
+
+                matrix[i][j] = Math.min(deletion, insertion, substitution);
+            }
+        }
+
+        const maxLen = Math.max(a.length, b.length);
+        const editDistance = matrix[a.length][b.length] / maxLen;
+
+        return editDistance;
     }
 });
