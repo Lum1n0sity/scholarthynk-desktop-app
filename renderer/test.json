@@ -1,0 +1,42 @@
+[
+  {
+    "german": "neu",
+    "english": "new",
+    "difficulty": "Easy"
+  },
+  {
+    "german": "Auto",
+    "english": "car",
+    "difficulty": "Easy"
+  },
+  {
+    "german": "Haus",
+    "english": "house",
+    "difficulty": "Medium"
+  },
+  {
+    "german": "Banane",
+    "english": "Banana",
+    "difficulty": "Medium"
+  },
+  {
+    "german": "Gurke",
+    "english": "Cucumber",
+    "difficulty": "Medium"
+  },
+  {
+    "german": "Elefant",
+    "english": "Elephant",
+    "difficulty": "Medium"
+  },
+  {
+    "german": "Fußball",
+    "english": "Football",
+    "difficulty": "Easy"
+  },
+  {
+    "german": "Giraffe",
+    "english": "Giraffe",
+    "difficulty": "Medium"
+  }
+]

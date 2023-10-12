@@ -10,7 +10,7 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: true, // Allow DevTools to open with Ctrl + Shift + I
+      devTools: true,
     },
   });
 
@@ -19,13 +19,14 @@ function createMainWindow() {
   mainWindow.maximize();
   mainWindow.show();
   mainWindow.setMinimumSize(1000, 600);
-  mainWindow.menuBarVisible = false;
+  mainWindow.menuBarVisible = true;
 }
 
 function openFileDialog() {
   const options = {
     title: 'Select a File',
     filters: [
+      { name: 'JSON Files', extensions: ['json'] },
       { name: 'Text Files', extensions: ['txt'] },
       { name: 'All Files', extensions: ['*'] },
     ],
@@ -37,9 +38,14 @@ function openFileDialog() {
     .then((result) => {
       if (!result.canceled) {
         const filePath = result.filePaths[0];
-        console.log('Selected file:', filePath);
 
         mainWindow.webContents.send('selected-file', filePath);
+      }
+      else
+      {
+        console.log("Canceled");
+
+        mainWindow.webContents.send('file-dialog-canceled');
       }
     })
     .catch((err) => {
