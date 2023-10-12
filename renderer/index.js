@@ -935,8 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         } 
                         else 
                         {
-                            console.log('JSON file created and initialized with an empty array.');
-                            console.log('File Path:', fileName);
+                            offlineFilePath = fileName;
                         }
                     });
                 });
