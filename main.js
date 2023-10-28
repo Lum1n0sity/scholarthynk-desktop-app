@@ -10,7 +10,7 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: true, // Allow DevTools to open with Ctrl + Shift + I
+      devTools: true,
     },
   });
 
@@ -26,6 +26,7 @@ function openFileDialog() {
   const options = {
     title: 'Select a File',
     filters: [
+      { name: 'JSON', extensions: ['json'] },
       { name: 'Text Files', extensions: ['txt'] },
       { name: 'All Files', extensions: ['*'] },
     ],
@@ -62,7 +63,34 @@ ipcMain.on('open-file-dialog', () => {
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (process.platform !== 'darwin') 
+  {
     app.quit();
   }
 });
+
+/*
+async function checkForUpdates() {
+  const response = await fetch('https://example.com/updates.json');
+  const updates = await response.json();
+
+  const currentVersion = require('./package.json').version;
+  const latestVersion = updates.latestVersion;
+
+  if (latestVersion > currentVersion) {
+    const downloadUrl = updates.downloadUrl;
+    const response = await fetch(downloadUrl);
+    const appZip = await response.buffer();
+
+    const extract = require('extract-zip');
+    await extract(appZip, './');
+
+    const fs = require('fs');
+    fs.cpSync('./app/', './');
+
+    require('electron').app.relaunch();
+  }
+}
+
+setInterval(checkForUpdates, 3600000);
+*/
