@@ -97,6 +97,11 @@
                 <span class="slider round"></span>
             </label>
             <button id="settings_offline"><ion-icon name="settings-outline"></ion-icon></button>
+            <button id="search_btn"><ion-icon name="search-outline"></ion-icon></button>
+            <input type="text" placeholder="Search Vocab..." id="search_vocab">
+            <div id="vocab_search_output_div">
+                <p id="p_output"></p>
+            </div>
             <div id="delete_vocab_div">
                 <h4>Delete Vocab</h4>
                 <input type="text" placeholder="German word..." id="delete_german">
@@ -127,7 +132,20 @@
             </div>
             <button id="offline_feedback"><ion-icon name="thumbs-up-outline"></ion-icon></button>
             <button id="change-log-open"><ion-icon name="reader-outline"></ion-icon></button>
-        </div> 
+            <button id="update"><ion-icon name="cloud-download-outline"></ion-icon></button>
+            <div id="update_available">
+                <h4>Update Available!</h4>
+                <p>Do you want to install the newest version?</p>
+                <button id="install">Install</button>
+                <button id="cancel">Cancel</button>
+                <div id="update_available_buttons">
+                </div>
+            </div>
+            <div id="no_update_available">
+                <h4>No updates available!</h4>
+                <button id="ok_no_updates">OK</button>
+            </div> 
+        </div>
         <button id="close_log"><ion-icon name="close-outline"></ion-icon></button>
         <div id="change_log_bg"></div>
         <div id="change_log_container">
@@ -151,9 +169,13 @@
             </div>
             <button id="next_block">Start <ion-icon name="play-forward-outline"></ion-icon></button>
         </div>
-        <!--
-        <div id="loader-bg"></div>
-        <div id="loader"></div>
-        -->
+        <div id="note_file">
+            <p>If you don't have a file <br> click on cancel (abbrechen) <br> and it will generate one <br> for you in the Documents (Dokumente) folder!</p>
+            <button id="ok_note_file">Ok</button>
+        </div>
+        <div id="checking_for_updates">
+            <div class="custom-loader"></div>
+        </div>
+        <div id="pop_up_block"></div>
     </body>
 </html>

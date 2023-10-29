@@ -3,9 +3,9 @@ const path = require('path');
 const { ipcRenderer } = require('electron');
 const nodemailer = require('nodemailer');
 const { clearInterval } = require('timers');
+const FuzzySearch = require("fuzzy-search");
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const api_address = '192.168.5.21';
 
     let canConnectToServer = true;
@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayConnectionError();
         });
     }
+    const popupBlock = document.getElementById('pop_up_block');
 
     const login_button = document.getElementById('login_button');
     const user_button = document.getElementById('user_logged_in_bg');
@@ -244,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         login_field.style.display = 'grid';
         list_div.style.display = 'none';
         close_login.style.display = 'block';
+        popupBlock.style.display = 'block';
     }
 
     function closeLogin()
@@ -254,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         login_field.style.display = 'none';
         list_div.style.display = 'block';
         close_login.style.display = 'none';
+        popupBlock.style.display = 'none';
     }
 
     function closeRegister()
@@ -263,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         register_field.style.display = 'none';
         list_div.style.display = 'block';
+        popupBlock.style.display = 'none';
         close_register.style.display = 'none';
     }
 
@@ -312,6 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.status === 401)
             {
                 login_error_message.style.display = 'block';
+                popupBlock.style.display = 'block';
                 return;
             }
             else if (signal.aborted)
@@ -341,6 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 registerField.style.display = 'none';
                 close_login.style.display = 'none';
                 close_register.style.display = 'none';
+                popupBlock.style.display = 'none';
                 list_div.style.display = 'block';
                 displayLoginMessage();
                 isLoggedIn = true;
@@ -390,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.status === 401)
             {
                 register_error_message.style.display = 'block';
+                popupBlock.style.display = 'block';
                 return;
             }
             else if (signal.aborted) {
@@ -418,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 registerField.style.display = 'none';
                 close_login.style.display = 'none';
                 close_register.style.display = 'none';
+                popupBlock.style.display = 'none';
                 list_div.style.display = 'block';
                 displayLoginMessage();
                 isLoggedIn = true;
@@ -507,9 +515,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const english_word = document.getElementById('english-in').value;
                     const difficulty = getDifficulty(english_word);
 
+                    const newData = { german: german_word, english: english_word, difficulty: difficulty };
                     let exists = false;
 
-                    const newData = { german: german_word, english: english_word, difficulty: difficulty };
 
                     const filePath = offlineFilePath;
 
@@ -519,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.error('Error reading file: ', error);
                             return;
                         }
-                    
+
                         try 
                         {
                             let existingData = JSON.parse(data);
@@ -571,7 +579,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         catch (erro) 
                         {
                             console.error('Error parsing JSON:', erro);
-                        }
+                            vocab_message.style.display = 'block';
+        
+                            const vocab_message_ok = document.getElementById('warning_vocab_ok');
+        
+                            vocab_message_ok.addEventListener('click', () => {
+                                vocab_message.style.display = 'none';
+                            });
+                        } 
                     });
                 } 
                 catch (error) 
@@ -733,6 +748,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     registerField.style.display = 'none';
                     close_login.style.display = 'none';
                     close_register.style.display = 'none';
+                    popupBlock.style.display = 'none';
                     list_div.style.display = 'block';
                     displayLoginMessage();
                     isLoggedIn = true;
@@ -760,10 +776,23 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             isOffline = false;
             unloadVocab();
+        if (this.checked) 
+        {   
+            isOffline = true;
+            handleOffline();
+        } 
+        else 
+        {
+            isOffline = false;
+            unloadVocab();
 
             login_button.style.display = 'block';
             user_button.style.display = 'none';
+            login_button.style.display = 'block';
+            user_button.style.display = 'none';
 
+            tryAutoLogin();
+        }
             tryAutoLogin();
         }
     });
@@ -779,6 +808,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const close_login = document.getElementById('close_login');
         
         connection_error.style.display = 'block';
+        popupBlock.style.display = 'block';
         list_div.style.display = 'none';
         register_div.style.display = 'none';
         login_div.style.display = 'none';
@@ -801,6 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
         list_div.style.display = 'block';
         add_vocab.style.display = 'block';
         delete_vocab.style.display = 'block';
+        popupBlock.style.display = 'none';
     }
 
     try_again_login.addEventListener('click', () => {
@@ -836,6 +867,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleOffline();
         add_vocab.style.display = 'block';
         delete_vocab.style.display = 'block';
+        popupBlock.style.display = 'none';
     });
 
     function displayOfflineMessage() 
@@ -860,6 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 const filePath = offlineFilePath;
     
+                fs.readFile(filePath, 'utf-8', (err, data) => {
                 fs.readFile(filePath, 'utf-8', (err, data) => {
                     if (err)
                     {
@@ -890,9 +923,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error parsing JSON: ', e);
                     }
                 });
+                    try 
+                    {
+                        const rawData = JSON.parse(data);
+
+                        const processedData = [];
+                        
+                        rawData.forEach(item => {
+                            const germanW = item.german;
+                            const englishW = item.english;
+                        
+                            const wordR = `${germanW} | ${englishW}`;
+                            processedData.push(wordR);
+                        });
+
+                        const sanitizedData = processedData.map(item => item.replace(/,/g, ''));
+
+                        vocab_list.textContent = sanitizedData.join('\n');
+                    }
+                    catch(e)
+                    {
+                        console.error('Error parsing JSON: ', e);
+                    }
+                });
             } 
             catch (error) 
             {
+              console.error('Error reading to file:', error);
               console.error('Error reading to file:', error);
             }
         }        
@@ -904,7 +961,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleOffline() {
-        if (isOffline) {
+        if (isOffline) 
+        {
             try 
             {
                 const offline_toggle_checkbox = document.getElementById('toggleSwitch_offline');
@@ -912,7 +970,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 login_button.style.display = 'none';
                 user_button.style.display = 'none';
-
+            
                 offline_toggle_checkbox.checked = true;
                 
                 ipcRenderer.send('open-file-dialog');
@@ -985,6 +1043,7 @@ document.addEventListener('DOMContentLoaded', () => {
         add_vocab.style.display = 'none';
         delete_vocab_win.style.display = 'block';
         close_vocab_win.style.display = 'block'; 
+        popupBlock.style.display = 'block';
     });
 
     close_vocab_win.addEventListener('click', () => {
@@ -994,6 +1053,7 @@ document.addEventListener('DOMContentLoaded', () => {
         add_vocab.style.display = 'block';
         delete_vocab_win.style.display = 'none';
         close_vocab_win.style.display = 'none'; 
+        popupBlock.style.display = 'none';
     });
 
     delete_vocab_win_btn.addEventListener('click', () => {
@@ -1009,53 +1069,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 fs.readFile(filePath, 'utf8', (err, data) => {
                     if (err) 
                     {
-                      console.error('Error reading file:', err);
-                      return;
-                    }
-                    
-                    console.log('German in: ', german_in);
-                    console.log('English in: ', english_in);
-
-                    const rows = data.split('\n');
-
-                    console.log('Rows: ', rows);
-
-                    const updatedRows = [];
-                  
-                    for (const row of rows) 
-                    {
-                      const rowValues = row.split(' | ');
-                  
-                      console.log('Row Values', rowValues);
-
-                      if (!(rowValues.includes(german_in) && rowValues.includes(english_in))) 
-                      {
-                        updatedRows.push(row);
-                      }
+                        console.error('Error reading file:', err);
+                        return;
                     }
                   
-                    const newContent = updatedRows.join('\n');
-
-                    console.log('New Content', newContent);
+                    const jsonData = JSON.parse(data);
+                  
+                    const updatedData = jsonData.filter((item) => {
+                        return !(item.german === german_in && item.english === english_in);
+                    });
+                  
+                    const newContent = JSON.stringify(updatedData, null, 2);
                   
                     fs.writeFile(filePath, newContent, 'utf8', (err) => {
-                      if (err) 
-                      {
-                        console.error('Error writing to file:', err);
-                        return;
-                      }
+                        if (err) 
+                        {
+                            console.error('Error writing to file:', err);
+                            return;
+                        }
+                    });
                   
-                      console.log('Rows with matching values deleted.');
+                    const processedData = [];
+                        
+                    updatedData.forEach(item => {
+                        const germanW = item.german;
+                        const englishW = item.english;
+                    
+                        const wordR = `${germanW} | ${englishW}`;
+                        processedData.push(wordR);
                     });
 
-                    vocab_list.textContent = newContent;
+                    const sanitizedData = processedData.map(item => item.replace(/,/g, ''));
 
+                    vocab_list.value = sanitizedData.join('\n');
                     vocab_list.style.display = 'block';
                     list_div.style.display = 'block';
                     delete_vocab.style.display = 'block';
                     add_vocab.style.display = 'block';
                     delete_vocab_win.style.display = 'none';
-                    close_vocab_win.style.display = 'none'; 
+                    close_vocab_win.style.display = 'none';
+                    popupBlock.style.display = 'none';
                 });
             }
             else if (!isOffline)
@@ -1064,8 +1117,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const username = username_storage.textContent;
 
                 const dataToSendDeleteVocab = ({ german: german_in, english: english_in, username: username });
-
-                console.log(dataToSendDeleteVocab);
 
                 fetch(`http://${api_address}:3000/vocab/delete`, {
                     method: "DELETE",
@@ -1088,6 +1139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         add_vocab.style.display = 'block';
                         delete_vocab_win.style.display = 'none';
                         close_vocab_win.style.display = 'none'; 
+                        popupBlock.style.display = 'none';
 
                         let currentValue = vocab_list.value;
                         const lines = currentValue.split('\n');
@@ -1112,6 +1164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback_win.style.display = 'block';
             feedback_sub.style.display = 'block';
             feedback_close.style.display = 'block';
+            popupBlock.style.display = 'block';
             
             list_div.style.display = 'none';
             user_info_button_container.style.display = 'none';
@@ -1126,6 +1179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback_win.style.display = 'block';
             feedback_sub.style.display = 'block';
             feedback_close.style.display = 'block';
+            popupBlock.style.display = 'block';
             
             list_div.style.display = 'none';
             user_info_button_container.style.display = 'none';
@@ -1140,6 +1194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback_win.style.display = 'none';
             feedback_sub.style.display = 'none';
             feedback_close.style.display = 'none';
+            popupBlock.style.display = 'none';
             
             list_div.style.display = 'block';
 
@@ -1235,6 +1290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 feedback_win.style.display = 'none';
                 feedback_sub.style.display = 'none';
                 feedback_close.style.display = 'none';
+                popupBlock.style.display = 'none';
                 
                 list_div.style.display = 'block';
     
@@ -1272,7 +1328,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 feedback_win.style.display = 'none';
                 feedback_sub.style.display = 'none';
                 feedback_close.style.display = 'none';
-                
+                popupBlock.style.display = 'none';
+
                 list_div.style.display = 'block';
     
                 isFeedbackWinOpen = false;  
@@ -1377,6 +1434,7 @@ document.addEventListener('DOMContentLoaded', () => {
     start_training.addEventListener('click', () => {
         training_div.style.display = 'block';
         close_training.style.display = 'block';
+        popupBlock.style.display = 'block';
         isInTrainingMode = true;
         questionContainer.innerHTML = '';
         if (!isOffline)
@@ -1392,6 +1450,7 @@ document.addEventListener('DOMContentLoaded', () => {
     close_training.addEventListener('click', () => {
         training_div.style.display = 'none';
         close_training.style.display = 'none';
+        popupBlock.style.display = 'none';
         isInTrainingMode = false;
         currentDifficulty = "Easy";
         easyInputs.length = 0;
@@ -1631,9 +1690,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 next_button.appendChild(ionIcon);
 
                 isInTrainingMode = false;
-
-                console.table(inputsTrainer);
-                console.log(inputsTrainer.length);
+                popupBlock.style.display = 'none';
 
                 if (inputsTrainer.length > 0) 
                 {
@@ -1641,18 +1698,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     inputsTrainer.length = 0;
                 }
-        
-                console.log("Easy", easyInputs);
-                console.log("Medium", mediumInputs);
-                console.log("Hard", hardInputs);
-                console.log("Failed: ", failedWords);
 
                 if (!isOffline)
                 {
                     
                     const dataToSendDifficulty = ({ easy: easyInputs, medium: mediumInputs, hard: hardInputs, failed: failedWords });
-
-                    console.log(dataToSendDifficulty);
 
                     fetch(`http://${api_address}:3000/vocab/update/difficulty`, {
                         method: "POST",
@@ -1755,39 +1805,39 @@ document.addEventListener('DOMContentLoaded', () => {
                                         
                                         if (index !== -1) 
                                         {
-                                          jsonData[index].difficulty = difficulty;
-                                          updated = true;
+                                            jsonData[index].difficulty = difficulty;
+                                            updated = true;
                                         } 
                                         else 
                                         {
-                                          console.log('FAILED WORD NOT FOUND:', item);
+                                            console.log('FAILED WORD NOT FOUND:', item);
                                         }
                                     }
                                 
                                     if (updated) 
                                     {
                                       fs.writeFile(jsonFilePath, JSON.stringify(jsonData, null, 2), (writeErr) => {
-                                        if (writeErr) 
-                                        {
-                                          console.error('Error writing JSON file:', writeErr);
-                                        } 
-                                        else 
-                                        {
-                                          console.log('Updated failed words difficulty successfully!');
-                                        }
-                                        handleUpdateResponse();
+                                            if (writeErr) 
+                                            {
+                                                console.error('Error writing JSON file:', writeErr);
+                                            } 
+                                            else 
+                                            {
+                                                console.log('Updated failed words difficulty successfully!');
+                                            }
+                                            handleUpdateResponse();
                                       });
                                     } 
                                     else 
                                     {
-                                      console.log('No words were updated.');
-                                      handleUpdateResponse();
+                                        console.log('No words were updated.');
+                                        handleUpdateResponse();
                                     }
                                 } 
                                 catch (parseError) 
                                 {
-                                  console.error('Error parsing JSON data:', parseError);
-                                  handleUpdateResponse();
+                                    console.error('Error parsing JSON data:', parseError);
+                                    handleUpdateResponse();
                                 }
                             });
                         }
@@ -1803,22 +1853,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             const englishToUpdate = closestMatchForWord2 ? closestMatchForWord2 : word2;
                           
                             for (const row of vocabData) {
-                              if (row.german.trim().toLowerCase() === germanToUpdate.trim().toLowerCase() && row.english.trim().toLowerCase() === englishToUpdate.trim().toLowerCase()) {
-                                row.difficulty = difficulty;
-                              }
+                                if (row.german.trim().toLowerCase() === germanToUpdate.trim().toLowerCase() && row.english.trim().toLowerCase() === englishToUpdate.trim().toLowerCase()) {
+                                    row.difficulty = difficulty;
+                                }
                             }
                           
                             fs.writeFile(filePath, JSON.stringify(vocabData, null, 2), (writeErr) => {
-                              if (writeErr) 
-                              {
-                                console.error('Error writing JSON file:', writeErr);
-                              } 
-                              else 
-                              {
-                                console.log(`Updated difficulty for ${germanToUpdate} and ${englishToUpdate} to ${difficulty}`);
-                              }
-                              
-                              handleUpdateResponse();
+                                if (writeErr) 
+                                {
+                                    console.error('Error writing JSON file:', writeErr);
+                                } 
+
+                                handleUpdateResponse();
                             });
                         }
                     
@@ -2464,5 +2510,169 @@ document.addEventListener('DOMContentLoaded', () => {
         const editDistance = matrix[a.length][b.length] / maxLen;
 
         return editDistance;
+    }
+
+    const search_button = document.getElementById('search_btn');
+    const search_bar = document.getElementById('search_vocab');
+    const search_output = document.getElementById('vocab_search_output_div');
+
+    let isSearchBarVisible = false;
+
+    search_button.addEventListener('click', () => {
+        if (!isSearchBarVisible)
+        {
+            search_bar.style.display = 'block';
+            search_bar.style.width = '18vw';
+            search_bar.style.transition = '.5s';
+            search_bar.style.paddingLeft = '10px';
+            search_bar.style.paddingRight = '10px';
+            search_bar.style.borderRadius = '10px';
+            isSearchBarVisible = true;
+        }
+        else 
+        {
+            search_bar.style.width = '0vw';
+            search_bar.style.display = 'block';
+            search_bar.style.transition = '.5s';
+            search_bar.style.paddingLeft = '0px';
+            search_bar.style.paddingRight = '0px';
+            search_bar.style.borderRadius = '10px';
+            search_output.style.display = 'none';
+            search_bar.value = '';
+            const p_output = document.getElementById('p_output');
+            p_output.textContent = '';
+            isSearchBarVisible = false;
+        }
+    });
+
+    search_bar.addEventListener('keydown', async (event) => {
+        if (event.key === 'Enter') 
+        {
+            try 
+            {
+                const output = await search(search_bar.value);
+    
+                if (output) 
+                {
+                    if (isSearchBarVisible) 
+                    {
+                        search_bar.style.borderRadius = '10px 10px 0px 0px';
+                        search_output.style.display = 'block';
+    
+                        let outputText = `${output.german} ${output.english} ${output.difficulty}`;
+    
+                        const p_output = document.getElementById('p_output');
+                        p_output.textContent = outputText;
+                    } 
+                    else 
+                    {
+                        search_bar.style.borderRadius = '10px';
+                    }
+                } 
+            } 
+            catch (error) 
+            {
+                console.error('Error in search:', error);
+            }
+        }
+    });
+
+    async function search(input) 
+    {
+        if (isOffline) 
+        {
+            if (input.length > 0)
+            {
+                const jsonData = JSON.parse(fs.readFileSync(offlineFilePath));
+            
+                const germanSearcher = new FuzzySearch(jsonData, ["german"], {
+                    caseSensitive: false,
+                });
+            
+                const englishSearcher = new FuzzySearch(jsonData, ["english"], {
+                    caseSensitive: false,
+                });
+
+                const exactMatchGerman = jsonData.find((item) => item.german.toLowerCase() === input.toLowerCase());
+                const exactMatchEnglish = jsonData.find((item) => item.english.toLowerCase() === input.toLowerCase());
+                
+                if (exactMatchGerman) 
+                {
+                    return {
+                        german: exactMatchGerman.german,
+                        english: exactMatchGerman.english,
+                        difficulty: exactMatchGerman.difficulty,
+                    };
+                }
+
+                if (exactMatchEnglish) 
+                {
+                    return {
+                        german: exactMatchEnglish.german,
+                        english: exactMatchEnglish.english,
+                        difficulty: exactMatchEnglish.difficulty,
+                    };
+                }
+
+                const closeMatchesGerman = germanSearcher.search(input);
+                const closeMatchesEnglish = englishSearcher.search(input);
+
+                if (closeMatchesGerman.length > 0) 
+                {
+                    return {
+                        german: closeMatchesGerman[0].german,
+                        english: closeMatchesGerman[0].english,
+                        difficulty: closeMatchesGerman[0].difficulty,
+                    };
+                }
+
+                if (closeMatchesEnglish.length > 0) 
+                {
+                    return {
+                        german: closeMatchesEnglish[0].german,
+                        english: closeMatchesEnglish[0].english,
+                        difficulty: closeMatchesEnglish[0].difficulty,
+                    };
+                }
+
+                return null;
+            }
+        } 
+        else 
+        {
+            const username_storage = document.getElementById('username_view');
+            const username = username_storage.textContent;
+
+            return new Promise((resolve, reject) => {
+                if (input.length !== 0) 
+                {
+                    let dataToSendVocabSearch = { input, username };
+        
+                    fetch(`http://${api_address}:3000/search`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(dataToSendVocabSearch)
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        resolve({
+                            german: data.german,
+                            english: data.english,
+                            difficulty: data.difficulty
+                        });
+                    })
+                    .catch((err) => {
+                        reject(err);
+                    });
+                }
+                else 
+                {
+                    resolve(null);
+                }
+            });
+        }  
     }
 });

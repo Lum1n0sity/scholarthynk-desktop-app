@@ -11,6 +11,8 @@
   "dependencies": {
     "crypto": "^1.0.1",
     "electron": "^26.2.2",
+    "fuzzy-search": "^3.2.1",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.5",
     "path": "^0.12.7",
     "timers": "^0.1.1"
