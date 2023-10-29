@@ -1027,41 +1027,42 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error reading file:', err);
                         return;
                     }
-
-                    const rows = data.split('\n');
-
-                    const updatedRows = [];
                   
-                    for (const row of rows) 
-                    {
-                        const rowValues = row.split(' | ');
-
-                        if (!(rowValues.includes(german_in) && rowValues.includes(english_in))) 
-                        {
-                            updatedRows.push(row);
-                        }
-                    }
+                    const jsonData = JSON.parse(data);
                   
-                    const newContent = updatedRows.join('\n');
-
-                    console.log('New Content', newContent);
+                    const updatedData = jsonData.filter((item) => {
+                        return !(item.german === german_in && item.english === english_in);
+                    });
+                  
+                    const newContent = JSON.stringify(updatedData, null, 2);
                   
                     fs.writeFile(filePath, newContent, 'utf8', (err) => {
-                      if (err) 
-                      {
-                        console.error('Error writing to file:', err);
-                        return;
-                      }
+                        if (err) 
+                        {
+                            console.error('Error writing to file:', err);
+                            return;
+                        }
+                    });
+                  
+                    const processedData = [];
+                        
+                    updatedData.forEach(item => {
+                        const germanW = item.german;
+                        const englishW = item.english;
+                    
+                        const wordR = `${germanW} | ${englishW}`;
+                        processedData.push(wordR);
                     });
 
-                    vocab_list.textContent = newContent;
+                    const sanitizedData = processedData.map(item => item.replace(/,/g, ''));
 
+                    vocab_list.value = sanitizedData.join('\n');
                     vocab_list.style.display = 'block';
                     list_div.style.display = 'block';
                     delete_vocab.style.display = 'block';
                     add_vocab.style.display = 'block';
                     delete_vocab_win.style.display = 'none';
-                    close_vocab_win.style.display = 'none'; 
+                    close_vocab_win.style.display = 'none';
                     popupBlock.style.display = 'none';
                 });
             }
@@ -1071,8 +1072,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const username = username_storage.textContent;
 
                 const dataToSendDeleteVocab = ({ german: german_in, english: english_in, username: username });
-
-                console.log(dataToSendDeleteVocab);
 
                 fetch(`http://${api_address}:3000/vocab/delete`, {
                     method: "DELETE",
@@ -2494,6 +2493,7 @@ document.addEventListener('DOMContentLoaded', () => {
             search_bar.style.paddingRight = '0px';
             search_bar.style.borderRadius = '10px';
             search_output.style.display = 'none';
+            search_bar.value = '';
             const p_output = document.getElementById('p_output');
             p_output.textContent = '';
             isSearchBarVisible = false;
@@ -2501,30 +2501,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     search_bar.addEventListener('keydown', async (event) => {
-        if (event.key === 'Enter')
+        if (event.key === 'Enter') 
         {
-            let output = await search(search_bar.value);
-
-            if (output)
+            try 
             {
-                if (isSearchBarVisible)
-                {
-                    search_bar.style.borderRadius = '10px 10px 0px 0px';
-                    search_output.style.display = 'block';
+                const output = await search(search_bar.value);
     
-                    let outputText = `${output.german} ${output.english} ${output.difficulty}`;
-    
-                    const p_output = document.getElementById('p_output');
-                    p_output.textContent = outputText;
-                }
-                else
+                if (output) 
                 {
-                    search_bar.style.borderRadius = '10px';
+                    if (isSearchBarVisible) 
+                    {
+                        search_bar.style.borderRadius = '10px 10px 0px 0px';
+                        search_output.style.display = 'block';
+    
+                        let outputText = `${output.german} ${output.english} ${output.difficulty}`;
+    
+                        const p_output = document.getElementById('p_output');
+                        p_output.textContent = outputText;
+                    } 
+                    else 
+                    {
+                        search_bar.style.borderRadius = '10px';
+                    }
+                } 
+                else 
+                {
+                    console.log('No results were found.');
                 }
-            }
-            else
+            } 
+            catch (error) 
             {
-                console.log('No results were found.');
+                console.error('Error in search:', error);
             }
         }
     });
@@ -2592,7 +2599,39 @@ document.addEventListener('DOMContentLoaded', () => {
         } 
         else 
         {
-            // TODO: Implement online search functionality.
+            const username_storage = document.getElementById('username_view');
+            const username = username_storage.textContent;
+
+            return new Promise((resolve, reject) => {
+                if (input.length !== 0) 
+                {
+                    let dataToSendVocabSearch = { input, username };
+        
+                    fetch(`http://${api_address}:3000/search`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(dataToSendVocabSearch)
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        resolve({
+                            german: data.german,
+                            english: data.english,
+                            difficulty: data.difficulty
+                        });
+                    })
+                    .catch((err) => {
+                        reject(err);
+                    });
+                }
+                else 
+                {
+                    resolve(null);
+                }
+            });
         }  
     }
        
