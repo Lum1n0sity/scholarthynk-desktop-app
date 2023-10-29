@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const path = require('path');
 const { ipcRenderer } = require('electron');
 const nodemailer = require('nodemailer');
 const { clearInterval } = require('timers');
@@ -149,6 +150,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const change_log_open = document.getElementById('change-log-open');
     const change_log_close = document.getElementById('close_log');
     const change_log_bg = document.getElementById('change_log_bg');
+
+    const start_training = document.getElementById('start_training');
+    const training_div = document.getElementById('training_con');
+    const close_training = document.getElementById('close_training');
+
+    const questionContainer = document.getElementById('question_container');
+    const next_button = document.getElementById('next_block');
+
+    const easyMode = document.getElementById('difficulty-display-easy');
+    const mediumMode = document.getElementById('difficulty-display-medium');
+    const hardMode = document.getElementById('difficulty-display-hard');      
+
+    const doneMode = document.getElementById('difficulty-display-done');
+
+    const easyInputs = [];
+    const mediumInputs = [];
+    const hardInputs = [];
+    const inputsTrainer = [];
+    const failedWords = [];
+
+    let isInTrainingMode = false;
+
+    let easyGroups;
+    let mediumGroups;
+    let hardGroups;
+    let currentDifficulty = 'Easy';
+    let groupIndex = 0;
 
     const start_training = document.getElementById('start_training');
     const training_div = document.getElementById('training_con');
@@ -515,13 +543,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const german_word = document.getElementById('german-in').value;
                     const english_word = document.getElementById('english-in').value;
                     const difficulty = getDifficulty(english_word);
+                    const difficulty = getDifficulty(english_word);
 
+                    let exists = false;
+
+                    const newData = { german: german_word, english: english_word, difficulty: difficulty };
                     let exists = false;
 
                     const newData = { german: german_word, english: english_word, difficulty: difficulty };
 
                     const filePath = offlineFilePath;
 
+                    fs.readFile(filePath, 'utf8', (error, data) => {
+                        if (error) 
                     fs.readFile(filePath, 'utf8', (error, data) => {
                         if (error) 
                         {
@@ -567,7 +601,58 @@ document.addEventListener('DOMContentLoaded', () => {
                             else
                             {
                                 const vocab_message = document.getElementById('warning_vocab_div');
+                    
+                        try 
+                        {
+                            let existingData = JSON.parse(data);
+                    
+                            exists = existingData.some(item => (
+                                item.german === newData.german || item.english === newData.english
+                            ))
+
+                            if (!exists)
+                            {
+                                if (!Array.isArray(existingData)) 
+                                {
+                                    existingData = [];
+                                }
+                        
+                                existingData.push(newData);
+                        
+                                const updatedData = JSON.stringify(existingData, null, 2);
+                        
+                                fs.writeFile(filePath, updatedData, 'utf8', (err) => {
+                                    if (err) 
+                                    {
+                                        console.error(err);
+                                    } 
+                                    else 
+                                    {
+                                        console.log('Data inserted');
+                                    }
+                                })
+                                
+                                const formattedText = `${german_word} | ${english_word}`;
+                    
+                                vocab_list.value += (vocab_list.value ? '\n' : '') + formattedText;
+                                vocab_list.scrollTop = vocab_list.scrollHeight;
+                            }
+                            else
+                            {
+                                const vocab_message = document.getElementById('warning_vocab_div');
     
+                                vocab_message.style.display = 'block';
+            
+                                const vocab_message_ok = document.getElementById('warning_vocab_ok');
+            
+                                vocab_message_ok.addEventListener('click', () => {
+                                    vocab_message.style.display = 'none';
+                                });
+                            }
+                        } 
+                        catch (erro) 
+                        {
+                            console.error('Error parsing JSON:', erro);
                                 vocab_message.style.display = 'block';
             
                                 const vocab_message_ok = document.getElementById('warning_vocab_ok');
@@ -770,10 +855,23 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             isOffline = false;
             unloadVocab();
+        if (this.checked) 
+        {   
+            isOffline = true;
+            handleOffline();
+        } 
+        else 
+        {
+            isOffline = false;
+            unloadVocab();
 
             login_button.style.display = 'block';
             user_button.style.display = 'none';
+            login_button.style.display = 'block';
+            user_button.style.display = 'none';
 
+            tryAutoLogin();
+        }
             tryAutoLogin();
         }
     });
@@ -874,6 +972,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const filePath = offlineFilePath;
     
                 fs.readFile(filePath, 'utf-8', (err, data) => {
+                fs.readFile(filePath, 'utf-8', (err, data) => {
                     if (err)
                     {
                         console.error('Error reading file: ', err);
@@ -903,9 +1002,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error parsing JSON: ', e);
                     }
                 });
+                    try 
+                    {
+                        const rawData = JSON.parse(data);
+
+                        const processedData = [];
+                        
+                        rawData.forEach(item => {
+                            const germanW = item.german;
+                            const englishW = item.english;
+                        
+                            const wordR = `${germanW} | ${englishW}`;
+                            processedData.push(wordR);
+                        });
+
+                        const sanitizedData = processedData.map(item => item.replace(/,/g, ''));
+
+                        vocab_list.textContent = sanitizedData.join('\n');
+                    }
+                    catch(e)
+                    {
+                        console.error('Error parsing JSON: ', e);
+                    }
+                });
             } 
             catch (error) 
             {
+              console.error('Error reading to file:', error);
               console.error('Error reading to file:', error);
             }
         }        
@@ -925,7 +1048,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 login_button.style.display = 'none';
                 user_button.style.display = 'none';
+            try 
+            {
+                const offline_toggle_checkbox = document.getElementById('toggleSwitch_offline');
+                const offline_toggle = document.getElementById('offline_toggle');
+                
+                login_button.style.display = 'none';
+                user_button.style.display = 'none';
 
+                offline_toggle_checkbox.checked = true;
+                
+                ipcRenderer.send('open-file-dialog');
+                
+                ipcRenderer.on('selected-file', (event, filePath) => {
+                    offlineFilePath = filePath;
+
+                    loadVocabOffline();
+                });
+
+                ipcRenderer.on('file-dialog-canceled', (event) => {
+                    const jsonData = [];
+
+                    const fileName = 'vocab.json';
+
+                    fs.writeFile(fileName, JSON.stringify(jsonData, null, 2), (err) => {
+                        if (err) 
+                        {
+                            console.error('Error writing JSON file:', err);
+                        } 
+                        else 
+                        {
+                            offlineFilePath = fileName;
+                        }
+                    });
+                });
+            
+                offline_toggle_checkbox.addEventListener('change', function () 
+                {
+                  if (this.checked) 
+                  {
+                    isOffline = true;
+                    isLoggedIn = false;
+
+                    ipcRenderer.send('open-file-dialog');
+                
+                    ipcRenderer.on('selected-file', (event, filePath) => {
+                        offlineFilePath = filePath;
+                        loadVocabOffline();
+                    });
+                  } 
+                  else 
+                  {
+                    isOffline = false;
+                    console.log('isOffline', isOffline);
+                    unloadVocab();
+                    login_button.style.display = 'block';
+                    user_button.style.display = 'none';
+                    tryAutoLogin();
+                  }
+                });
+            
+                return;
+            } 
+            catch (error) 
+            {
+                console.error("Error clearing offlineInterval:", error);
+            }
+        }
+        else
+        {
+            console.log("isOffline = false");
+        }
                 offline_toggle_checkbox.checked = true;
                 
                 ipcRenderer.send('open-file-dialog');

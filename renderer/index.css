@@ -21,7 +21,6 @@ body {
     background-color: var(--background-dark);
     color: var(--text-color-dark);
     overflow-x: hidden;
-    overflow-x: hidden;
 }
 
 #main_grid {
