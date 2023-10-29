@@ -2569,10 +2569,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         search_bar.style.borderRadius = '10px';
                     }
                 } 
-                else 
-                {
-                    console.log('No results were found.');
-                }
             } 
             catch (error) 
             {
