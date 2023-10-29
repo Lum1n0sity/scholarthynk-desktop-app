@@ -3,23 +3,23 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 let mainWindow;
 
 function createMainWindow() {
-  mainWindow = new BrowserWindow({
-    title: 'Production Manager',
-    width: 1920,
-    height: 1080,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      devTools: true,
-    },
-  });
+    mainWindow = new BrowserWindow({
+        title: 'Production Manager',
+        width: 1920,
+        height: 1080,
+        webPreferences: {
+          nodeIntegration: true,
+          contextIsolation: false,
+          devTools: true,
+        },
+    });
 
-  mainWindow.loadFile('renderer/index.html');
+    mainWindow.loadFile('renderer/index.html');
 
-  mainWindow.maximize();
-  mainWindow.show();
-  mainWindow.setMinimumSize(1000, 600);
-  mainWindow.menuBarVisible = true;
+    mainWindow.maximize();
+    mainWindow.show();
+    mainWindow.setMinimumSize(1000, 600);
+    mainWindow.menuBarVisible = false;
 }
 
 function openFileDialog() {
