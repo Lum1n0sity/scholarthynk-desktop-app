@@ -6,6 +6,7 @@ const { clearInterval } = require('timers');
 const FuzzySearch = require("fuzzy-search");
 
 document.addEventListener('DOMContentLoaded', () => {
+    localStorage.removeItem('authToken');
     const api_address = '192.168.5.21';
 
     let canConnectToServer = true;
@@ -1037,20 +1038,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     delete_vocab.addEventListener('click', () => {
-        vocab_list.style.display = 'none';
-        list_div.style.display = 'none';
-        delete_vocab.style.display = 'none';
-        add_vocab.style.display = 'none';
+        add_vocab.disabled = true;
+        delete_vocab.disabled = true;
         delete_vocab_win.style.display = 'block';
         close_vocab_win.style.display = 'block'; 
         popupBlock.style.display = 'block';
     });
 
     close_vocab_win.addEventListener('click', () => {
-        vocab_list.style.display = 'block';
-        list_div.style.display = 'block';
-        delete_vocab.style.display = 'block';
-        add_vocab.style.display = 'block';
+        add_vocab.disabled = false;
+        delete_vocab.disabled = false;
         delete_vocab_win.style.display = 'none';
         close_vocab_win.style.display = 'none'; 
         popupBlock.style.display = 'none';
@@ -1165,8 +1162,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback_sub.style.display = 'block';
             feedback_close.style.display = 'block';
             popupBlock.style.display = 'block';
-            
-            list_div.style.display = 'none';
+
             user_info_button_container.style.display = 'none';
 
             isFeedbackWinOpen = true;
@@ -1181,7 +1177,6 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback_close.style.display = 'block';
             popupBlock.style.display = 'block';
             
-            list_div.style.display = 'none';
             user_info_button_container.style.display = 'none';
 
             isFeedbackWinOpen = true;
@@ -1205,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     feedback_tab.addEventListener('mouseover', () => {
         if (isInProblemTab)
         {
-            feedback_tab.style.backgroundColor = '#151922';
+            feedback_tab.style.backgroundColor = '#2f353c';
             feedback_tab.style.transition = '.5s';
         }
     });
@@ -1213,7 +1208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     feedback_tab.addEventListener('mouseout', () => {
         if (isInProblemTab)
         {
-            feedback_tab.style.backgroundColor = '#222b38';
+            feedback_tab.style.backgroundColor = '#202028';
             feedback_tab.style.transition = '.5s';
         }
     });
@@ -1224,8 +1219,8 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback_sub.style.display = 'block'
             problem_sub.style.display = 'none';
 
-            feedback_tab.style.backgroundColor = '#151922';
-            problem_tab.style.backgroundColor = '#222b38';
+            feedback_tab.style.backgroundColor = '#000000';
+            problem_tab.style.backgroundColor = '#202028';
 
             isInProblemTab = false;
             isInFeedbackTab = true;
@@ -1235,7 +1230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     problem_tab.addEventListener('mouseover', () => {
         if (isInFeedbackTab)
         {
-            problem_tab.style.backgroundColor = '#151922';
+            problem_tab.style.backgroundColor = '#2f353c';
             problem_tab.style.transition = '.5s';
         }
     });
@@ -1243,7 +1238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     problem_tab.addEventListener('mouseout', () => {
         if (isInFeedbackTab)
         {
-            problem_tab.style.backgroundColor = '#222b38';
+            problem_tab.style.backgroundColor = '#202028';
             problem_tab.style.transition = '.5s';
         }
     });
@@ -1254,8 +1249,8 @@ document.addEventListener('DOMContentLoaded', () => {
             feedback_sub.style.display = 'none'
             problem_sub.style.display = 'block';
 
-            feedback_tab.style.backgroundColor = '#222b38';
-            problem_tab.style.backgroundColor = '#151922';
+            feedback_tab.style.backgroundColor = '#202028';
+            problem_tab.style.backgroundColor = '#000000';
 
             isInFeedbackTab = false;
             isInProblemTab = true;

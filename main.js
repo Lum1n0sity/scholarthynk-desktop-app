@@ -19,7 +19,7 @@ function createMainWindow() {
     mainWindow.maximize();
     mainWindow.show();
     mainWindow.setMinimumSize(1000, 600);
-    mainWindow.menuBarVisible = false;
+    mainWindow.menuBarVisible = true;
 }
 
 function openFileDialog() {

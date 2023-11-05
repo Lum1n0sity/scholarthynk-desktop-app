@@ -40,7 +40,7 @@
                 <p>You already have that Vocabulary in your list!</p>
                 <button id="warning_vocab_ok">Ok</button>
             </div>
-            <button id="close_register" style="display: none;"><ion-icon name="close-outline"></ion-icon></button>
+            <button id="close_register"><ion-icon name="close-outline"></ion-icon></button>
             <button id="close_login"><ion-icon name="close-outline"></ion-icon></button>
             <button id="close_delete"><ion-icon name="close-outline"></ion-icon></button>
             <button id="close_feedback"><ion-icon name="close-outline"></ion-icon></button>
@@ -91,11 +91,7 @@
                 <button id="offline_login">Continue offline</button>
             </div>
             <p id="offline_message">You are offline!</p>
-            <p id="offline_toggle_label">Offline Mode:</p>
-            <label id="offline_toggle">
-                <input type="checkbox" id="toggleSwitch_offline">
-                <span class="slider round"></span>
-            </label>
+            <button id="nav_bar_open"><ion-icon name="menu-outline"></ion-icon></button>
             <button id="settings_offline"><ion-icon name="settings-outline"></ion-icon></button>
             <button id="search_btn"><ion-icon name="search-outline"></ion-icon></button>
             <input type="text" placeholder="Search Vocab..." id="search_vocab">
@@ -175,6 +171,13 @@
         </div>
         <div id="checking_for_updates">
             <div class="custom-loader"></div>
+        </div>
+        <div id="settings_div" style="display: none;">
+            <p id="offline_toggle_label">Offline Mode:</p>
+            <label id="offline_toggle">
+                <input type="checkbox" id="toggleSwitch_offline">
+                <span class="slider round"></span>
+            </label>
         </div>
         <div id="pop_up_block"></div>
     </body>
