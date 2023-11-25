@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
+
+:root {
+    --background-dark: #161616;
+    --primary: #2F2F2F;
+    --secondary: #2C88AF;
+    --selected-primary: #454545c7;
+    --selected-secondary: #246C89;
+    --text-color: #fff;
+    --disabled: #767676;
+    --alt-primary: #1C1C1C;
+}
+
+* {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--text-color);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#main_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    height: 100vh;
+    width: 100vw;
+    grid-gap: 10px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#nav_bar {
+    grid-row: 1;
+    grid-column: 1;
+    background-color: var(--primary);
+    height: 100vh;
+    width: 5vw;
+    text-align: center;
+}
+
+#nav_logo {
+    width: 4vw;
+    margin-top: .5vw;
+    border-radius: 11.52px;
+}
+
+#nav_bar button:not(#nav_courses) {
+    color: var(--text-color);
+    margin-top: 1vh;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#nav_courses {
+    color: var(--text-color);
+    margin-top: 1vh;
+    background-color: var(--selected-primary);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#nav_bar span {
+    font-size: xx-large;
+}
+
+#nav_bar p {
+    font-size: .8vw;
+    text-align: center;
+}
+
+#nav_lower {
+    position: absolute;
+    bottom: 1vh;
+    width: 5vw;
+}
+
+#nav_bar button:not(#nav_plan):hover {
+    background-color: var(--selected-primary);
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    transition: .5s;
+}
+
+#nav_bar button#nav_plan:hover {
+    background-color: var(--selected-primary);
+    border-radius: 5px;
+    transition: .5s;
+}
+
+#page_content {
+    background-color: transparent;
+    height: 100vh;
+    width: 95vw;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#add_course {
+    width: 3vw;
+    height: 3vw;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    transition: .5s;
+    position: absolute;
+    top: 3.5vw;
+    left: 42vw;
+}
+
+#add_course span {
+    font-size: 2.5vw;
+    transform: translateX(-4%);
+    color: var(--text-color);
+}
+
+#add_course:hover {
+    background-color: #e1e1e122;
+    transition: .5s;
+}
+
+#subject_select {
+    padding: 10px;
+    font-size: xx-large;
+    position: absolute;
+    top: 3vw;
+    left: 5vw;
+    width: 21vw;
+    border-radius: 6px;
+    border: 2px solid var(--primary);
+    outline: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+#course_01 {
+    background-color: #1D1D1D;
+    border-radius: 5px;
+    width: 40vw;
+    height: 10vw;
+    cursor: pointer;
+    position: absolute;
+    top: 10vw;
+    left: 5vw;
+}
+
+#course_01 img {
+    width: 8vw;
+    border-radius: 10px;
+    margin-top: 1vw;
+    margin-left: 1vw;
+    cursor: pointer;
+}
+
+#course_01_title {
+    position: absolute;
+    top: 3vw;
+    left: 11vw;
+    font-size: 2vw;
+    cursor: pointer;
+}
+
+#progress_bar01 {
+    background-color: var(--disabled);
+    width: 28vw;
+    height: .5vw;
+    border-radius: 5px;
+    position: absolute;
+    top: 7vw;
+    left: 11vw;
+    cursor: pointer;
+}
+
+#course_01 p {
+    font-size: 1vw;
+    position: absolute;
+    top: 8vw;
+    left: 11vw;
+    cursor: pointer;
+}
+
+#course_02 {
+    background-color: var(--primary);
+    border-radius: 5px;
+    width: 40vw;
+    height: 10vw;
+    cursor: pointer;
+    position: absolute;
+    top: 21vw;
+    left: 5vw;
+}
+
+#course_02 img {
+    width: 8vw;
+    border-radius: 10px;
+    margin-top: 1vw;
+    margin-left: 1vw;
+    cursor: pointer;
+}
+
+#course_02_title {
+    position: absolute;
+    top: 3vw;
+    left: 11vw;
+    font-size: 2vw;
+    cursor: pointer;
+}
+
+#progress_bar02 {
+    background-color: var(--disabled);
+    width: 28vw;
+    height: .5vw;
+    border-radius: 5px;
+    position: absolute;
+    top: 7vw;
+    left: 11vw;
+    cursor: pointer;
+}
+
+#progress_fill02 {
+    background-color: var(--secondary);
+    width: 14vw;
+    height: .5vw;
+    border-radius: 5px;
+    position: absolute;
+    top: 0vw;
+    left: 0vw;
+    cursor: pointer;
+}
+
+#course_02 p {
+    font-size: 1vw;
+    position: absolute;
+    top: 8vw;
+    left: 11vw;
+    cursor: pointer;
+}
+
+#user {
+    position: absolute;
+    top: 2vw;
+    right: 2vw;
+    width: 5vw;
+    height: 5vw;
+    border-radius: 50%;
+    border: 5px solid var(--secondary);
+    box-shadow: 1px 8px 19px -8px rgba(255,255,255,0.23);
+    cursor: pointer;
+}

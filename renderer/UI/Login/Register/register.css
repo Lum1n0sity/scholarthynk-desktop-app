@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
+
+:root {
+    --background-dark: #161616;
+    --primary: #2F2F2F;
+    --secondary: #2C88AF;
+    --selected-primary: #454545c7;
+    --selected-secondary: #246C89;
+    --text-color: #fff;
+    --disabled: #767676;
+    --alt-primary: #1C1C1C;
+}
+
+* {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--text-color);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#register_container {
+    height: 60vh;
+    width: 30vw;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background-color: var(--primary);
+    border-radius: 0px 10px 00px 0px;
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-70%, -50%);
+}
+
+#register_container h3 {
+    font-size: 3vw;
+    position: absolute;
+    left: 10%;
+    top: 2vh;
+}
+
+#logo {
+    width: 5vw;
+    position: absolute;
+    left: 80%;
+    top: 3%;
+    border-radius: 11px;
+}
+
+#username_input {
+    font-size: 1.7vw;
+    width: 23vw;
+    position: relative;
+    top: 7vw;
+    left: 10%;
+    border-radius: 6px;
+    border-bottom: 2px solid var(--disabled);
+    border-right: none;
+    border-top: none;
+    border-left: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    transition: .5s;
+}
+
+#username_input:focus {
+    border-left: 2px solid var(--secondary);
+    transition: .1s;
+}
+
+#pw {
+    position: relative;
+    top: 10vw;
+    left: 10%;
+    align-items: center;
+    display: flex;
+}
+
+#password_input {
+    font-size: 1.7vw;
+    width: 20vw;
+    border-radius: 6px 0px 0px 6px;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    border-bottom: 2px solid var(--disabled);
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+}
+
+#password_input:focus {
+    border-left: 2px solid var(--secondary);
+    transition: .1s;
+}
+
+#show_pw {
+    border-radius: 0px 6px 6px 0px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 2px solid var(--disabled);
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    cursor: pointer;
+    margin-left: -.1vw;
+    transition: .5s;
+}
+
+#show_pw span {
+    font-size: 2vw;
+}
+
+#show_pw:hover {
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#hide_pw {
+    padding: 10px;
+    border-radius: 0px 6px 6px 0px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 2px solid var(--disabled);
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    position: absolute;
+    right: 6vw;
+    display: none;
+}
+
+#hide_pw span {
+    font-size: 2vw;
+}
+
+#hide_pw:hover {
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#error_msg{
+    font-size: 1.5vw;
+    background-color: rgba(255, 0, 0, 0.453);
+    width: 29.95vw;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 0px 0px 10px 10px;
+    border-top: none;
+    border-left: 2px solid red;
+    border-right: 2px solid red;
+    border-bottom: 2px solid red;
+    position: absolute;
+    top: 80vh;
+    left: 63.95vw;
+    transform: translateX(-50%);
+    font-weight: bold;
+    z-index: 50;
+    display: none;
+}
+
+#sign_in {
+    background-color: var(--secondary);
+    width: 20vw;
+    height: 60vh;
+    border-radius: 10px 0px 0px 10px;
+    border-right: var(--selected-secondary) 2px solid;
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    transform: translate(44%, -50%);
+}
+
+#sign_in h3 {
+    font-size: 2vw;
+    position: absolute;
+    left: 13%;
+    top: 35%;
+}
+
+#register_switch {
+    font-size: 1vw;
+    padding: 1vw;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
+    border-radius: 50px;
+    outline: none;
+    border: var(--text-color) .2vw solid;
+    background-color: transparent;
+    color: var(--text-color);
+    font-weight: bold;
+    position: absolute;
+    top: 45%;
+    left: 28%;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#register_switch:hover {
+    background-color: #ffffff7d;
+    transition: .5s;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 2vw;
+    height: 2vw;
+    background-color: transparent;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    top: 11.5vw;
+    left: 30%;
+}
+  
+input[type="checkbox"]:checked:after {
+    font-family: "Material Symbols Rounded";
+    content: "\e876";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffffff;
+    font-size: 1.8vw;
+}
+  
+
+#remember_div p {
+    font-size: 1.8vw;
+    position: relative;
+    top: 9.1vw;
+    left: 38%;
+}
+
+#register {
+    font-size: 2vw;
+    padding: 1vw;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
+    border-radius: 50px;
+    outline: none;
+    border: var(--text-color) .2vw solid;
+    background-color: transparent;
+    color: var(--text-color);
+    font-weight: bold;
+    position: absolute;
+    top: 70%;
+    left: 25%;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#register span {
+    font-size: 2vw;
+    transform: translateY(20%);
+}
+
+#register:hover {
+    background-color: #ffffff7d;
+    transition: .5s;
+}
+
+#connection_error {
+    font-size: 1.5vw;
+    background-color: rgba(255, 0, 0, 0.453);
+    width: 29.95vw;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 0px 0px 10px 10px;
+    border-top: none;
+    border-left: 2px solid red;
+    border-right: 2px solid red;
+    border-bottom: 2px solid red;
+    position: absolute;
+    top: 80vh;
+    left: 63.95vw;
+    transform: translateX(-50%);
+    font-weight: bold;
+    z-index: 50;
+    display: none;
+}
