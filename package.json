@@ -9,13 +9,16 @@
   "author": "Raphael Schuhmann <raphael221@outlook.de>",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/translate": "^8.0.2",
     "crypto": "^1.0.1",
     "electron": "^26.2.2",
+    "electron-store": "^8.1.0",
     "fuzzy-search": "^3.2.1",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.5",
     "path": "^0.12.7",
-    "timers": "^0.1.1"
+    "timers": "^0.1.1",
+    "tokenizers": "^0.13.3"
   },
   "devDependencies": {
     "source-map-loader": "^4.0.1",

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vocab-Trainer</title>
+        <link rel="stylesheet" href="discover.css">
+        <script src="discover.js"></script>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    </head>
+    <body> 
+        <div id="main_grid">
+            <nav id="nav_bar">
+                <img src="Images/Logo.png" id="nav_logo">
+                <button id="nav_home"><span class="material-symbols-rounded">home</span><br><p>Home</p></button>
+                <button id="nav_discover"><span class="material-symbols-rounded">search</span><br><p>Discover</p></button>
+                <button id="nav_courses"><span class="material-symbols-rounded">play_circle</span><br><p>Courses</p></button>
+                <button id="nav_plan"><span class="material-symbols-rounded">menu_book</span><br><p>Study-plan</p></button>
+                <button id="nav_dates"><span class="material-symbols-rounded">calendar_month</span><br><p>Dates</p></button>
+                <button id="nav_learn"><span class="material-symbols-rounded">neurology</span><br><p>Learn</p></button>
+                <div id="nav_lower">
+                    <button id="nav_settigns"><span class="material-symbols-rounded">settings</span><br><p>Settings</p></button>
+                    <button id="nav_logout"><span class="material-symbols-rounded">logout</span><br><p>Logout</p></button>
+                </div>
+            </nav>
+            <div id="page_content">
+                <header>
+                    <button id="add_topic"><span class="material-symbols-rounded">add</span></button>
+                    <h1 id="page_title">Discover new words and topics</title>
+                </header>
+                <div id="topic_list">
+                    <section id="vocab_of_the_week">
+                        <span class="material-symbols-rounded">calendar_month</span>
+                        <h3>Vocab of the week</h3>
+                        <p>By Student</p>
+                        <div id="sepperator"></div>
+                    </section>
+                </div>
+                <div id="vocab_list_display">
+                    <button id="add_vocab"><span class="material-symbols-rounded">add</span></button>
+                    <h2 id="vocab_list_display_topic">Vocab of the week</h2>
+                    <div id="vocab_table">
+                        <textarea id="vocab_container" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+                <div id="add_topic_win">
+                    <h3>Add new topic</h3>
+                    <button id="close_add_topic"><span class="material-symbols-rounded">close</span></button>
+                    <input type="text" placeholder="Topic" id="topic_input">
+                    <button id="select_image"><span class="material-symbols-rounded">image</span> Select Image</button>
+                    <button id="add_topic_btn">Add topic</button>
+                </div>
+                <img src="Images/testuserimg.png" id="user">
+            </div>
+            <div id="background"></div>
+            <template id="topic_list_template">
+                <style>
+                    section {
+                        width: 45%;
+                        height: 3%;
+                        margin-left: 2vw;
+                        margin-top: 5vw;
+                        grid-column: 1 / span 1;
+                        grid-row: 1 / span 1; 
+                        cursor: pointer;
+                    }
+
+                    #template_img {
+                        width: 3vw;
+                        height: 3vw;
+                        position: relative;
+                        top: 2.5vw;
+                        left: 1vw;
+                        border-radius: 6px;
+                    }
+
+                    #template_h3 {
+                        font-size: 2vw;
+                        position: relative;
+                        left: 5vw;
+                        bottom: 1vw;
+                    }
+
+                    #separator {
+                        background-color: #2F2F2F; 
+                        height: .2vh;
+                        width: 43vw;
+                    }
+                </style>
+
+                <section>
+                    <img src="" alt="Image" id="template_img">
+                    <h3 id="template_h3">N/A</h3>
+                    <div id="separator"></div>
+                </section>    
+            </template>
+        </div>
+    </body>
+</html>

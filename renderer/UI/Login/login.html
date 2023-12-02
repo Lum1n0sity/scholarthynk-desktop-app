@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign In - Vocab Trainer</title>
+        <link rel="stylesheet" href="login.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+        
+        <script src="login.js"></script>
+    </head>
+    <body>
+        <div id="login_container">
+            <h3>Sign In</h3>
+            <img src="Images/Logo.png" id="logo">
+            <input type="text" placeholder="Username" id="username_input">
+            <div id="pw">
+                <input type="password" placeholder="Password" id="password_input">
+                <button id="show_pw"><span class="material-symbols-rounded">visibility</span></button>
+                <button id="hide_pw"><span class="material-symbols-rounded">visibility_off</span></button>
+            </div>
+            <div id="remember_div">
+                <input type="checkbox" id="remember_checkbox">
+                <p>Remember?</p>
+            </div>
+            <button id="login">Sign In <span class="material-symbols-rounded">login</span></button>
+        </div>
+        <div id="sign_up">
+            <h3>New Here?</h3>
+            <button id="register_switch">Sign Up</button>
+        </div>
+        <p id="error_msg">Username or Password is wrong!</p>
+        <p id="connection_error">Unable to connect to the server! <br> Try again later</p>
+    </body>
+</html>

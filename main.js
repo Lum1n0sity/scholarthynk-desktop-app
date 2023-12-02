@@ -1,10 +1,13 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const Store = require('electron-store');
+const store = new Store();
 
 let mainWindow;
 
-function createMainWindow() {
+function createMainWindow() 
+{
     mainWindow = new BrowserWindow({
-        title: 'Production Manager',
+        title: 'School-Manager',
         width: 1920,
         height: 1080,
         webPreferences: {
@@ -14,7 +17,7 @@ function createMainWindow() {
         },
     });
 
-    mainWindow.loadFile('renderer/index.html');
+    mainWindow.loadFile('renderer/UI/Login/login.html');
 
     mainWindow.maximize();
     mainWindow.show();
@@ -22,10 +25,12 @@ function createMainWindow() {
     mainWindow.menuBarVisible = true;
 }
 
-function openFileDialog() {
+function openFileDialog() 
+{
   const options = {
     title: 'Select a File',
     filters: [
+      { name: 'PNG Files', extensions: ['png'] },
       { name: 'JSON Files', extensions: ['json'] },
       { name: 'Text Files', extensions: ['txt'] },
       { name: 'All Files', extensions: ['*'] },
@@ -36,15 +41,13 @@ function openFileDialog() {
   dialog
     .showOpenDialog(options)
     .then((result) => {
-      if (!result.canceled) {
-        const filePath = result.filePaths[0];
-
-        mainWindow.webContents.send('selected-file', filePath);
-      }
-      else
+      if (!result.canceled) 
       {
-        console.log("Canceled");
-
+        const filePath = result.filePaths[0];
+        mainWindow.webContents.send('selected-file', filePath);
+      } 
+      else 
+      {
         mainWindow.webContents.send('file-dialog-canceled');
       }
     })
@@ -54,10 +57,13 @@ function openFileDialog() {
 }
 
 app.whenReady().then(() => {
+  store.set('loggedOut', false);
+
   createMainWindow();
 
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
+    if (BrowserWindow.getAllWindows().length === 0) 
+    {
       createMainWindow();
     }
   });
@@ -73,29 +79,3 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-/*
-async function checkForUpdates() {
-  const response = await fetch('https://example.com/updates.json');
-  const updates = await response.json();
-
-  const currentVersion = require('./package.json').version;
-  const latestVersion = updates.latestVersion;
-
-  if (latestVersion > currentVersion) {
-    const downloadUrl = updates.downloadUrl;
-    const response = await fetch(downloadUrl);
-    const appZip = await response.buffer();
-
-    const extract = require('extract-zip');
-    await extract(appZip, './');
-
-    const fs = require('fs');
-    fs.cpSync('./app/', './');
-
-    require('electron').app.relaunch();
-  }
-}
-
-setInterval(checkForUpdates, 3600000);
-*/

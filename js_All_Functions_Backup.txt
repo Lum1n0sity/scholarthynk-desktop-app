@@ -1,12 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-const { ipcRenderer } = require('electron');
-const nodemailer = require('nodemailer');
-const { clearInterval } = require('timers');
-const FuzzySearch = require("fuzzy-search");
-
-document.addEventListener('DOMContentLoaded', () => {
-    localStorage.removeItem('authToken');
+localStorage.removeItem('authToken');
     const api_address = '192.168.5.21';
 
     let canConnectToServer = true;
@@ -1601,6 +1593,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             training_div.style.display = 'none';
             close_training.style.display = 'none';
+            popupBlock.style.display = 'none';
             isInTrainingMode = false;
         }
 
@@ -1685,7 +1678,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 next_button.appendChild(ionIcon);
 
                 isInTrainingMode = false;
-                popupBlock.style.display = 'none';
 
                 if (inputsTrainer.length > 0) 
                 {
@@ -1694,6 +1686,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     inputsTrainer.length = 0;
                 }
 
+                // * Update Difficulty
                 if (!isOffline)
                 {
                     
@@ -2670,4 +2663,3 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }  
     }
-});
