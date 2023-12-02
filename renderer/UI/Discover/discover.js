@@ -1,5 +1,8 @@
 const Store = require('electron-store');
 const { ipcRenderer } = require('electron');
+const fs = require('fs');
+const path = require('path');
+const { cursorTo } = require('readline');
 
 document.addEventListener('DOMContentLoaded', function () 
 {
@@ -45,26 +48,85 @@ document.addEventListener('DOMContentLoaded', function ()
 
     select_image.addEventListener('click', () => {
         ipcRenderer.send('open-file-dialog');
-                
+    
         ipcRenderer.on('selected-file', (event, filePath) => {
-            new_selected_image = filePath;
+            try 
+            {
+                new_selected_image = filePath;
+            } 
+            catch (error) 
+            {
+                console.error('Error reading file:', error);
+            }
         });
-
-        ipcRenderer.on('file-dialog-canceled', (event) => {
+    
+        ipcRenderer.on('file-dialog-canceled', () => {
             new_selected_image = null;
         });
     });
-
+    
     add_topic_btn.addEventListener('click', () => {
         const topic_name = topic_input.value;
-
-        if (topic_name != null)
+    
+        if (topic_name != null && new_selected_image != null) 
         {
-            const formData = new FormData();
-            formData.append('file', new_selected_image);
-            formData.append('name', topic_name);
+            const fileContent = fs.readFileSync(new_selected_image);
+            const fileName = path.basename(new_selected_image);
+            const fileType = path.extname(new_selected_image).toLowerCase();
 
-            fetch(`${api_addr}/discover/topic/add`)
+            const mimeType = fileType === '.jpg' || fileType === '.jpeg' ? 'image/jpeg' :
+                             fileType === '.png' ? 'image/png':
+                             null;
+                             
+            if (mimeType)
+            {
+                const formData = new FormData();
+                formData.append('image', new Blob([fileContent], { type: mimeType }), fileName);
+                formData.append('name', topic_name);
+
+                fetch(`${api_addr}/discover/topic/add`, {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    try 
+                    {
+                        const jsonData = JSON.parse(data);
+                        console.log(jsonData);
+
+                        const added = jsonData.added;
+
+                        if (added)
+                        {
+                            const template = document.getElementById('topic_list_template');
+
+                            const clonedTemplate = document.importNode(template.content, true);
+
+                            const imgElement = clonedTemplate.querySelector('img');
+                            imgElement.src = new_selected_image;
+
+                            const title = clonedTemplate.querySelector('h3');
+                            title.textContent = topic_name;
+
+                            document.getElementById('topic_list').appendChild(clonedTemplate);
+                        }
+                    } 
+                    catch (parseError) 
+                    {
+                        console.error('Error parsing JSON:', parseError);
+                        console.log('Raw response:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+            }
         }
     });
 });

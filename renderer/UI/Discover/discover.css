@@ -236,7 +236,7 @@ header {
 #sepperator {
     background-color: var(--primary); 
     height: .2vh;
-    width: 45%vw;
+    width: 43vw;
 }
 
 #vocab_list_display {

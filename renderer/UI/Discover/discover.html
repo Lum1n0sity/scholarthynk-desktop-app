@@ -54,6 +54,47 @@
                 <img src="Images/testuserimg.png" id="user">
             </div>
             <div id="background"></div>
+            <template id="topic_list_template">
+                <style>
+                    section {
+                        width: 45%;
+                        height: 3%;
+                        margin-left: 2vw;
+                        margin-top: 5vw;
+                        grid-column: 1 / span 1;
+                        grid-row: 1 / span 1; 
+                        cursor: pointer;
+                    }
+
+                    #template_img {
+                        width: 3vw;
+                        height: 3vw;
+                        position: relative;
+                        top: 2.5vw;
+                        left: 1vw;
+                        border-radius: 6px;
+                    }
+
+                    #template_h3 {
+                        font-size: 2vw;
+                        position: relative;
+                        left: 5vw;
+                        bottom: 1vw;
+                    }
+
+                    #separator {
+                        background-color: #2F2F2F; 
+                        height: .2vh;
+                        width: 43vw;
+                    }
+                </style>
+
+                <section>
+                    <img src="" alt="Image" id="template_img">
+                    <h3 id="template_h3">N/A</h3>
+                    <div id="separator"></div>
+                </section>    
+            </template>
         </div>
     </body>
 </html>
