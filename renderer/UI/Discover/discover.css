@@ -9,6 +9,7 @@
     --text-color: #fff;
     --disabled: #767676;
     --alt-primary: #1C1C1C;
+    --warning: #ab0000;
 }
 
 * {
@@ -133,24 +134,105 @@ body {
 }
 
 header {
-    background-color: transparent;
+    background-color: var(--background-dark);
     width: 50%;
-    margin-top: 1vw;
+    height: 5vw;
     grid-column: 1 / span 1;
     grid-row: 1 / span 1; 
+    z-index: 100;
+    justify-content: center;
+    display: flex;
 }
 
-#page_title {
+#english_tab {
+    font-size: 2vw;
+    color: var(--text-color);
+    background-color: var(--selected-secondary);
+    border: none;
+    outline: none;
+    padding: 1vw;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: .25vw;
+    transition: .5s;
+}
+
+#english_tab span {
+    font-size: 2vw;
+    transform: translateY(12%);
+}
+
+#german_tab {
+    font-size: 2vw;
+    color: var(--text-color);
+    background-color: var(--secondary);
+    border: none;
+    outline: none;
+    padding: 1vw;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: .25vw;
+    margin-left: 2vw;
+    transition: .5s;
+}
+
+#german_tab span {
+    font-size: 2vw;
+    transform: translateY(12%);
+}
+
+#german_tab:hover {
+    border-radius: 50px;
+    background-color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#math_tab {
+    font-size: 2vw;
+    color: var(--text-color);
+    background-color: var(--secondary);
+    border: none;
+    outline: none;
+    padding: 1vw;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: .25vw;
+    margin-left: 2vw;
+    transition: .5s;
+}
+
+#math_tab span {
+    font-size: 2vw;
+    transform: translateY(12%);
+}
+
+#math_tab:hover {
+    border-radius: 50px;
+    background-color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#english {
+    width: 95vw;
+    height: 95vh;
+    display: block;
+}
+
+#english_title {
     font-size: 2vw;
     position: relative;
-    left: 20%;
+    left: 17%;
     bottom: 1.5vw;
 }
 
-#add_topic {
+#english_header {
+    width: 50%;
+}
+
+#menu_topics {
     position: relative;
     top: 1.3vw;
-    left: 2vw;
+    left: 3.7vw;
     width: 3vw;
     height: 3vw;
     border-radius: 50%;
@@ -160,6 +242,49 @@ header {
     background-color: transparent;
     color: var(--text-color);
     transition: .5s;
+    z-index: 100;
+}
+
+#menu_topics span {
+    font-size: 2vw;
+    transform: translateY(5%);
+    transition: .5s;
+}
+
+#menu_topics:hover {
+    background-color: #2f2f2f5d;
+    transition: .5s;
+}
+
+#menu_topics:hover span {
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#menu_topics_div {
+    background-color: var(--primary);
+    padding-top: 2.5vw;
+    padding-bottom: .4vw;
+    border-radius: 50px;
+    width: 3vw;
+    position: absolute;
+    left: 3.7vw;
+    top: 6.3vw;
+    transition: .5s;
+    display: none;
+}
+
+#add_topic {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--text-color);
+    transition: .5s;
+    display: block;
 }
 
 #add_topic span {
@@ -178,10 +303,90 @@ header {
     transition: .5s;
 }
 
+#delete_topics {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--text-color);
+    transition: .5s;
+    display: block;
+}
+
+#delete_topics span {
+    font-size: 2vw;
+    transform: translateY(5%);
+    transition: .5s;
+}
+
+#delete_topics:hover {
+    background-color: #2f2f2f5d;
+    transition: .5s;
+}
+
+#delete_topics:hover span {
+    color: var(--warning);
+    transition: .5s;
+}
+
+#delete_topic_overlay {
+    background-color: var(--primary);
+    position: absolute;
+    top: 0;
+    left: 5vw;
+    z-index: 101;
+    width: 20vw;
+    height: 7vh;
+    border-bottom-right-radius: 10px;
+    display: none;
+}
+
+#cancel_delete_topic {
+    font-size: 1.5vw;
+    margin-top: .8vw;
+    margin-left: 3vw;
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: bold;
+}
+
+#delete_delete_topic {
+    font-size: 1.5vw;
+    margin-top: .8vw;
+    margin-left: 1vw;
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: bold;
+}
+
+#cancel_delete_topic:hover {
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#delete_delete_topic:hover {
+    color: var(--warning);
+    transition: .5s;
+}
+
 #topic_list {
     grid-column: 1 / span 1;
     grid-row: 1 / span 1; 
-    overflow-y: auto;
+    overflow: auto;
+    width: 50%;
+    height: 41vw;
+    margin-top: .5vw;
 }
 
 #topic_list::-webkit-scrollbar {
@@ -202,48 +407,60 @@ header {
     background: #555;
 }
 
+#h3_courses {
+    font-size: 2vw;
+    text-align: center;
+    border-top: 3px solid var(--primary);
+    width: 95%;
+    margin-left: 2.5%;
+    margin-top: 1vw;
+    padding-top: .5vw;
+}
+
 #vocab_of_the_week {
-    width: 45%;
-    height: 3%;
-    margin-left: 2vw;
-    margin-top: 5vw;
-    grid-column: 1 / span 1;
-    grid-row: 1 / span 1; 
+    background-color: transparent;
+    width: 90%;
+    height: 6vw;
+    margin-left: 2.5vw;
+    display: flex;
+    border-radius: 8px;
     cursor: pointer;
+    transition: .5s;
 }
 
 #vocab_of_the_week h3 {
     font-size: 2vw;
-    position: relative;
-    left: 5vw;
-    bottom: 1vw;
+    align-self: start;
+    margin-left: 2.8vw;
+    margin-top: 1vw;
+    width: 100vw;
 }
 
 #vocab_of_the_week p {
-    font-size: 1.5vw;
-    position: relative;
-    left: 5vw;
-    bottom: 1vw;
+    font-size: 1.2vw;
+    align-self: end;
+    margin-left: -35vw;
+    margin-bottom: 1vw;
+    width: 100vw;
 }
 
 #vocab_of_the_week span {
-    font-size: 3vw;
-    position: relative;
-    top: 2.5vw;
-    left: 1vw;
+    font-size: 3.5vw;
+    align-self: center;
+    margin-left: 1vw;
 }
 
-#sepperator {
-    background-color: var(--primary); 
-    height: .2vh;
-    width: 43vw;
+#vocab_of_the_week:hover {
+    background-color: var(--selected-primary);
+    transition: .5s;
 }
 
 #vocab_list_display {
     width: 50%;
-    height: 100%;
+    height: 100vh;
     background-color: var(--primary);
-    position: relative;
+    position: absolute;
+    top: 0;
     left: 50%;
     align-self: start;
     display: flex;
@@ -256,7 +473,9 @@ header {
     position: relative;
     top: 2vw;
     width: 100%;
-    left: 30%;
+    height: 2.5vw;
+    left: 12%;
+    text-align: center;
 }
 
 #add_vocab {
@@ -271,6 +490,7 @@ header {
     outline: none;
     cursor: pointer;
     transition: .5s;
+    z-index: 101;
 }
 
 #add_vocab span {
@@ -288,6 +508,124 @@ header {
 #add_vocab:hover span {
     color: var(--selected-secondary);
     transition: .5s;
+}
+
+#delete_vocab {
+    height: 5vh;
+    width: 3.5vw;
+    position: relative;
+    top: 2vw;
+    left: 2.5vw;
+    background-color: transparent;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    z-index: 101;
+}
+
+#delete_vocab span {
+    font-size: 2vw;
+    color: var(--text-color);
+    transform: translateY(3%);
+    transition: .5s;
+}
+
+#delete_vocab:hover {
+    background-color: #1c1c1ca1;
+    transition: .5s;
+}
+
+#delete_vocab:hover span {
+    color: var(--warning);
+    transition: .5s;
+}
+
+#delete_vocab_win {
+    position: absolute;
+    top: 30%;
+    left: 31%;
+    width: 31.46vw;
+    height: 26.67vh;
+    background-color: var(--primary);
+    border-radius: 8px;
+    z-index: 103;
+    display: none;
+}
+
+#delete_vocab_win h3 {
+    font-size: 2vw;
+    text-align: center;
+    position: relative;
+    top: 1vh;
+}
+
+#close_delete_vocab_win {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    position: relative;
+    left: 89%;
+    bottom: 15%;
+    color: var(--text-color);
+    background-color: transparent;
+    cursor: pointer;
+    transition: .5s;
+    border: none;
+    outline: none;
+}
+
+#close_delete_vocab_win span {
+    transform: translateY(5%);
+    font-size: 1.5vw;
+    transition: .5s;
+}
+
+#close_delete_vocab_win:hover {
+    background-color: #1c1c1ca1;
+    transition: .5s;
+}
+
+#close_delete_vocab_win:hover span {
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#delete_select {
+    padding: 10px;
+    font-size: 1.5vw;
+    position: relative;
+    top: 2vw;
+    left: 2vw;
+    width: 21vw;
+    border-radius: 6px;
+    border: 2px solid var(--primary);
+    outline: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+#delete_btn {
+    font-size: 1.5vw;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    position: relative;
+    top: 3.5vw;
+    left: 42%;
+    display: flex;
+    align-items: center;
+    transition: .5s;
+    cursor: pointer;
+}
+
+#delete_btn:hover {
+    background-color: var(--selected-secondary);
+    transition: .5s; 
 }
 
 #vocab_container {
@@ -331,7 +669,7 @@ header {
     height: 26.67vh;
     background-color: var(--primary);
     border-radius: 8px;
-    z-index: 15;
+    z-index: 103;
     display: none;
 }
 
@@ -437,6 +775,109 @@ header {
     transition: .5s; 
 }
 
+#add_vocab_win {
+    position: absolute;
+    top: 30%;
+    left: 31%;
+    width: 31.46vw;
+    height: 26.67vh;
+    background-color: var(--primary);
+    border-radius: 8px;
+    z-index: 103;
+    display: none;
+}
+
+#add_vocab_win h3 {
+    font-size: 2vw;
+    text-align: center;
+    position: relative;
+    top: 1vh;
+}
+
+#close_add_vocab_win {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    position: relative;
+    left: 88%;
+    bottom: 13%;
+    color: var(--text-color);
+    background-color: transparent;
+    cursor: pointer;
+    transition: .5s;
+    border: none;
+    outline: none;
+}
+
+#close_add_vocab_win span {
+    transform: translateY(5%);
+    font-size: 1.5vw;
+    transition: .5s;
+}
+
+#close_add_vocab_win:hover {
+    background-color: #1c1c1ca1;
+    transition: .5s;
+}
+
+#close_add_vocab_win:hover span {
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#german_input {
+    font-size: 1vw;
+    justify-self: center;
+    width: 8vw;
+    border-radius: 6px;
+    border: 2px solid var(--primary);
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    padding-right: 5vw;
+    position: absolute;
+    top: 4vw;
+    left: 1.5vw;
+    outline: none;
+}
+
+#english_input {
+    font-size: 1vw;
+    justify-self: center;
+    width: 8vw;
+    border-radius: 6px;
+    border: 2px solid var(--primary);
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    padding-right: 5vw;
+    position: absolute;
+    top: 4vw;
+    left: 16.37vw;
+    outline: none;
+}
+
+#add_word_pair {
+    font-size: 1vw;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    position: relative;
+    top: 3vw;
+    left: 42%;
+    display: flex;
+    align-items: center;
+    transition: .5s;
+    cursor: pointer;
+}
+
+#add_word_pair:hover {
+    background-color: var(--selected-secondary);
+    transition: .5s; 
+}
+
 #background {
     background-color: #000000;
     opacity: 25%;
@@ -445,7 +886,7 @@ header {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 102;
     display: none;
 }
 
@@ -461,4 +902,5 @@ header {
     cursor: pointer;
     grid-column: 1 / span 1;
     grid-row: 1 / span 1; 
+    display: none;
 }
