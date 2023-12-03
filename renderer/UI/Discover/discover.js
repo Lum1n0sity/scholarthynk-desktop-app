@@ -2,11 +2,25 @@ const Store = require('electron-store');
 const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const i18next = require('i18next');
 
 document.addEventListener('DOMContentLoaded', function () 
 {
     const store = new Store();
     const api_addr = "http://192.168.5.21:3000";
+
+    ipcRenderer.send('get-language');
+
+    ipcRenderer.on('language', (event, language) => {
+      i18next.changeLanguage(language, (err, t) => {
+        document.body.querySelectorAll('[data-i18n]').forEach(element => {
+          const key = element.getAttribute('data-i18n');
+          const options = element.getAttribute('data-i18n-options');
+    
+          element.textContent = t(key, options ? JSON.parse(options) : {});
+        });
+      });
+    });
 
     const delete_select = document.getElementById('delete_select');
 
