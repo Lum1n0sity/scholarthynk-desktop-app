@@ -26,75 +26,137 @@
             </nav>
             <div id="page_content">
                 <header>
-                    <button id="add_topic"><span class="material-symbols-rounded">add</span></button>
-                    <h1 id="page_title">Discover new words and topics</title>
+                    <button id="english_tab"><span class="material-symbols-rounded">emoji_food_beverage</span> English</button>
+                    <button id="german_tab"><span class="material-symbols-rounded">sports_bar</span> German</button>
+                    <button id="math_tab"><span class="material-symbols-rounded">calculate</span> Math</button>
                 </header>
-                <div id="topic_list">
-                    <section id="vocab_of_the_week">
-                        <span class="material-symbols-rounded">calendar_month</span>
-                        <h3>Vocab of the week</h3>
-                        <p>By Student</p>
-                        <div id="sepperator"></div>
-                    </section>
-                </div>
-                <div id="vocab_list_display">
-                    <button id="add_vocab"><span class="material-symbols-rounded">add</span></button>
-                    <h2 id="vocab_list_display_topic">Vocab of the week</h2>
-                    <div id="vocab_table">
-                        <textarea id="vocab_container" cols="30" rows="10"></textarea>
+                <div id="english">
+                    <div id="english_header">
+                        <button id="menu_topics"><span class="material-symbols-rounded">menu</span></button>
+                        <h1 id="english_title">Discover new topics and courses</h1>
+                        <div id="menu_topics_div">
+                            <button id="add_topic"><span class="material-symbols-rounded">add</span></button>
+                            <button id="delete_topics"><span class="material-symbols-rounded">delete</span></button>
+                        </div>
+                    </div>
+                    <div id="topic_list">
+                        <div id="vocab_of_the_week">
+                            <span class="material-symbols-rounded">calendar_month</span>
+                            <h3>Vocab of the week</h3>
+                            <p id="studentDisplay">By N/A</p>
+                        </div>
+                        <!--Template clones-->
+                        <h3 id="h3_courses">Courses NOT AVAILABLE</h3>
+                    </div>
+                    <div id="vocab_list_display">
+                        <button id="add_vocab" disabled><span class="material-symbols-rounded">add</span></button>
+                        <button id="delete_vocab" disabled><span class="material-symbols-rounded">delete</span></button>
+                        <h2 id="vocab_list_display_topic">Vocab of the week</h2>
+                        <div id="vocab_table">
+                            <textarea id="vocab_container" cols="30" rows="10" readonly></textarea>
+                        </div>
+                    </div>
+                    <div id="add_topic_win">
+                        <h3>Add new topic</h3>
+                        <button id="close_add_topic"><span class="material-symbols-rounded">close</span></button>
+                        <input type="text" placeholder="Topic" id="topic_input">
+                        <button id="select_image"><span class="material-symbols-rounded">image</span> Select Image</button>
+                        <button id="add_topic_btn">Add topic</button>
+                    </div>
+                    <div id="add_vocab_win">
+                        <h3>Add new words</h3>
+                        <button id="close_add_vocab_win"><span class="material-symbols-rounded">close</span></button>
+                        <input type="text" placeholder="German" id="german_input">
+                        <input type="text" placeholder="English" id="english_input">
+                        <button id="add_word_pair">Add word</button>
+                    </div>
+                    <div id="delete_vocab_win">
+                        <h3>Delete words</h3>
+                        <button id="close_delete_vocab_win"><span class="material-symbols-rounded">close</span></button>
+                        <select id="delete_select">
+                            <option value="default">Select a word pair</option>
+                        </select>
+                        <button id="delete_btn">Delete</button>
                     </div>
                 </div>
-                <div id="add_topic_win">
-                    <h3>Add new topic</h3>
-                    <button id="close_add_topic"><span class="material-symbols-rounded">close</span></button>
-                    <input type="text" placeholder="Topic" id="topic_input">
-                    <button id="select_image"><span class="material-symbols-rounded">image</span> Select Image</button>
-                    <button id="add_topic_btn">Add topic</button>
+                <div id="german">
+                    <h1>GERMAN</h1>
+                </div>
+                <div id="math">
+                    <h1>MATH</h1>
                 </div>
                 <img src="Images/testuserimg.png" id="user">
             </div>
             <div id="background"></div>
-            <template id="topic_list_template">
-                <style>
-                    section {
-                        width: 45%;
-                        height: 3%;
-                        margin-left: 2vw;
-                        margin-top: 5vw;
-                        grid-column: 1 / span 1;
-                        grid-row: 1 / span 1; 
-                        cursor: pointer;
-                    }
-
-                    #template_img {
-                        width: 3vw;
-                        height: 3vw;
-                        position: relative;
-                        top: 2.5vw;
-                        left: 1vw;
-                        border-radius: 6px;
-                    }
-
-                    #template_h3 {
-                        font-size: 2vw;
-                        position: relative;
-                        left: 5vw;
-                        bottom: 1vw;
-                    }
-
-                    #separator {
-                        background-color: #2F2F2F; 
-                        height: .2vh;
-                        width: 43vw;
-                    }
-                </style>
-
-                <section>
-                    <img src="" alt="Image" id="template_img">
-                    <h3 id="template_h3">N/A</h3>
-                    <div id="separator"></div>
-                </section>    
-            </template>
+            <div id="delete_topic_overlay">
+                <button id="cancel_delete_topic">Cancel</button>
+                <button id="delete_delete_topic">Delete</button>
+            </div>
         </div>
+        <template id="topic_list_template">
+            <style>
+                #template_div {
+                    background-color: transparent;
+                    width: 90%;
+                    height: 6vw;
+                    margin-top: .5vw;
+                    margin-left: 2.5vw;
+                    display: flex;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: .5s;   
+                }
+
+                #template_div:hover {
+                    background-color: #454545c7;
+                    transition: .5s;
+                }
+
+                #template_img {
+                    width: 3vw;
+                    height: 3vw;
+                    border-radius: 6px;
+                    align-self: center;
+                    margin-left: 1.5vw;
+                }
+
+                #template_h3 {
+                    font-size: 2vw;
+                    align-self: center;
+                    margin-left: 3.4vw;
+                    width: 100vw;
+                }
+
+                input[type="checkbox"] {
+                    appearance: none;
+                    width: 6vw;
+                    height: 2.1vw;
+                    align-self: center;
+                    position: relative;
+                    right: 1vw;
+                    background-color: transparent;
+                    border: 2px solid #fff;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    display: none;
+                }
+
+                input[type="checkbox"]:checked:after {
+                    font-family: "Material Symbols Rounded";
+                    content: "\e876";
+                    transform: translate(-50%, -50%);
+                    position: relative;
+                    bottom: .1vw;
+                    left: .1vw;
+                    color: #ffffffff;
+                    font-size: 1.8vw;
+                }
+            </style>
+            <div id="template_div">
+                <img src="" alt="N/A" id="template_img">
+                <h3 id="template_h3">N/A</h3>
+                <input type="checkbox" id="template_del_checkbox">
+            </div>
+        </template>
     </body>
 </html>

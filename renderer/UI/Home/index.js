@@ -113,12 +113,18 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 const added = data != null ? data.added : null;
+
                 if (added != null && added == true)
                 {
                     const formattedText = `${german_word} | ${english_word}`;
 
                     your_words_list.value += (your_words_list.value ? '\n' : '') + formattedText;
                     your_words_list.scrollTop = your_words_list.scrollHeight;
+                        
+                    const option = document.createElement('option');
+                    option.value = formattedText;
+                    option.textContent = formattedText;
+                    delete_words_select.appendChild(option);
                 }
             })
             .catch(error => {
