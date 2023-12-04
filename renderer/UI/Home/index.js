@@ -16,44 +16,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     function updateUILanguage() 
     {
         document.querySelectorAll('[data-i18n]').forEach((element) => {
-          const key = element.getAttribute('data-i18n');
-          const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
+            const key = element.getAttribute('data-i18n');
+            const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
 
-          if (attribute === 'placeholder') 
-          {
-            element.setAttribute(attribute, i18next.t(key));
-          }
-          else if (attribute === 'textContent')
-          {
-            element.textContent = i18next.t(key);
-          }
-          else 
-          {
-            element[attribute] = i18next.t(key);
-          }
+            if (attribute === 'placeholder') 
+            {
+                  element.setAttribute(attribute, i18next.t(key));
+            }
+            else if (attribute === 'textContent')
+            {
+                  element.textContent = i18next.t(key);
+            }
+            else 
+            {
+                  element[attribute] = i18next.t(key);
+            }
         });
-      }
+    }
+
+    const storedLang = store.get('lang') || 'en';
 
     await i18next
     .use(fsBackend)
     .init({
-      lng: 'en',
+      lng: storedLang,
       fallbackLng: 'en',
       backend: {
         loadPath: `${__dirname}/../../Translation/{{lng}}.yaml`
       }
     }, 
     (err, t) => {
-      if (err) 
-      {
-        console.error('Error initializing i18next:', err);
-        return;
-      }
+        if (err) 
+        {
+              console.error('Error initializing i18next:', err);
+              return;
+        }
 
-      updateUILanguage();
-
-      console.log('Loaded Translations:', i18next.services.resourceStore.data);
-      console.log('Detected Language:', i18next.language);
+        updateUILanguage();
     });
 
     const test_lang_selection_save = document.getElementById('test_lang_selection_save');
@@ -66,11 +65,9 @@ document.addEventListener('DOMContentLoaded', async () => {
               console.error('Error changing language:', err);
               return;
             }
-        
-            // Update the UI with the new language
+
             updateUILanguage();
-        
-            // Save the selected language in the store
+
             store.set('lang', selectedLang);
         });
     });

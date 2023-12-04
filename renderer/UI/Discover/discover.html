@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ScholarThynk - Discover</title>
+        <title data-i18n="app.discover.title"></title>
         <link rel="stylesheet" href="discover.css">
         <script src="discover.js"></script>
 
@@ -14,27 +14,27 @@
         <div id="main_grid">
             <nav id="nav_bar">
                 <img src="Images/Logo.png" id="nav_logo">
-                <button id="nav_home"><span class="material-symbols-rounded">home</span><br><p>Home</p></button>
-                <button id="nav_discover"><span class="material-symbols-rounded">search</span><br><p>Discover</p></button>
-                <button id="nav_courses"><span class="material-symbols-rounded">play_circle</span><br><p>Courses</p></button>
-                <button id="nav_plan"><span class="material-symbols-rounded">menu_book</span><br><p>Study-plan</p></button>
-                <button id="nav_dates"><span class="material-symbols-rounded">calendar_month</span><br><p>Dates</p></button>
-                <button id="nav_learn"><span class="material-symbols-rounded">neurology</span><br><p>Learn</p></button>
+                <button id="nav_home"><span class="material-symbols-rounded">home</span><br><p data-i18n="app.nav_bar.home"></p></button>
+                <button id="nav_discover"><span class="material-symbols-rounded">search</span><br><p data-i18n="app.nav_bar.discover"></p></button>
+                <button id="nav_courses"><span class="material-symbols-rounded">play_circle</span><br><p data-i18n="app.nav_bar.courses"></p></button>
+                <button id="nav_plan"><span class="material-symbols-rounded">menu_book</span><br><p data-i18n="app.nav_bar.study_plan"></p></button>
+                <button id="nav_dates"><span class="material-symbols-rounded">calendar_month</span><br><p data-i18n="app.nav_bar.dates"></p></button>
+                <button id="nav_learn"><span class="material-symbols-rounded">neurology</span><br><p data-i18n="app.nav_bar.learn"></p></button>
                 <div id="nav_lower">
-                    <button id="nav_settigns"><span class="material-symbols-rounded">settings</span><br><p>Settings</p></button>
-                    <button id="nav_logout"><span class="material-symbols-rounded">logout</span><br><p>Logout</p></button>
+                    <button id="nav_notification"><span class="material-symbols-rounded">notifications</span></button>
+                    <button id="nav_logout"><span class="material-symbols-rounded">logout</span><br><p data-i18n="app.nav_bar.logout"></p></button>
                 </div>
             </nav>
             <div id="page_content">
                 <header>
-                    <button id="english_tab"><span class="material-symbols-rounded">emoji_food_beverage</span> English</button>
-                    <button id="german_tab"><span class="material-symbols-rounded">sports_bar</span> German</button>
-                    <button id="math_tab"><span class="material-symbols-rounded">calculate</span> Math</button>
+                    <button id="english_tab"><span class="material-symbols-rounded">emoji_food_beverage</span> <p data-i18n="app.discover.tab_en"></p></button>
+                    <button id="german_tab"><span class="material-symbols-rounded">sports_bar</span> <p data-i18n="app.discover.tab_de"></p></button>
+                    <button id="math_tab"><span class="material-symbols-rounded">calculate</span> <p data-i18n="app.discover.tab_mt"></p></button>
                 </header>
                 <div id="english">
                     <div id="english_header">
                         <button id="menu_topics"><span class="material-symbols-rounded">menu</span></button>
-                        <h1 id="english_title" data-i18n="app.discover.english.header.title"></h1>
+                        <h1 id="english_title" data-i18n="app.discover.english.header_title"></h1>
                         <div id="menu_topics_div">
                             <button id="add_topic"><span class="material-symbols-rounded">add</span></button>
                             <button id="delete_topics"><span class="material-symbols-rounded">delete</span></button>
@@ -43,41 +43,41 @@
                     <div id="topic_list">
                         <div id="vocab_of_the_week">
                             <span class="material-symbols-rounded">calendar_month</span>
-                            <h3>Vocab of the week</h3>
-                            <p id="studentDisplay">By N/A</p>
+                            <h3 data-i18n="app.discover.english.discover_list.votw_title"></h3>
+                            <p id="studentDisplay" data-i18n="app.discover.english.discover_list.votw_student"></p>
                         </div>
                         <!--Template clones-->
-                        <h3 id="h3_courses">Courses NOT AVAILABLE</h3>
+                        <h3 id="h3_courses" data-i18n="app.discover.english.discover_list.courses"></h3>
                     </div>
                     <div id="vocab_list_display">
                         <button id="add_vocab" disabled><span class="material-symbols-rounded">add</span></button>
                         <button id="delete_vocab" disabled><span class="material-symbols-rounded">delete</span></button>
-                        <h2 id="vocab_list_display_topic">Vocab of the week</h2>
+                        <h2 id="vocab_list_display_topic" data-i18n="app.discover.english.vocab_display.title_votw"></h2>
                         <div id="vocab_table">
                             <textarea id="vocab_container" cols="30" rows="10" readonly></textarea>
                         </div>
                     </div>
                     <div id="add_topic_win">
-                        <h3>Add new topic</h3>
+                        <h3 data-i18n="app.discover.english.add_topic.title"></h3>
                         <button id="close_add_topic"><span class="material-symbols-rounded">close</span></button>
-                        <input type="text" placeholder="Topic" id="topic_input">
-                        <button id="select_image"><span class="material-symbols-rounded">image</span> Select Image</button>
-                        <button id="add_topic_btn">Add topic</button>
+                        <input type="text" data-i18n="app.discover.english.add_topic.input_placeholder" data-i18n-attr="placeholder" id="topic_input">
+                        <button id="select_image"><span class="material-symbols-rounded">image</span> <p data-i18n="app.discover.english.add_topic.image_select"></p></button>
+                        <button id="add_topic_btn" data-i18n="app.discover.english.add_topic.add_topic"></button>
                     </div>
                     <div id="add_vocab_win">
-                        <h3>Add new words</h3>
+                        <h3 data-i18n="app.discover.english.add_vocab.title"></h3>
                         <button id="close_add_vocab_win"><span class="material-symbols-rounded">close</span></button>
-                        <input type="text" placeholder="German" id="german_input">
-                        <input type="text" placeholder="English" id="english_input">
-                        <button id="add_word_pair">Add word</button>
+                        <input type="text" data-i18n="app.discover.english.add_vocab.placeholder_german" data-i18n-attr="placeholder" id="german_input">
+                        <input type="text" data-i18n="app.discover.english.add_vocab.placeholder_english" data-i18n-attr="placeholder" id="english_input">
+                        <button id="add_word_pair" data-i18n="app.discover.english.add_vocab.add_word"></button>
                     </div>
                     <div id="delete_vocab_win">
-                        <h3>Delete words</h3>
+                        <h3 data-i18n="app.discover.english.delete_vocab.title"></h3>
                         <button id="close_delete_vocab_win"><span class="material-symbols-rounded">close</span></button>
                         <select id="delete_select">
-                            <option value="default">Select a word pair</option>
+                            <option value="default" data-i18n="app.discover.english.delete_vocab.default_select"></option>
                         </select>
-                        <button id="delete_btn">Delete</button>
+                        <button id="delete_btn" data-i18n="app.discover.english.delete_vocab.delete"></button>
                     </div>
                 </div>
                 <div id="german">
@@ -90,8 +90,8 @@
             </div>
             <div id="background"></div>
             <div id="delete_topic_overlay">
-                <button id="cancel_delete_topic">Cancel</button>
-                <button id="delete_delete_topic">Delete</button>
+                <button id="cancel_delete_topic" data-i18n="app.discover.english.delete_topic_overlay.cancel"></button>
+                <button id="delete_delete_topic" data-i18n="app.discover.english.delete_topic_overlay.delete"></button>
             </div>
         </div>
         <template id="topic_list_template">

@@ -3,23 +3,53 @@ const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const i18next = require('i18next');
+const fsBackend = require('i18next-fs-backend');
 
-document.addEventListener('DOMContentLoaded', function () 
+document.addEventListener('DOMContentLoaded', async function () 
 {
     const store = new Store();
     const api_addr = "http://192.168.5.21:3000";
 
-    ipcRenderer.send('get-language');
+    function updateUILanguage() 
+    {
+        document.querySelectorAll('[data-i18n]').forEach((element) => {
+            const key = element.getAttribute('data-i18n');
+            const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
 
-    ipcRenderer.on('language', (event, language) => {
-      i18next.changeLanguage(language, (err, t) => {
-        document.body.querySelectorAll('[data-i18n]').forEach(element => {
-          const key = element.getAttribute('data-i18n');
-          const options = element.getAttribute('data-i18n-options');
-    
-          element.textContent = t(key, options ? JSON.parse(options) : {});
+            if (attribute === 'placeholder') 
+            {
+                  element.setAttribute(attribute, i18next.t(key));
+            }
+            else if (attribute === 'textContent')
+            {
+                  element.textContent = i18next.t(key);
+            }
+            else 
+            {
+                  element[attribute] = i18next.t(key);
+            }
         });
-      });
+    }
+
+    const storedLang = store.get('lang') || 'en';
+
+    await i18next
+    .use(fsBackend)
+    .init({
+      lng: storedLang,
+      fallbackLng: 'en',
+      backend: {
+        loadPath: `${__dirname}/../../Translation/{{lng}}.yaml`
+      }
+    }, 
+    (err, t) => {
+        if (err) 
+        {
+              console.error('Error initializing i18next:', err);
+              return;
+        }
+
+        updateUILanguage();
     });
 
     const delete_select = document.getElementById('delete_select');
@@ -80,7 +110,11 @@ document.addEventListener('DOMContentLoaded', function ()
             const studentDisplay = document.getElementById('studentDisplay');
             const vocabDisplay = document.getElementById('vocab_container');
 
-            studentDisplay.textContent = `By ${student}`;
+            const currentText = studentDisplay.textContent;
+
+            const newText = currentText.replace('N/A', student);
+
+            studentDisplay.textContent = newText;
 
             const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
                 
@@ -262,7 +296,14 @@ document.addEventListener('DOMContentLoaded', function ()
                 }
             }
 
-            vocab_list_display_topic.textContent = "Vocab of the week";
+            if (storedLang == 'en')
+            {
+                vocab_list_display_topic.textContent = "Vocab of the week";
+            }
+            else if (storedLang == 'de')
+            {
+                vocab_list_display_topic.textContent = "Vocabeln der Woche";
+            }
 
             const dataToSendVocabOfWeek = ({ topic: "vocab_of_the_week" });
 
@@ -285,7 +326,11 @@ document.addEventListener('DOMContentLoaded', function ()
                     const studentDisplay = document.getElementById('studentDisplay');
                     const vocabDisplay = document.getElementById('vocab_container');
         
-                    studentDisplay.textContent = `By ${student}`;
+                    const currentText = studentDisplay.textContent;
+
+                    const newText = currentText.replace('N/A', student);
+
+                    studentDisplay.textContent = newText;
         
                     const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
                         

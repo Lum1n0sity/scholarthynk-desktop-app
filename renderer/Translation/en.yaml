@@ -23,4 +23,33 @@ app:
       delete_button: Delete
     your_words_section:
       your_words_title: Your words
-    
+  discover:
+    title: ScholarThynk - Discover
+    tab_en: English
+    tab_de: German
+    tab_mt: Math
+    english:
+      header_title: Discover new topics and words
+      discover_list:
+        votw_title: Vocab of the week
+        votw_student: By N/A
+        courses: Courses
+      vocab_display:
+        title_votw: Vocab of the week
+      add_topic:
+        title: Add new topic
+        input_placeholder: Topic
+        image_select: Select Image
+        add_topic: Add topic
+      delete_topic_overlay:
+        cancel: Cancel
+        delete: Delete
+      add_vocab: 
+        title: Add new words
+        placeholder_german: German
+        placeholder_english: English
+        add_word: Add words
+      delete_vocab:
+        title: Delete words
+        default_select: Select words to delete
+        delete: Delete
