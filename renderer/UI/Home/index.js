@@ -2,14 +2,78 @@ const fs = require('fs');
 const path = require('path');
 const { ipcRenderer } = require('electron');
 const Store = require('electron-store');
+const i18next = require('i18next');
+const fsBackend = require('i18next-fs-backend');
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const store = new Store();
     const api_addr = "http://192.168.5.21:3000";
 
     const dataToSendLoadVocab = ({ username: store.get('username') });
     const your_words_list = document.getElementById('your_words_list');
     const delete_words_select = document.getElementById('delete_words_select');
+    
+    function updateUILanguage() 
+    {
+        document.querySelectorAll('[data-i18n]').forEach((element) => {
+          const key = element.getAttribute('data-i18n');
+          const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
+
+          if (attribute === 'placeholder') 
+          {
+            element.setAttribute(attribute, i18next.t(key));
+          }
+          else if (attribute === 'textContent')
+          {
+            element.textContent = i18next.t(key);
+          }
+          else 
+          {
+            element[attribute] = i18next.t(key);
+          }
+        });
+      }
+
+    await i18next
+    .use(fsBackend)
+    .init({
+      lng: 'en',
+      fallbackLng: 'en',
+      backend: {
+        loadPath: `${__dirname}/../../Translation/{{lng}}.yaml`
+      }
+    }, 
+    (err, t) => {
+      if (err) 
+      {
+        console.error('Error initializing i18next:', err);
+        return;
+      }
+
+      updateUILanguage();
+
+      console.log('Loaded Translations:', i18next.services.resourceStore.data);
+      console.log('Detected Language:', i18next.language);
+    });
+
+    const test_lang_selection_save = document.getElementById('test_lang_selection_save');
+
+    test_lang_selection_save.addEventListener('click', () => {
+        const selectedLang = document.getElementById('test_lang_selection').value;
+
+        i18next.changeLanguage(selectedLang, (err, t) => {
+            if (err) {
+              console.error('Error changing language:', err);
+              return;
+            }
+        
+            // Update the UI with the new language
+            updateUILanguage();
+        
+            // Save the selected language in the store
+            store.set('lang', selectedLang);
+        });
+    });
 
     fetch(`${api_addr}/vocab/load`, {
         method: "POST",

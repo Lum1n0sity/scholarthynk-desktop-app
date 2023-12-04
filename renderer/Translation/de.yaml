@@ -1,0 +1,26 @@
+app:
+  nav_bar:
+    home: Home
+    discover: Entdecken
+    courses: Kurse
+    study_plan: Wochenplan
+    dates: Termine
+    learn: Lernen
+    logout: Log out
+  home:
+    title: "ScholarThynk - Home"
+    search_section:
+      search_title: Suche nach Wörtern
+      search_placeholder: Suche
+    add_section:
+      add_title: Füge neue Wörter hinzu
+      add_german_placeholder: Deutsch
+      add_english_placeholder: Englisch
+      add_button: Hinzufügen
+    delete_section:
+      delete_title: Wörter löschen
+      delete_select_default: Wähle Wörter zum löschen
+      delete_button: Löschen
+    your_words_section:
+      your_words_title: Deine Wörter
+    
