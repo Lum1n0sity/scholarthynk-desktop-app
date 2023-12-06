@@ -23,18 +23,6 @@ body {
     overflow-y: hidden;
 }
 
-#test_lang_selection {
-    position: absolute;
-    top: 0;
-    left: 10vw;
-}
-
-#test_lang_selection_save {
-    position: absolute;
-    top: 0;
-    left: 15vw;
-}
-
 #main_grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -431,6 +419,63 @@ body {
     border: 5px solid var(--secondary);
     box-shadow: 1px 8px 19px -8px rgba(255,255,255,0.23);
     cursor: pointer;
+}
+
+#user_options {
+    background-color: var(--primary);
+    position: absolute;
+    top: 8vw;
+    right: 3vw;
+    width: 3.5vw;
+    height: 7vw;
+    border-radius: 50px;
+    display: none;
+}
+
+#feedback_user_options {
+    margin-left: .25vw;
+    margin-top: .25vw;
+    border-radius: 50%;
+    width: 3vw;
+    height: 3vw;
+    cursor: pointer;
+    background-color: transparent;
+    transition: .5s;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+}
+
+#feedback_user_options span {
+    font-size: 2vw;
+}
+
+#feedback_user_options:hover {
+    background-color: #1c1c1ca1;
+    transition: .5s;
+}
+
+#settings_user_options {
+    margin-left: .25vw;
+    margin-top: .5vw;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: transparent;
+    transition: .5s;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+}
+
+#settings_user_options span {
+    font-size: 2vw;
+}
+
+#settings_user_options:hover {
+    background-color: #1c1c1ca1;
+    transition: .5s;
 }
 
 #share {

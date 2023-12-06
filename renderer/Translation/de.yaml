@@ -53,4 +53,14 @@ app:
         title: Wörter löschen
         default_select: Wähle Wörter zum löschen
         delete: Löschen
-    
+    settings:
+      title: ScholarThynk - Settings
+      nav:  
+        account: Benutzer
+        notifications: Benachrichtigungen
+        privacy_and_safety: Privatsphähre & Sicherheit
+        log: Was ist neu
+        help: Hilfe?
+        appearance: Erscheinung
+        organization: Organisation
+        close: Zurück

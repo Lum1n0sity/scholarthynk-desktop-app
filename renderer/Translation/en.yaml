@@ -53,3 +53,19 @@ app:
         title: Delete words
         default_select: Select words to delete
         delete: Delete
+  settings:
+    title: ScholarThynk - Settings
+    nav:  
+      account: Account
+      notifications: Notifications
+      privacy_and_safety: Privacy & Safety
+      log: What's New
+      help: Need Help?
+      appearance: Appearance
+      organization: Organization
+      close: Back
+    account:
+      edit: Edit
+      remove:
+        title: Account Removal
+        delete_btn: Delete Account

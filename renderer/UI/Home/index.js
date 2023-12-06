@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dataToSendLoadVocab = ({ username: store.get('username') });
     const your_words_list = document.getElementById('your_words_list');
     const delete_words_select = document.getElementById('delete_words_select');
+
+    const user = document.getElementById('user');
     
     function updateUILanguage() 
     {
@@ -118,6 +120,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const search_words_search = document.getElementById('search_words_search');
     const search_words_output_display = document.getElementById('search_words_output_display');
 
+    const user_options = document.getElementById('user_options');
+    const settings_user_options = document.getElementById('settings_user_options');
+    const feedback_user_options = document.getElementById('feedback_user_options');
+
     function hideSearchOutput()
     {
         search_words_output_display.style.display = 'none'
@@ -151,6 +157,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         store.set('loggedIn', false);
         store.set('loggedOut', true);
         store.delete('authToken');
+    });
+
+    user.addEventListener('click', () => {
+        user_options.style.display = user_options.style.display === 'block' ? 'none' : 'block';
+    });
+
+    settings_user_options.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        window.location.href = '../Settings/settings.html';
     });
 
     add_words_add.addEventListener('click', () => {

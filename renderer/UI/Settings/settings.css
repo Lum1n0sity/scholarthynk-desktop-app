@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
+
+:root {
+    --background-dark: #161616;
+    --primary: #2F2F2F;
+    --secondary: #2C88AF;
+    --selected-primary: #454545c7;
+    --selected-secondary: #246C89;
+    --text-color: #fff;
+    --disabled: #767676;
+    --alt-primary: #1C1C1C;
+}
+
+* {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--text-color);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#nav_bar {
+    background-color: var(--primary);
+    width: 15%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#nav_bar h3:not(#close_settings) {
+    background-color: transparent;
+    border-radius: 5px;
+    margin-top: .5vw;
+    width: 90%;
+    margin-left: 3%;
+    padding: 5px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#nav_bar h3:not(#close_settings):hover {
+    background-color: var(--disabled);
+    transition: .5s;
+}
+
+#close_settings {
+    margin-top: 1vw;
+    margin-left: 3%;
+    background-color: transparent;
+    border-radius: 5px;
+    width: 90%;
+    padding: 5px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#close_settings:hover {
+    background-color: var(--disabled);
+    transition: .5s;
+}
+
+#user {
+    position: absolute;
+    top: 2vw;
+    right: 2vw;
+    width: 5vw;
+    height: 5vw;
+    border-radius: 50%;
+    border: 5px solid var(--secondary);
+    box-shadow: 1px 8px 19px -8px rgba(255,255,255,0.23);
+    cursor: pointer;
+}

@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async function ()
 
             studentDisplay.textContent = newText;
 
-            const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
+            // const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
                 
             const wordPairs = formattedText.split('\n');
 
