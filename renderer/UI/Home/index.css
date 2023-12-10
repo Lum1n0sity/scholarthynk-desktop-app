@@ -1,23 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
 
-:root {
-    --background-dark: #161616;
-    --primary: #2F2F2F;
-    --secondary: #2C88AF;
-    --selected-primary: #454545c7;
-    --selected-secondary: #246C89;
-    --text-color: #fff;
-    --disabled: #767676;
-    --alt-primary: #1C1C1C;
-}
-
 * {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
 }
 
 body {
-    background-color: var(--background-dark);
+    background-color: var(--background);
     color: var(--text-color);
     overflow-x: hidden;
     overflow-y: hidden;

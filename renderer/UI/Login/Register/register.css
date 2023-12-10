@@ -1,23 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
 
-:root {
-    --background-dark: #161616;
-    --primary: #2F2F2F;
-    --secondary: #2C88AF;
-    --selected-primary: #454545c7;
-    --selected-secondary: #246C89;
-    --text-color: #fff;
-    --disabled: #767676;
-    --alt-primary: #1C1C1C;
-}
-
 * {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
 }
 
 body {
-    background-color: var(--background-dark);
+    background-color: var(--background);
     color: var(--text-color);
     overflow-x: hidden;
     overflow-y: hidden;
@@ -51,11 +40,30 @@ body {
     border-radius: 11px;
 }
 
-#username_input {
+#email_input {
     font-size: 1.7vw;
     width: 23vw;
     position: relative;
     top: 7vw;
+    left: 10%;
+    border-radius: 6px;
+    border-bottom: 2px solid var(--disabled);
+    border-right: none;
+    border-top: none;
+    border-left: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    transition: .5s;
+}   
+
+
+#username_input {
+    font-size: 1.7vw;
+    width: 23vw;
+    position: relative;
+    top: 8vw;
     left: 10%;
     border-radius: 6px;
     border-bottom: 2px solid var(--disabled);
@@ -76,7 +84,7 @@ body {
 
 #pw {
     position: relative;
-    top: 10vw;
+    top: 9vw;
     left: 10%;
     align-items: center;
     display: flex;
@@ -224,7 +232,7 @@ input[type="checkbox"] {
     border-radius: 5px;
     cursor: pointer;
     position: relative;
-    top: 11.5vw;
+    top: 10vw;
     left: 30%;
 }
   
@@ -243,7 +251,7 @@ input[type="checkbox"]:checked:after {
 #remember_div p {
     font-size: 1.8vw;
     position: relative;
-    top: 9.1vw;
+    top: 7.5vw;
     left: 38%;
 }
 
@@ -259,7 +267,7 @@ input[type="checkbox"]:checked:after {
     color: var(--text-color);
     font-weight: bold;
     position: absolute;
-    top: 70%;
+    top: 75%;
     left: 25%;
     cursor: pointer;
     transition: .5s;

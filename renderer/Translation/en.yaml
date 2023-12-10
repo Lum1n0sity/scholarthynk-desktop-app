@@ -1,4 +1,27 @@
 app:
+  register: 
+    title: Sign Up
+    placeholder_email: E-Mail
+    placeholder_username: Username
+    placeholder_password: Password
+    remember: Remember?
+    sign_up: Sign Up
+    switch_text: Welcome Back!
+    switch_btn: Sign In
+    error_username: Username already exists!
+    error_server: Unable to connect to server!
+    error_server_try_again: Try again later
+  login:
+    title: Sign In
+    placeholder_username: Username
+    placeholder_password: Password
+    remember: Remember?
+    sign_in: Sign In
+    switch_text: New Here?
+    switch_btn: Sign Up
+    error_inputs: Username or Password is wrong!
+    error_server: Unable to connect to server!
+    error_server_try_again: Try again later
   nav_bar:
     home: Home
     discover: Discover
@@ -57,15 +80,58 @@ app:
     title: ScholarThynk - Settings
     nav:  
       account: Account
-      notifications: Notifications
       privacy_and_safety: Privacy & Safety
       log: What's New
       help: Need Help?
       appearance: Appearance
-      organization: Organization
       close: Back
     account:
-      edit: Edit
+      title: Account
+      reset_pw: Reset
+      edit_btn: Edit
+      edit:
+        username:
+          title: Change your username
+          placeholder_username: New username
+          change: Change
+          cancel: Cancel
+          error_409:
+            title: Username already exists!
       remove:
         title: Account Removal
         delete_btn: Delete Account
+      warning:
+        title: WARNING!
+        message: You are about to delete your Account FOR EVER. 
+        question: Do you really want to do that?
+        cancel: Cancel
+        delete: Delete
+      error_delete_500:
+        title: Error deleting your Account!
+        message: There was an error deleting your Account! Please contact support.
+        ok: Ok
+      error_delete_404:
+        title: Error deleting your Account!
+        message: Your Account was not found! Please contact support.
+        ok: Ok
+    privacy_safety:
+      title: Privacy & Safety
+      export: Export your data
+      consent:
+        title: Data Processing Consent Information
+        content: N/A
+      privacy_policy: Privacy Policy
+      notifactions: 
+        title: Notification Settings
+      2FA: 
+        title: Two-Factor Authentication
+        label: Turn on/off Two-Factor Authentication
+    appearance:
+      title: Appearance
+      theme: 
+        title: Theme
+        light: Light
+        dark: Dark
+      language:
+        title: Language
+        save_button: Save

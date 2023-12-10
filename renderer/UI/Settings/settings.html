@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title data-i18n="app.settings.title"></title>
         <link rel="stylesheet" href="settings.css">
+        <link rel="stylesheet" href="../style.css">
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
         <script src="../../../node_modules/i18next/dist/umd/i18next.js"></script>
@@ -15,8 +16,6 @@
             <nav id="nav_bar">
                 <h3 id="account_nav" data-i18n="app.settings.nav.account"></h3>
                 <h3 id="privacy_safety_nav" data-i18n="app.settings.nav.privacy_and_safety"></h3>
-                <h3 id="organization_nav" data-i18n="app.settings.nav.organization"></h3>
-                <h3 id="notifications_nav" data-i18n="app.settings.nav.notifications"></h3>
                 <h3 id="appearance_nav" data-i18n="app.settings.nav.appearance"></h3>
                 <h3 id="help_nav" data-i18n="app.settings.nav.help"></h3>
                 <h3 id="dev_log_nav" data-i18n="app.settings.nav.log"></h3>
@@ -24,24 +23,81 @@
             </nav>
             <div id="page_content">
                 <div id="account_settings">
-                    <img src="Images/testuserimg.png" alt="" id="user">
-                    <h2 id="username">N/A</h2>
+                    <h2 id="account_settings_title" data-i18n="app.settings.account.title"></h2>
+                    <div id="user_info">
+                        <img src="Images/testuserimg.png" alt="">
+                        <h2 id="username">N/A</h2>
+                    </div>
                     <div id="edit_options">
                         <h3 id="username_edit"></h3>
-                        <button id="username_edit_btn" data-i18n="app.settings.account.edit"></button>
-                        <input type="password" id="password_edit">
-                        <button id="password_edit_btn" data-i18n="app.settings.account.edit"></button>
+                        <button id="username_edit_btn" data-i18n="app.settings.account.edit_btn"></button>
+                        <input type="password" id="password_edit" readonly>
+                        <button id="password_edit_btn" data-i18n="app.settings.account.reset_pw"></button>
                     </div>
                     <div id="account_remove">
                         <h3 id="account_remove_title" data-i18n="app.settings.account.remove.title"></h3>
+                        <button id="account_remove_btn" data-i18n="app.settings.account.remove.delete_btn"></button>
                     </div>
                 </div>
-                <select id="test_lang_selection">
-                    <option value="en">English</option>
-                    <option value="de">German</option>
-                </select>
-                <button id="test_lang_selection_save">Save</button>
+                <div id="privacy_safety">
+                    <h2 data-i18n="app.settings.privacy_safety.title"></h2>
+                    <button id="export_data"><p data-i18n="app.settings.privacy_safety.export"></p> <span class="material-symbols-rounded">download</span></button>
+                    <button id="consent_open_close"><p data-i18n="app.settings.privacy_safety.consent.title"></p> <span class="material-symbols-rounded">chevron_right</span></button>
+                    <h4 data-i18n="app.settings.privacy_safety.consent.content" id="consent_content"></h4>
+                    <button id="privacy_policy_look_up" data-i18n="app.settings.privacy_safety.privacy_policy"></button>
+                    <h3 id="TFA_title" data-i18n="app.settings.privacy_safety.2FA.title"></h3>
+                    <h4 id="TFA_label" data-i18n="app.settings.privacy_safety.2FA.label"></h4>
+                    <label id="TFA_toggle">
+                        <input type="checkbox" id="TFA_toggle_switch">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div id="appearance">
+                    <h2 data-i18n="app.settings.appearance.title" id="title_appearance"></h2>
+                    <h3 id="theme_title" data-i18n="app.settings.appearance.theme.title"></h3>
+                    <div id="light_mode">
+                        <img src="Images/Light.png" alt="">
+                        <p data-i18n="app.settings.appearance.theme.light"></p>
+                    </div>
+                    <div id="dark_mode">
+                        <img src="Images/Dark.png" alt="">
+                        <p data-i18n="app.settings.appearance.theme.dark"></p>
+                    </div>
+                    <h3 id="lang_title" data-i18n="app.settings.appearance.language.title"></h3>
+                    <select id="lang_select">
+                        <option value="en">English</option>
+                        <option value="de">German</option>
+                    </select>
+                    <button id="lang_save" data-i18n="app.settings.appearance.language.save_button"></button>
+                </div>
+                <div id="warning_account">
+                    <h3 data-i18n="app.settings.account.warning.title" id="delete_title"></h3>
+                    <h3 data-i18n="app.settings.account.warning.message" id="delete_msg"></h3>
+                    <h3 data-i18n="app.settings.account.warning.question" id="delete_question"></h3>
+                    <button id="cancel_delete" data-i18n="app.settings.account.warning.cancel"></button>
+                    <button id="delete_delete" data-i18n="app.settings.account.warning.delete"></button>
+                </div>
+                <div id="error_delete_500">
+                    <h3 id="title_500" data-i18n="app.settings.account.error_delete_500.title"></h3>
+                    <h4 id="msg_500" data-i18n="app.settings.account.error_delete_500.message"></h4>
+                    <button id="ok_500" data-i18n="app.settings.account.error_delete_500.ok"></button>
+                </div>
+                <div id="error_delete_404">
+                    <h3 id="title_404" data-i18n="app.settings.account.error_delete_404.title"></h3>
+                    <h4 id="msg_404" data-i18n="app.settings.account.error_delete_404.message"></h4>
+                    <button id="ok_404" data-i18n="app.settings.account.error_delete_404.ok"></button>
+                </div>
+                <div id="edit_username">
+                    <h3 id="title_username" data-i18n="app.settings.account.edit.username.title"></h3>
+                    <input type="text" data-i18n="app.settings.account.edit.username.placeholder_username" data-i18n-attr="placeholder" id="new_username">
+                    <button id="cancel_edit_username" data-i18n="app.settings.account.edit.username.cancel"></button>                    
+                    <button id="change_edit_username" data-i18n="app.settings.account.edit.username.change"></button>
+                </div>
+                <div id="username_409">
+                    <h3 id="title_409" data-i18n="app.settings.account.edit.username.error_409.title"></h3>
+                </div>
             </div>
+            <div id="background"></div>
         </div>
     </body>
 </html>

@@ -9,6 +9,42 @@ document.addEventListener('DOMContentLoaded', async function ()
 {
     const store = new Store();
     const api_addr = "http://192.168.5.21:3000";
+    const root = document.documentElement;
+    
+    function switchAppearance()
+    {
+        const mode = store.get('mode');
+
+        if (mode == null)
+        {
+            root.style.setProperty('--background', '#161616');
+            root.style.setProperty('--primary', '#2F2F2F');
+            root.style.setProperty('--selected-primary', '#454545c7');
+            root.style.setProperty('--text-color', '#ffffff');
+            root.style.setProperty('--alt-primary', '#1C1C1C');
+        }
+        else
+        {
+            if (mode === 'light')
+            {
+                root.style.setProperty('--background', '#E0E0E0');
+                root.style.setProperty('--primary', '#CCCCCC');
+                root.style.setProperty('--selected-primary', '#A0A0A0C7');
+                root.style.setProperty('--text-color', '#000000');
+                root.style.setProperty('--alt-primary', '#D8D8D8');
+            }
+            else
+            {
+                root.style.setProperty('--background', '#161616');
+                root.style.setProperty('--primary', '#2F2F2F');
+                root.style.setProperty('--selected-primary', '#454545c7');
+                root.style.setProperty('--text-color', '#ffffff');
+                root.style.setProperty('--alt-primary', '#1C1C1C');
+            }
+        }
+    }
+
+    switchAppearance();
 
     function updateUILanguage() 
     {

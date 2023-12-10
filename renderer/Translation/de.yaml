@@ -53,14 +53,29 @@ app:
         title: Wörter löschen
         default_select: Wähle Wörter zum löschen
         delete: Löschen
-    settings:
-      title: ScholarThynk - Settings
-      nav:  
-        account: Benutzer
-        notifications: Benachrichtigungen
-        privacy_and_safety: Privatsphähre & Sicherheit
-        log: Was ist neu
-        help: Hilfe?
-        appearance: Erscheinung
-        organization: Organisation
-        close: Zurück
+  settings:
+    title: ScholarThynk - Settings
+    nav:  
+      account: Benutzer
+      privacy_and_safety: Privatsphähre & Sicherheit
+      log: Was ist neu
+      help: Hilfe?
+      appearance: Erscheinung
+      close: Zurück
+    account:
+      edit: Bearbeiten
+      remove:
+        title: Account Löschung
+        delete_btn: Account Löschen
+    privacy_safety:
+      title: Privatsphähre & Sicherheit
+      export: Exportiere deine daten
+      consent:
+        title: Informationen zur Einwilligung in die Datenverarbeitung
+        content: N/A
+      privacy_policy: Datenschutzbestimmungen
+      notifactions: 
+        title: Einstellungen für Benachrichtigungen
+      2FA: 
+        title: Zwei-Faktoren-Authentifizierung
+        label: Zwei-Faktor-Authentifizierung ein-/ausschalten

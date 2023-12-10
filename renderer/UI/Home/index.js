@@ -8,6 +8,42 @@ const fsBackend = require('i18next-fs-backend');
 document.addEventListener('DOMContentLoaded', async () => {
     const store = new Store();
     const api_addr = "http://192.168.5.21:3000";
+    const root = document.documentElement;
+    
+    function switchAppearance()
+    {
+        const mode = store.get('mode');
+
+        if (mode == null)
+        {
+            root.style.setProperty('--background', '#161616');
+            root.style.setProperty('--primary', '#2F2F2F');
+            root.style.setProperty('--selected-primary', '#454545c7');
+            root.style.setProperty('--text-color', '#ffffff');
+            root.style.setProperty('--alt-primary', '#1C1C1C');
+        }
+        else
+        {
+            if (mode === 'light')
+            {
+                root.style.setProperty('--background', '#E0E0E0');
+                root.style.setProperty('--primary', '#CCCCCC');
+                root.style.setProperty('--selected-primary', '#A0A0A0C7');
+                root.style.setProperty('--text-color', '#000000');
+                root.style.setProperty('--alt-primary', '#D8D8D8');
+            }
+            else
+            {
+                root.style.setProperty('--background', '#161616');
+                root.style.setProperty('--primary', '#2F2F2F');
+                root.style.setProperty('--selected-primary', '#454545c7');
+                root.style.setProperty('--text-color', '#ffffff');
+                root.style.setProperty('--alt-primary', '#1C1C1C');
+            }
+        }
+    }
+
+    switchAppearance();
 
     const dataToSendLoadVocab = ({ username: store.get('username') });
     const your_words_list = document.getElementById('your_words_list');
@@ -55,23 +91,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         updateUILanguage();
-    });
-
-    const test_lang_selection_save = document.getElementById('test_lang_selection_save');
-
-    test_lang_selection_save.addEventListener('click', () => {
-        const selectedLang = document.getElementById('test_lang_selection').value;
-
-        i18next.changeLanguage(selectedLang, (err, t) => {
-            if (err) {
-              console.error('Error changing language:', err);
-              return;
-            }
-
-            updateUILanguage();
-
-            store.set('lang', selectedLang);
-        });
     });
 
     fetch(`${api_addr}/vocab/load`, {
@@ -128,7 +147,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     {
         search_words_output_display.style.display = 'none'
         search_words_input.style.borderRadius = '6px 6px 6px 6px';
-        search_words_input.style.borderBottom = '2px solid #2F2F2F';
     }
 
     document.addEventListener('click', (event) => {
@@ -244,6 +262,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const filteredLines = lines.filter(line => line.trim() !== valueToRemove);
 
                 currentValue = filteredLines.join('\n');
+
+                const options = delete_words_select.options;
+                for (let i = options.length - 1; i >= 0; i--)
+                {
+                    if (options[i].value == wordPair)
+                    {
+                        options[i].remove();
+                    }
+                }
 
                 your_words_list.value = currentValue;
             }
