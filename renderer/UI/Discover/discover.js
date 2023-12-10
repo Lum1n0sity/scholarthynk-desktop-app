@@ -2,11 +2,91 @@ const Store = require('electron-store');
 const { ipcRenderer } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const i18next = require('i18next');
+const fsBackend = require('i18next-fs-backend');
 
-document.addEventListener('DOMContentLoaded', function () 
+document.addEventListener('DOMContentLoaded', async function () 
 {
     const store = new Store();
     const api_addr = "http://192.168.5.21:3000";
+    const root = document.documentElement;
+    
+    function switchAppearance()
+    {
+        const mode = store.get('mode');
+
+        if (mode == null)
+        {
+            root.style.setProperty('--background', '#161616');
+            root.style.setProperty('--primary', '#2F2F2F');
+            root.style.setProperty('--selected-primary', '#454545c7');
+            root.style.setProperty('--text-color', '#ffffff');
+            root.style.setProperty('--alt-primary', '#1C1C1C');
+        }
+        else
+        {
+            if (mode === 'light')
+            {
+                root.style.setProperty('--background', '#E0E0E0');
+                root.style.setProperty('--primary', '#CCCCCC');
+                root.style.setProperty('--selected-primary', '#A0A0A0C7');
+                root.style.setProperty('--text-color', '#000000');
+                root.style.setProperty('--alt-primary', '#D8D8D8');
+            }
+            else
+            {
+                root.style.setProperty('--background', '#161616');
+                root.style.setProperty('--primary', '#2F2F2F');
+                root.style.setProperty('--selected-primary', '#454545c7');
+                root.style.setProperty('--text-color', '#ffffff');
+                root.style.setProperty('--alt-primary', '#1C1C1C');
+            }
+        }
+    }
+
+    switchAppearance();
+
+    function updateUILanguage() 
+    {
+        document.querySelectorAll('[data-i18n]').forEach((element) => {
+            const key = element.getAttribute('data-i18n');
+            const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
+
+            if (attribute === 'placeholder') 
+            {
+                  element.setAttribute(attribute, i18next.t(key));
+            }
+            else if (attribute === 'textContent')
+            {
+                  element.textContent = i18next.t(key);
+            }
+            else 
+            {
+                  element[attribute] = i18next.t(key);
+            }
+        });
+    }
+
+    const storedLang = store.get('lang') || 'en';
+
+    await i18next
+    .use(fsBackend)
+    .init({
+      lng: storedLang,
+      fallbackLng: 'en',
+      backend: {
+        loadPath: `${__dirname}/../../Translation/{{lng}}.yaml`
+      }
+    }, 
+    (err, t) => {
+        if (err) 
+        {
+              console.error('Error initializing i18next:', err);
+              return;
+        }
+
+        updateUILanguage();
+    });
 
     const delete_select = document.getElementById('delete_select');
 
@@ -66,9 +146,13 @@ document.addEventListener('DOMContentLoaded', function ()
             const studentDisplay = document.getElementById('studentDisplay');
             const vocabDisplay = document.getElementById('vocab_container');
 
-            studentDisplay.textContent = `By ${student}`;
+            const currentText = studentDisplay.textContent;
 
-            const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
+            const newText = currentText.replace('N/A', student);
+
+            studentDisplay.textContent = newText;
+
+            // const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
                 
             const wordPairs = formattedText.split('\n');
 
@@ -248,7 +332,14 @@ document.addEventListener('DOMContentLoaded', function ()
                 }
             }
 
-            vocab_list_display_topic.textContent = "Vocab of the week";
+            if (storedLang == 'en')
+            {
+                vocab_list_display_topic.textContent = "Vocab of the week";
+            }
+            else if (storedLang == 'de')
+            {
+                vocab_list_display_topic.textContent = "Vocabeln der Woche";
+            }
 
             const dataToSendVocabOfWeek = ({ topic: "vocab_of_the_week" });
 
@@ -271,7 +362,11 @@ document.addEventListener('DOMContentLoaded', function ()
                     const studentDisplay = document.getElementById('studentDisplay');
                     const vocabDisplay = document.getElementById('vocab_container');
         
-                    studentDisplay.textContent = `By ${student}`;
+                    const currentText = studentDisplay.textContent;
+
+                    const newText = currentText.replace('N/A', student);
+
+                    studentDisplay.textContent = newText;
         
                     const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
                         

@@ -1,0 +1,81 @@
+app:
+  nav_bar:
+    home: Home
+    discover: Entdecken
+    courses: Kurse
+    study_plan: Wochenplan
+    dates: Termine
+    learn: Lernen
+    logout: Abmelden
+  home:
+    title: "ScholarThynk - Home"
+    search_section:
+      search_title: Suche nach Wörtern
+      search_placeholder: Suche
+    add_section:
+      add_title: Füge neue Wörter hinzu
+      add_german_placeholder: Deutsch
+      add_english_placeholder: Englisch
+      add_button: Hinzufügen
+    delete_section:
+      delete_title: Wörter löschen
+      delete_select_default: Wähle Wörter zum löschen
+      delete_button: Löschen
+    your_words_section:
+      your_words_title: Deine Wörter
+  discover:
+    title: ScholarThynk - Entdecken
+    tab_en: Englisch
+    tab_de: Deutsch
+    tab_mt: Mathe
+    english:
+      header_title: Entdecke neue Themen und Wörter
+      discover_list:
+        votw_title: Vocabeln der Woche
+        votw_student: Von N/A
+        courses: Kurse
+      vocab_display:
+        title_votw: Vocabeln der Woche
+      add_topic:
+        title: Neues Thema hinzufügen
+        input_placeholder: Thema
+        image_select: Bild auswählen
+        add_topic: Hinzufügen
+      delete_topic_overlay:
+        cancel: Abbrechen
+        delete: Löschen
+      add_vocab: 
+        title: Neu wörter hinzufügen
+        placeholder_german: Deutsch
+        placeholder_english: Englisch
+        add_word: Wörter hinzufügen
+      delete_vocab: 
+        title: Wörter löschen
+        default_select: Wähle Wörter zum löschen
+        delete: Löschen
+  settings:
+    title: ScholarThynk - Settings
+    nav:  
+      account: Benutzer
+      privacy_and_safety: Privatsphähre & Sicherheit
+      log: Was ist neu
+      help: Hilfe?
+      appearance: Erscheinung
+      close: Zurück
+    account:
+      edit: Bearbeiten
+      remove:
+        title: Account Löschung
+        delete_btn: Account Löschen
+    privacy_safety:
+      title: Privatsphähre & Sicherheit
+      export: Exportiere deine daten
+      consent:
+        title: Informationen zur Einwilligung in die Datenverarbeitung
+        content: N/A
+      privacy_policy: Datenschutzbestimmungen
+      notifactions: 
+        title: Einstellungen für Benachrichtigungen
+      2FA: 
+        title: Zwei-Faktoren-Authentifizierung
+        label: Zwei-Faktor-Authentifizierung ein-/ausschalten

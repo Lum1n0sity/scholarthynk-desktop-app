@@ -1,0 +1,63 @@
+Consent:
+
+Implement an active and informed consent mechanism before collecting or processing personal information.
+Add a checkbox for users to agree with the "Terms and Conditions" explicitly.
+Access:
+
+Provide users with the ability to control their consent preferences.
+Clearly state user rights in your Privacy Policy.
+Establish a process for responding to user requests for information under GDPR.
+Portability:
+
+Enable users to request and receive their data handled by the app.
+Allow users to transfer their data to another app or service, if requested.
+Removal ("Right to be Forgotten"):
+
+Implement a mechanism for users to request the deletion of their data.
+Allow users to deactivate their accounts, ensuring all associated data is removed.
+Transparency:
+
+Clearly communicate who is collecting user data and for what purpose.
+Provide easily accessible and concise information about data collection and processing.
+Ensure the information is written in a language that is easy for users to understand.
+Necessity:
+
+Review and assess the data your app collects and ensure it is necessary for the app's functionality.
+Only request information that is essential for providing the best user experience.
+Data Security:
+
+Implement robust security measures to protect user data during transmission and storage.
+Regularly review and update security protocols to address potential vulnerabilities.
+Privacy Policy:
+
+Develop a comprehensive Privacy Policy that outlines how user data is handled.
+Keep the Privacy Policy up-to-date and easily accessible within the app.
+User Communication:
+
+Communicate any changes to data processing practices to users and seek their consent if necessary.
+Establish a channel for users to reach out with privacy-related concerns or requests.
+GDPR Compliance Check:
+
+Regularly assess and ensure that your app remains in compliance with GDPR regulations.
+Consider seeking legal advice to ensure ongoing adherence to privacy laws.
+
+Question answers:
+
+Options Confirmation Window:
+
+Yes, it's allowed to have a single window at the beginning where users can select their preferences and provide consent. This is a common approach to ensure that users actively agree to the terms and conditions, data collection practices, and other relevant settings.
+Privacy Policy and Terms and Conditions:
+
+It's common to have both a Privacy Policy and Terms and Conditions as separate documents. They serve different purposes. The Privacy Policy typically outlines how user data is handled, while Terms and Conditions cover the general rules and terms of use for your app. You can present these separately to users, usually accessible through links during account creation or within the app.
+Transferring User Data:
+
+Allowing users to transfer their data to another app means providing a mechanism for users to download or export the data they've contributed or generated within your app. This could include user-generated content, study materials, preferences, etc. This feature ensures that users have control over their data and can use it elsewhere if they choose to do so.
+User-Generated Content and Deletion:
+
+If users can add topics and vocabulary that are visible to others, it's a good practice to inform users that this content may remain even after account deletion. Deleting the account can remove personal information associated with the user, but you may need a policy on how to handle user-generated content that has been shared with the community.
+Data Transmission Security (HTTPS):
+
+Yes, using HTTPS ensures secure transmission of data between the user's device and your server. This is a fundamental security measure to prevent unauthorized access or data interception during transmission.
+Security Protocols:
+
+Security protocols refer to a set of rules and procedures to ensure the confidentiality, integrity, and availability of data. This includes encryption methods, access controls, regular security audits, and measures to prevent and respond to security breaches. Implementing security protocols is crucial to safeguard user data from potential threats.

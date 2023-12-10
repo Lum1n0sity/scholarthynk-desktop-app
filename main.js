@@ -4,25 +4,25 @@ const store = new Store();
 
 let mainWindow;
 
-function createMainWindow() 
+async function createMainWindow() 
 {
-    mainWindow = new BrowserWindow({
-        title: 'School-Manager',
-        width: 1920,
-        height: 1080,
-        webPreferences: {
-          nodeIntegration: true,
-          contextIsolation: false,
-          devTools: true,
-        },
-    });
+  mainWindow = new BrowserWindow({
+    title: 'ScholarThynk',
+    width: 1920,
+    height: 1080,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true,
+    },
+  });
 
-    mainWindow.loadFile('renderer/UI/Login/login.html');
+  mainWindow.loadFile('renderer/UI/Login/login.html');
 
-    mainWindow.maximize();
-    mainWindow.show();
-    mainWindow.setMinimumSize(1000, 600);
-    mainWindow.menuBarVisible = true;
+  mainWindow.maximize();
+  mainWindow.show();
+  mainWindow.setMinimumSize(1000, 600);
+  mainWindow.menuBarVisible = true;
 }
 
 function openFileDialog() 

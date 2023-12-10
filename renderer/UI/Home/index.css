@@ -1,23 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
 
-:root {
-    --background-dark: #161616;
-    --primary: #2F2F2F;
-    --secondary: #2C88AF;
-    --selected-primary: #454545c7;
-    --selected-secondary: #246C89;
-    --text-color: #fff;
-    --disabled: #767676;
-    --alt-primary: #1C1C1C;
-}
-
 * {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
 }
 
 body {
-    background-color: var(--background-dark);
+    background-color: var(--background);
     color: var(--text-color);
     overflow-x: hidden;
     overflow-y: hidden;
@@ -107,6 +96,7 @@ body {
     position: absolute;
     top: 0;
     right: 0;
+    display: grid;
 }
 
 #search_words {
@@ -119,10 +109,10 @@ body {
     font-size: 2.3vw;
     margin-top: 1vw;
     margin-left: 2vw;
+    height: 2vw;
 }
 
 #search_words div {
-    justify-self: start;
     align-self: end;
     margin-bottom: 1vw;
     width: 20vw;
@@ -133,8 +123,10 @@ body {
     padding-right: 5vw;
     outline: none;
     height: 3vw;
-    margin-left: -14.5vw;
+    position: fixed;
+    left: 7vw;
     z-index: 5;
+    display: grid;
 }
 
 #search_words_input {
@@ -156,17 +148,22 @@ body {
 
 #search_words_output_display {
     font-size: 1.7vw;
-    margin-left: -2.8%;
-    margin-top: -2vw;
-    width: 25.5vw;
-    height: 2vw;
-    padding-bottom: 1vw;
-    padding-top: 2vw;
+    justify-self: center;
+    margin-left: -.6vw;
+    align-self: end;
+    margin-bottom: -2vw;
+    width: 20vw;
+    border-radius: 6px;
+    border-bottom: 2px solid var(--primary);
+    border-right: 2px solid var(--primary);
+    border-left: 2px solid var(--primary);
+    border-top: none;
     background-color: var(--alt-primary);
-    border-radius: 0px 0px 6px 6px;
-    border: 2px solid var(--primary);
-    text-align: center;
-    z-index: 5;
+    color: var(--text-color);
+    padding: 10px;
+    padding-right: 5vw;
+    outline: none;
+    z-index: 6;
     display: none;
     overflow-y: auto;
 }
@@ -190,25 +187,32 @@ body {
 }
 
 #search_words_search {
-    background-color: var(--secondary);
-    font-size: 1.7vw;
-    height: 3.4vw;
-    justify-self: start;
-    align-self: end;
-    margin-bottom: 1vw;
-    margin-left: 1vw;
-    border-radius: 6px;
+    align-items: center;
+    position: fixed;
+    left: 29.5vw;
+    margin-top: .25vw;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50px;
     border: none;
+    background-color: transparent;
+    color: var(--text-color);
+    padding: 10px;
     outline: none;
     cursor: pointer;
-    color: var(--text-color);
     transition: .5s;
+    z-index: 10;
     padding-left: 10px;
     padding-right: 10px;
 }
 
+#search_words_search span {
+    font-size: 1.7vw;
+    transition: .5s;
+}
+
 #search_words_search:hover {
-    background-color: var(--selected-secondary);
+    background-color: #2f2f2f5d;
     transition: .5s;
 }
 
@@ -223,16 +227,17 @@ body {
     font-size: 2.3vw;
     margin-top: 1vw;
     margin-left: 2vw;
+    height: 2vw;
 }
 
 #add_words_german_input {
     font-size: 1.7vw;
     grid-column: 1;
     grid-row: 1;
-    justify-self: start;
+    position: fixed;
+    left: 7vw;
     align-self: end;
     margin-bottom: 1vw;
-    margin-left: -16.5vw;
     width: 20vw;
     height: 2.5vw;
     border-radius: 6px;
@@ -248,9 +253,10 @@ body {
     font-size: 1.7vw;
     grid-column: 1;
     grid-row: 1;
+    position: fixed;
+    left: 29vw;
     align-self: end;
     margin-bottom: 1vw;
-    margin-left: 1vw;
     width: 20vw;
     height: 2.5vw;
     border-radius: 6px;
@@ -266,11 +272,10 @@ body {
     font-size: 1.7vw;
     padding: 10px;
     padding-bottom: 14px;
-    margin-left: 1vw;
-    margin-bottom: 1.1vw;
-    width: 5vw;
-    height: 3.5vw;
-    justify-self: end;
+    padding-top: 15px;
+    margin-bottom: 1vw;
+    position: fixed;
+    left: 51vw;
     align-self: end;
     border-radius: 6px;
     border: none;
@@ -295,16 +300,17 @@ body {
     font-size: 2.3vw;
     margin-top: 1vw;
     margin-left: 2vw;
+    height: 2vw;
 }
 
 #delete_words_select {
     padding: 10px;
     font-size: 1.7vw;
     margin-bottom: 1vw;
-    margin-left: -14vw;
-    justify-self: start;
+    position: fixed;
+    left: 7vw;
     align-self: end;
-    width: 21vw;
+    width: 25vw;
     border-radius: 6px;
     border: 2px solid var(--primary);
     outline: none;
@@ -319,7 +325,8 @@ body {
     padding: 10px;
     padding-bottom: 14px;
     margin-bottom: 1vw;
-    margin-left: 1vw;
+    position: fixed;
+    left: 32.8vw;
     justify-self: start;
     align-self: end;
     border-radius: 6px;
@@ -345,6 +352,7 @@ body {
     font-size: 2.3vw;
     margin-top: 1vw;
     margin-left: 2vw;
+    height: 2vw;
 }
 
 #your_words_list {
@@ -352,7 +360,8 @@ body {
     justify-self: start;
     align-self: end;
     margin-bottom: 1vw;
-    margin-left: -12vw;
+    position: fixed;
+    left: 7vw;
     width: 20vw;
     height: 14vw;
     outline: none;
@@ -399,6 +408,63 @@ body {
     border: 5px solid var(--secondary);
     box-shadow: 1px 8px 19px -8px rgba(255,255,255,0.23);
     cursor: pointer;
+}
+
+#user_options {
+    background-color: var(--primary);
+    position: absolute;
+    top: 8vw;
+    right: 3vw;
+    width: 3.5vw;
+    height: 7vw;
+    border-radius: 50px;
+    display: none;
+}
+
+#feedback_user_options {
+    margin-left: .25vw;
+    margin-top: .25vw;
+    border-radius: 50%;
+    width: 3vw;
+    height: 3vw;
+    cursor: pointer;
+    background-color: transparent;
+    transition: .5s;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+}
+
+#feedback_user_options span {
+    font-size: 2vw;
+}
+
+#feedback_user_options:hover {
+    background-color: #1c1c1ca1;
+    transition: .5s;
+}
+
+#settings_user_options {
+    margin-left: .25vw;
+    margin-top: .5vw;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: transparent;
+    transition: .5s;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+}
+
+#settings_user_options span {
+    font-size: 2vw;
+}
+
+#settings_user_options:hover {
+    background-color: #1c1c1ca1;
+    transition: .5s;
 }
 
 #share {

@@ -1,24 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
 
-:root {
-    --background-dark: #161616;
-    --primary: #2F2F2F;
-    --secondary: #2C88AF;
-    --selected-primary: #454545c7;
-    --selected-secondary: #246C89;
-    --text-color: #fff;
-    --disabled: #767676;
-    --alt-primary: #1C1C1C;
-    --warning: #ab0000;
-}
-
 * {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
 }
 
 body {
-    background-color: var(--background-dark);
+    background-color: var(--background);
     color: var(--text-color);
     overflow-x: hidden;
     overflow-y: hidden;
@@ -134,7 +122,7 @@ body {
 }
 
 header {
-    background-color: var(--background-dark);
+    background-color: var(--background);
     width: 50%;
     height: 5vw;
     grid-column: 1 / span 1;
@@ -162,6 +150,10 @@ header {
     transform: translateY(12%);
 }
 
+#english_tab p {
+    display: inline;
+}
+
 #german_tab {
     font-size: 2vw;
     color: var(--text-color);
@@ -179,6 +171,10 @@ header {
 #german_tab span {
     font-size: 2vw;
     transform: translateY(12%);
+}
+
+#german_tab p {
+    display: inline;
 }
 
 #german_tab:hover {
@@ -204,6 +200,10 @@ header {
 #math_tab span {
     font-size: 2vw;
     transform: translateY(12%);
+}
+
+#math_tab p {
+    display: inline;
 }
 
 #math_tab:hover {
@@ -616,7 +616,8 @@ header {
     border: none;
     position: relative;
     top: 3.5vw;
-    left: 42%;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     transition: .5s;
@@ -759,15 +760,18 @@ header {
     background-color: var(--secondary);
     color: var(--text-color);
     padding: 10px;
+    padding-bottom: 14px;
     border-radius: 6px;
     border: none;
     position: relative;
     top: -.5vw;
-    left: 19.5vw;
-    display: flex;
-    align-items: center;
+    left: 72%;
+    width: 8vw;
+    transform: translateX(-72%);
+    transform-origin: center;
     transition: .5s;
     cursor: pointer;
+    text-align: center;
 }
 
 #add_topic_btn:hover {
@@ -866,9 +870,10 @@ header {
     border: none;
     position: relative;
     top: 3vw;
-    left: 42%;
+    left: 35%;
     display: flex;
-    align-items: center;
+    align-items: center;      
+    transform-origin: center;
     transition: .5s;
     cursor: pointer;
 }

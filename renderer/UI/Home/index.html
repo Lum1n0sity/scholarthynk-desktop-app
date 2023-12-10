@@ -3,57 +3,63 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Vocab-Trainer</title>
+        <title data-i18n="app.home.title"></title>
         <link rel="stylesheet" href="index.css">
-        <script src="index.js"></script>
+        <link rel="stylesheet" href="../style.css">
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+        <script src="../../../node_modules/i18next/dist/umd/i18next.js"></script>
     </head>
     <body> 
+        <script src="index.js"></script>
         <div id="main_grid">
             <nav id="nav_bar">
                 <img src="Images/Logo.png" id="nav_logo">
-                <button id="nav_home"><span class="material-symbols-rounded">home</span><br><p>Home</p></button>
-                <button id="nav_discover"><span class="material-symbols-rounded">search</span><br><p>Discover</p></button>
-                <button id="nav_courses"><span class="material-symbols-rounded">play_circle</span><br><p>Courses</p></button>
-                <button id="nav_plan"><span class="material-symbols-rounded">menu_book</span><br><p>Study-plan</p></button>
-                <button id="nav_dates"><span class="material-symbols-rounded">calendar_month</span><br><p>Dates</p></button>
-                <button id="nav_learn"><span class="material-symbols-rounded">neurology</span><br><p>Learn</p></button>
+                <button id="nav_home"><span class="material-symbols-rounded">home</span><br><p data-i18n="app.nav_bar.home"></p></button>
+                <button id="nav_discover"><span class="material-symbols-rounded">search</span><br><p data-i18n="app.nav_bar.discover"></p></button>
+                <button id="nav_courses"><span class="material-symbols-rounded">play_circle</span><br><p data-i18n="app.nav_bar.courses"></p></button>
+                <button id="nav_plan"><span class="material-symbols-rounded">menu_book</span><br><p data-i18n="app.nav_bar.study_plan"></p></button>
+                <button id="nav_dates"><span class="material-symbols-rounded">calendar_month</span><br><p data-i18n="app.nav_bar.dates"></p></button>
+                <button id="nav_learn"><span class="material-symbols-rounded">neurology</span><br><p data-i18n="app.nav_bar.learn"></p></button>
                 <div id="nav_lower">
-                    <button id="nav_settigns"><span class="material-symbols-rounded">settings</span><br><p>Settings</p></button>
-                    <button id="nav_logout"><span class="material-symbols-rounded">logout</span><br><p>Logout</p></button>
+                    <button id="nav_notification"><span class="material-symbols-rounded">notifications</span></button>
+                    <button id="nav_logout"><span class="material-symbols-rounded">logout</span><br><p data-i18n="app.nav_bar.logout"></p></button>
                 </div>
             </nav>
             <div id="page_content">
-                <section id="search_words">
-                    <h3 id="search_words_title">Search words</h3>
+                <div id="search_words">
+                    <h3 id="search_words_title" data-i18n="app.home.search_section.search_title"></h3>
                     <div>
-                        <input type="text" placeholder="Search" id="search_words_input">
+                        <button id="search_words_search"><span class="material-symbols-rounded">search</span></button>
+                        <input type="text" data-i18n="app.home.search_section.search_placeholder" data-i18n-attr="placeholder" id="search_words_input">
                         <p id="search_words_output_display">N/A | N/A | N/A</p>
                     </div>
-                    <button id="search_words_search">Search</button>
-                </section>
+                </div>
                 <div id="sepperator"></div>
-                <section id="add_words">
-                    <h3 id="add_words_title">Add new words</h3>
-                    <input type="text" placeholder="German" id="add_words_german_input">
-                    <input type="text" placeholder="English" id="add_words_english_input">
-                    <button id="add_words_add">Add</button>
-                </section>
+                <div id="add_words">
+                    <h3 id="add_words_title" data-i18n="app.home.add_section.add_title"></h3>
+                    <input type="text" data-i18n="app.home.add_section.add_german_placeholder" data-i18n-attr="placeholder" id="add_words_german_input">
+                    <input type="text" data-i18n="app.home.add_section.add_english_placeholder" data-i18n-attr="placeholder" id="add_words_english_input">
+                    <button id="add_words_add" data-i18n="app.home.add_section.add_button"></button>
+                </div>
                 <div id="sepperator"></div>
-                <section id="delete_words">
-                    <h3 id="delete_words_title">Delete words</h3>
+                <div id="delete_words">
+                    <h3 id="delete_words_title" data-i18n="app.home.delete_section.delete_title"></h3>
                     <select id="delete_words_select">
-                        <option value="message">Select words to delete</option>
+                        <option value="message" data-i18n="app.home.delete_section.delete_select_default"></option>
                     </select>
-                    <button id="delete_words_delete">Delete</button>
-                </section>
+                    <button id="delete_words_delete" data-i18n="app.home.delete_section.delete_button"></button>
+                </div>
                 <div id="sepperator"></div>
-                <section id="your_words">
-                    <h3 id="your_words_title">Your words</h3>
+                <div id="your_words">
+                    <h3 id="your_words_title" data-i18n="app.home.your_words_section.your_words_title"></h3>
                     <textarea id="your_words_list" cols="30" rows="10" readonly></textarea>
-                </section>
+                </div>
                 <img src="Images/testuserimg.png" id="user">
+                <div id="user_options">
+                    <button id="feedback_user_options"><span class="material-symbols-rounded">feedback</span></button>
+                    <button id="settings_user_options"><span class="material-symbols-rounded">settings</span></button>
+                </div>
                 <button id="share"><span class="material-symbols-rounded">ios_share</span></button>
             </div>
         </div>
