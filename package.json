@@ -1,10 +1,11 @@
 {
-  "name": "vocab-trainer",
-  "version": "1.0.0",
-  "description": "A Vocabulary trainer.",
+  "name": "ScholarThynk",
+  "version": "2.0.0",
+  "description": "An app for students to study and connect.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "mocha tests/**/*.js"
   },
   "author": "Raphael Schuhmann <raphael221@outlook.de>",
   "license": "ISC",
@@ -28,6 +29,8 @@
     "tokenizers": "^0.13.3"
   },
   "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
     "source-map-loader": "^4.0.1",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
