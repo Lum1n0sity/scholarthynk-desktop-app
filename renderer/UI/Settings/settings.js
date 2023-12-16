@@ -334,6 +334,36 @@ document.addEventListener('DOMContentLoaded', async () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            const emailSend = data.emailSend;
+
+            if (emailSend)
+            {
+                ipcRenderer.send('email-received');
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        });
+    });
+
+    // * Update dummy password after password reset
+
+    ipcRenderer.on('update-dummy', () => {
+        console.log("Test1234");
+        const dataToSendDisplayPassword = ({ username: username });
+
+        fetch(`${api_addr}/user/display/password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataToSendDisplayPassword)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const password_edit = document.getElementById('password_edit');
+
+            password_edit.value = data.dummy;
         })
         .catch(error => {
             console.error('Fetch error: ', error);

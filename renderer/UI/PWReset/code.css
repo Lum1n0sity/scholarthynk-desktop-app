@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
+
+* {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-color);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#main_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    height: 100vh;
+    width: 100vw;
+    grid-gap: 10px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#page_content {
+    background-color: transparent;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#page_content h2 {
+    font-size: 9vw;
+    margin-left: 17vw;
+    margin-top: 5vw;
+}
+
+#reset_code {
+    font-size: 5vw;
+    margin-left: 50%;
+    margin-top: 10vw;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    border-radius: 6px;
+    border: 2px solid var(--primary);
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    z-index: 8;
+    text-align: center;
+}
+
+#send_code {
+    font-size: 6vw;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .5s;
+    margin-left: 50%;
+    margin-top: 10vw;
+    transform: translate(-50%, -50%);
+}
+
+#send_code:hover {
+    background-color: var(--selected-secondary);
+    border-radius: 50px;
+    transition: .5s;
+}
+
+#background {
+    background-color: #000000;
+    opacity: 25%;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 102;
+    display: none;
+}

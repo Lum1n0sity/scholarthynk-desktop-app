@@ -3,6 +3,7 @@ const Store = require('electron-store');
 const store = new Store();
 
 let mainWindow;
+let pwResetWin;
 
 async function createMainWindow() 
 {
@@ -23,6 +24,27 @@ async function createMainWindow()
   mainWindow.show();
   mainWindow.setMinimumSize(1000, 600);
   mainWindow.menuBarVisible = true;
+}
+
+function createPWResetWin()
+{
+  pwResetWin = new BrowserWindow({
+    title: 'ScholarThynk - Password Reset',
+    width: 500,
+    height: 550,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true
+    },
+  });
+
+  pwResetWin.loadFile('renderer/UI/PWReset/code.html');
+
+  pwResetWin.show();
+  pwResetWin.setMinimumSize(500, 600);
+  pwResetWin.setMinimizable = false;
+  pwResetWin.menuBarVisible = true;
 }
 
 function openFileDialog() 
@@ -67,6 +89,12 @@ app.whenReady().then(() => {
       createMainWindow();
     }
   });
+
+  ipcMain.on('reset', () => {
+    pwResetWin.close();
+    pwResetWin = null;
+    mainWindow.webContents.send('update-dummy');
+  })
 });
 
 ipcMain.on('open-file-dialog', () => {
@@ -78,4 +106,8 @@ app.on('window-all-closed', () => {
   {
     app.quit();
   }
+});
+
+ipcMain.on('email-received', () => {
+  createPWResetWin();
 });
