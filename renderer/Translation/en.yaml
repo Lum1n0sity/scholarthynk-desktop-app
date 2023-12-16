@@ -97,6 +97,15 @@ app:
           cancel: Cancel
           error_409:
             title: Username already exists!
+        password:
+          title: Password Reset
+          placeholder_code: Enter reset code
+          send_code: Send Code
+          reset:
+            title: Enter new Password
+            placeholder_password_01: New Password
+            placeholder_password_02: Confirm new Password
+            reset_btn: Reset
       remove:
         title: Account Removal
         delete_btn: Delete Account
