@@ -1,4 +1,27 @@
 app:
+  register: 
+    title: Account erstellen
+    placeholder_email: E-Mail
+    placeholder_username: Benutzername
+    placeholder_password: Passwort
+    remember: Erinnern?
+    sign_up: Login
+    switch_text: Wilkommen zurück!
+    switch_btn: Erstellen
+    error_username: Benutzername exestiert schon!
+    error_server: Keine Verbindung zum Server!
+    error_server_try_again: Versuche es später erneut
+  login:
+    title: Login
+    placeholder_username: Benutzername
+    placeholder_password: Passwort
+    remember: Erinnern?
+    sign_in: Login
+    switch_text: Neu hier?
+    switch_btn: Account erstellen
+    error_inputs: Benutzername oder Passwort ist falsch!
+    error_server: Keine Verbindung zum Server!
+    error_server_try_again: Versuche es später erneut
   nav_bar:
     home: Home
     discover: Entdecken
@@ -9,6 +32,10 @@ app:
     logout: Abmelden
   home:
     title: "ScholarThynk - Home"
+    subject_select:
+      english: Englisch
+      german: Deutsch
+      math: Mathe
     search_section:
       search_title: Suche nach Wörtern
       search_placeholder: Suche
@@ -63,10 +90,43 @@ app:
       appearance: Erscheinung
       close: Zurück
     account:
-      edit: Bearbeiten
+      title: Account
+      reset_pw: Resetten
+      edit_btn: Bearbeiten
+      edit:
+        username:
+          title: Änder deinen Benutzernamen
+          placeholder_username: Neuer Benutzername
+          change: Ändern
+          cancel: Abbrechen
+          error_409:
+            title: Benutzername exestiert schon!
+        password:
+          title: Passwort zurücksetzten
+          placeholder_code: Code
+          send_code: Code schicken
+          reset:
+            title: Neues Passwort eingeben
+            placeholder_password_01: Neues Passwort
+            placeholder_password_02: Neues Passwort bestätigen
+            reset_btn: Zurücksetzten
       remove:
         title: Account Löschung
         delete_btn: Account Löschen
+      warning:
+        title: Warnung!
+        message: Du bist dabei deinen Account unwiederruflich zu löschen!
+        question: Möchtest du das wirklich?
+        cancel: Abbrechen
+        delete: Löschen
+      error_delete_500:
+        title: Fehler beim löschen deines Accounts!
+        message: Es gab einen fehler bei der löschung deines Accounts! Bitte kontaktiere denn support.
+        ok: Ok
+      error_delete_404:
+        title: Fehler beim löschen deines Accounts!
+        message: Dein Account wurde nicht gefunden! Bitte kontaktiere denn support.
+        ok: Ok
     privacy_safety:
       title: Privatsphähre & Sicherheit
       export: Exportiere deine daten
@@ -79,3 +139,12 @@ app:
       2FA: 
         title: Zwei-Faktoren-Authentifizierung
         label: Zwei-Faktor-Authentifizierung ein-/ausschalten
+    appearance:
+      title: Appearance
+      theme: 
+        title: Theme
+        light: Light
+        dark: Dark
+      language:
+        title: Sprache
+        save_button: Speichern

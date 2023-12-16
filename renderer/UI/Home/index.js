@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, dialog } = require('electron');
 const Store = require('electron-store');
 const i18next = require('i18next');
 const fsBackend = require('i18next-fs-backend');
@@ -132,6 +132,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nav_courses = document.getElementById('nav_courses');
     const nav_logout = document.getElementById('nav_logout');
 
+    const subject_select = document.getElementById('subject_select');
+    const english = document.getElementById('english');
+    const german = document.getElementById('german');
+    const math = document.getElementById('math');
+
     const add_words_add = document.getElementById('add_words_add');
     const delete_words_delete = document.getElementById('delete_words_delete');
 
@@ -185,6 +190,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
 
         window.location.href = '../Settings/settings.html';
+    });
+
+    subject_select.addEventListener('change', () => {
+        const subjectI = subject_select.selectedIndex;
+        const subject = subject_select.options[subjectI].value;
+
+        if (subject == 'english')
+        {
+            english.style.display = 'block';
+            german.style.display = 'none';
+            math.style.display = 'none';
+        }
+        else if (subject == 'german')
+        {
+            english.style.display = 'none';
+            german.style.display = 'block';
+            math.style.display = 'none';
+        }
+        else if (subject == 'math')
+        {
+            english.style.display = 'none';
+            german.style.display = 'none';
+            math.style.display = 'block';
+        }
     });
 
     add_words_add.addEventListener('click', () => {

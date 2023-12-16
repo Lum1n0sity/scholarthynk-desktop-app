@@ -32,6 +32,10 @@ app:
     logout: Log out
   home:
     title: "ScholarThynk - Home"
+    subject_select:
+      english: English
+      german: German
+      math: Math
     search_section:
       search_title: Search words
       search_placeholder: Search

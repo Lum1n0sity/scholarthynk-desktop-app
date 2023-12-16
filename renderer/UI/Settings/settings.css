@@ -106,7 +106,7 @@ body {
     color: var(--text-color);
 }
 
-#edit_options {
+#lower_card {
     background-color: var(--primary);
     font-size: 1.7vw;
     width: 30vw;
@@ -116,10 +116,19 @@ body {
     color: var(--text-color);
     top: 5.2vw;
     left: 20vw;
+    z-index: 99;
+}
+
+#displays {
+    width: 25vw;
+    height: 10vw;
+    position: absolute;
     z-index: 100;
+    background-color: transparent;
 }
 
 #username_edit {
+    font-size: 1.7vw;
     position: relative;
     top: .5vw;
     left: 1vw;
@@ -127,11 +136,31 @@ body {
     color: var(--text-color);
 }
 
+#password_edit {
+    background-color: transparent;
+    font-size: 1.7vw;
+    border: none;
+    border-radius: 6px;
+    color: var(--text-color);
+    outline: none;
+    z-index: 101;
+    position: relative;
+    top: 2vw;
+    left: 1vw;
+}
+
+#edit_options {
+    background-color: transparent;
+    width: 5vw;
+    height: 10vw;
+    margin-left: 20vw;
+    position: absolute;
+    z-index: 100;
+}
+
 #username_edit_btn {
-    font-size: 1.5vw;
-    position: fixed;
-    top: 13.5vw;
-    left: 60vw;
+    font-size: 1.7vw;
+    margin-top: .5vw;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
@@ -151,24 +180,9 @@ body {
     transition: .5s;
 }
 
-#password_edit {
-    background-color: transparent;
-    font-size: 1.5vw;
-    border: none;
-    border-radius: 6px;
-    position: fixed;
-    top: 17vw;
-    left: 36vw;
-    color: var(--text-color);
-    outline: none;
-    z-index: 101;
-}
-
 #password_edit_btn {
-    font-size: 1.5vw;
-    position: fixed;
-    top: 17vw;
-    left: 58.7vw;
+    font-size: 1.7vw;
+    margin-top: .5vw;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;

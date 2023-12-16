@@ -126,7 +126,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // * Assign html elements:
 
+    const account_nav = document.getElementById('account_nav');
+    const privacy_safety_nav = document.getElementById('privacy_safety_nav');
+    const appearance_nav = document.getElementById('appearance_nav');
+    const help_nav = document.getElementById('help_nav');
+    const dev_log_nav = document.getElementById('dev_log_nav');
     const close_settings = document.getElementById('close_settings');
+
+    const account_settings = document.getElementById('account_settings');
+    const privacy_safety = document.getElementById('privacy_safety');
+    const appearance = document.getElementById('appearance');
 
     const light_mode = document.getElementById('light_mode');
     const dark_mode = document.getElementById('dark_mode');
@@ -153,6 +162,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     let updated = false;
 
     // * Settings navbar:
+
+    account_nav.addEventListener('click', () => {
+        account_settings.style.display = 'block';
+        privacy_safety.style.display = 'none';
+        appearance.style.display = 'none';
+    });
+    
+    privacy_safety_nav.addEventListener('click', () => {
+        account_settings.style.display = 'none';
+        privacy_safety.style.display = 'block';
+        appearance.style.display = 'none';
+    });
+
+    appearance_nav.addEventListener('click', () => {
+        account_settings.style.display = 'none';
+        privacy_safety.style.display = 'none';
+        appearance.style.display = 'block';
+    });
 
     close_settings.addEventListener('click', (event) => {
         event.preventDefault();
