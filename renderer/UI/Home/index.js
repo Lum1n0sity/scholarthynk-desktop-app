@@ -1,15 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-const { ipcRenderer, dialog } = require('electron');
+const { ipcRenderer, dialog, shell } = require('electron');
 const Store = require('electron-store');
 const i18next = require('i18next');
 const fsBackend = require('i18next-fs-backend');
+const { google } = require('googleapis');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const store = new Store();
     const api_addr = "http://192.168.5.21:3000";
     const root = document.documentElement;
-    
+
     function switchAppearance()
     {
         const mode = store.get('mode');
@@ -136,6 +137,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const english = document.getElementById('english');
     const german = document.getElementById('german');
     const math = document.getElementById('math');
+    
+    // * English:
+
+    // * Vocabulary features
+
+    const vocabopen = document.getElementById('vocabopen');
+    const vocab_popup = document.getElementById('vocab_popup');
+    const close_vocab = document.getElementById('close_vocab');
 
     const add_words_add = document.getElementById('add_words_add');
     const delete_words_delete = document.getElementById('delete_words_delete');
@@ -147,6 +156,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const user_options = document.getElementById('user_options');
     const settings_user_options = document.getElementById('settings_user_options');
     const feedback_user_options = document.getElementById('feedback_user_options');
+
+    // * Video feed
+
+    const scrollBar = document.getElementById('scroll-bar');
+    const navigatorLeft = document.getElementById('navigator-left');
+    const navigatorRight = document.getElementById('navigator-right');
+
+    const videoContainer = document.getElementById('video-container');
+
+    // * Vocabulary features Functionality
+
+    vocabopen.addEventListener('click', () => {vocab_popup.style.display = 'block';});
+    close_vocab.addEventListener('click', () => {vocab_popup.style.display = 'none';});
 
     function hideSearchOutput()
     {
@@ -395,4 +417,91 @@ document.addEventListener('DOMContentLoaded', async () => {
             }); 
         }
     }
+
+    // * Video feed Functionality
+
+    async function getVideos() {
+        const apiKey = 'AIzaSyAvoQu_3_sTw9soEv2w7qtOwVXQSELxqM4';
+      
+        const service = google.youtube({ version: 'v3', auth: apiKey });
+      
+        const request = {
+            part: 'snippet',
+            q: 'funny',
+            type: 'video',
+            maxResults: 50,
+            chart: 'mostPopular',
+            regionCode: 'US',
+            relevanceLanguage: 'en',
+            contentType: 'VIDEO',
+            musicFilter: 1,
+        };     
+
+        const response = await service.videos.list(request);
+        const allVideos = response.data.items;
+
+        allVideos.forEach((video) => {
+            const videoId = video.id;
+            const videoTitle = video.snippet.title;
+            const thumbnailUrl = video.snippet.thumbnails.medium.url;
+            const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+            const videoElement = document.createElement('a');
+            videoElement.href = videoUrl;
+            videoElement.className = 'video';
+
+            videoElement.addEventListener('click', (event) => {
+                event.preventDefault();
+                shell.openExternal(videoUrl);
+            });
+
+            const thumbnailElement = document.createElement('img');
+            thumbnailElement.src = thumbnailUrl;
+            thumbnailElement.className = 'thumbnail';
+
+            const titleElement = document.createElement('p');
+            titleElement.textContent = videoTitle;
+            titleElement.className = 'vid_title';
+
+            if (videoTitle.length > 16.8) {
+                titleElement.style.whiteSpace = 'normal';
+            }
+
+            videoElement.appendChild(thumbnailElement);
+            videoElement.appendChild(titleElement);
+
+            videoContainer.appendChild(videoElement);
+        });
+    }
+
+    getVideos();
+
+    let currentFeedIndex = 0;
+
+    function scrollVideos(direction) {
+        const videos = document.querySelectorAll('.video');
+        const videoWidth = videos.length > 0 ? videos[0].offsetWidth : 0;
+        const containerWidth = scrollBar.offsetWidth;
+        const maxIndex = videos.length - Math.floor(containerWidth / videoWidth);
+    
+        if (direction == 'left' && currentFeedIndex > 0) {
+            currentFeedIndex--;
+        } else if (direction == 'right' && currentFeedIndex < maxIndex) {
+            currentFeedIndex++;
+        }
+    
+        const newPosition = -currentFeedIndex * videoWidth;
+        videoContainer.style.transform = `translateX(${newPosition}px)`;
+    
+        navigatorLeft.disabled = currentFeedIndex == 0;
+        navigatorRight.disabled = currentFeedIndex == maxIndex;
+    }
+    
+    navigatorLeft.addEventListener('click', () => {
+        scrollVideos('left');
+    });
+    
+    navigatorRight.addEventListener('click', () => {
+        scrollVideos('right');
+    });    
 });

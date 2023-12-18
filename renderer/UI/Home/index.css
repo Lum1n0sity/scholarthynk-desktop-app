@@ -126,6 +126,89 @@ body {
     display: none;
 }
 
+/** Basic Section styling */
+
+.section:not(#vocab_section, #grammarchecker_section) {
+    height: 37.5%;
+}
+
+#vocab_section {
+    height: 12.5%;
+}
+
+#grammarchecker_section {
+    height: 12.5%;
+}
+
+/** English-Vocabulary */
+
+#vocab_section {
+    background-color: transparent;
+}
+
+#vocab_section h2 {
+    font-size: 1.6vw;
+    margin-left: 2vw;
+    margin-top: 1vw;
+}
+
+#vocabopen {
+    background-color: var(--secondary);
+    font-size: 1.5vw;
+    padding: 10px;
+    margin-top: .7vw;
+    position: absolute;
+    left: 2vw;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: .5s;
+}
+
+#vocabopen:hover {
+    background-color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#close_vocab {
+    background-color: transparent;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50px;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    position: absolute;
+    right: 2vw;
+    top: 2vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#close_vocab span {
+    font-size: 1.7vw;
+    transform: translateY(5%);
+}
+
+#close_vocab:hover {
+    background-color: var(--selected-primary);
+    transition: .5s;
+}
+
+#vocab_popup {
+    display: none;
+    width: 94vw;
+    height: 99vh;
+    z-index: 104;
+    border-radius: 10px;
+    margin-top: .5vh;
+    margin-left: .5vw;
+    background-color: var(--alt-primary);
+    position: absolute;
+}
+
 #search_words {
     background-color: transparent;
     height: 20vh;
@@ -386,7 +469,7 @@ body {
     resize: none;
     justify-self: start;
     align-self: end;
-    margin-bottom: 1vw;
+    margin-bottom: 2vw;
     position: fixed;
     left: 7vw;
     width: 20vw;
@@ -417,6 +500,170 @@ body {
 #your_words_list::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+/** Grammar checker styling */
+
+#grammarchecker_section h2 {
+    font-size: 1.6vw;
+    margin-left: 2vw;
+    margin-top: 1vw;
+}
+
+#grammarchecker {
+    background-color: var(--secondary);
+    font-size: 1.5vw;
+    padding: 10px;
+    margin-top: .7vw;
+    position: absolute;
+    left: 2vw;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: .5s;
+}
+
+#grammarchecker:hover {
+    background-color: var(--selected-secondary);
+    transition: .5s;
+}
+
+/** Video feed styling */
+
+/** Video Styling */
+
+#video-container {
+    display: flex;
+    background-color: transparent;
+    align-items: start;
+    margin-top: 3vw;
+    transition: .5s;
+}
+
+.video:link {
+    margin-top: .8vw;
+    margin-left: 2vw;
+    width: min-content;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: .5s;
+    padding-left: .5vw;
+    padding-right: .5vw;
+    padding-top: .25vw;
+    padding-bottom: .25vw;
+    text-decoration: none;
+}
+
+.thumbnail {
+    border-radius: 6px;
+    height: auto;
+}
+
+.vid_title {
+    width: 16.8vw;
+    height: auto;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.video:hover {
+    background-color: var(--selected-primary);
+    border-radius: 10px;
+    transition: .5s;
+}
+
+/** Video section */
+
+#youtube_feed_section h2 {
+    font-size: 1.6vw;
+    margin-left: 4.5vw;
+    margin-top: 1vw;
+}
+
+#scroll-bar_start {
+    position: absolute;
+    top: 16vw;
+    width: 2.5vw;
+    height: 34%;
+    background-color: var(--background);
+    overflow: hidden;
+    box-shadow: 20px 0px 20px 2px var(--background);
+    z-index: 100;
+}
+
+#scroll-bar_end {
+    position: absolute;
+    top: 17vw;
+    right: 0;
+    width: 2.5vw;
+    height: 34%;
+    background-color: var(--background);
+    overflow: hidden;
+    box-shadow: -20px 0px 20px 2px var(--background);
+    z-index: 100;
+}
+
+#scroll-bar {
+    background-color: transparent;
+    height: 87%;
+    width: 93vw;
+    margin-left: 2vw;
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    z-index: 99;
+    position: relative; 
+}
+
+.navigator {
+    background-color: #4545455e;
+    color: var(--text-color);
+    border-radius: 50px;
+    width: 3vw;
+    height: 3vw;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    position: absolute;
+    z-index: 101;
+}
+
+#navigator-left {
+    left: 1vw;
+}
+
+#navigator-right {
+    right: 3vw;
+}
+
+#navigator-left span {
+    font-size: 1.7vw;
+    transform: translate(-5%, 5%);
+}
+
+#navigator-right span {
+    font-size: 1.7vw;
+    transform: translate(4%, 5%);
+}
+
+.navigator:hover {
+    background-color: var(--selected-primary);
+    transition: .5s;
+}
+
+/** Exercise History styling */
+
+#exercise_history_section h2 {
+    font-size: 1.6vw;
+    margin-left: 2vw;
+    margin-top: 1vw;
+}
+
+ /** Other options styling */
 
 #sepperator {
    background-color: var(--primary); 

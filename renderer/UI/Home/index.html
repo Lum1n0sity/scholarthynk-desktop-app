@@ -28,33 +28,62 @@
             </nav>
             <div id="page_content">
                 <div id="english">
-                    <div id="search_words">
-                        <h3 id="search_words_title" data-i18n="app.home.search_section.search_title"></h3>
-                        <div>
-                            <button id="search_words_search"><span class="material-symbols-rounded">search</span></button>
-                            <input type="text" data-i18n="app.home.search_section.search_placeholder" data-i18n-attr="placeholder" id="search_words_input">
-                            <p id="search_words_output_display">N/A | N/A | N/A</p>
+                    <div id="vocab_popup">
+                        <button id="close_vocab"><span class="material-symbols-rounded">close</span></button>
+                        <div id="search_words">
+                            <h3 id="search_words_title" data-i18n="app.home.search_section.search_title"></h3>
+                            <div>
+                                <button id="search_words_search"><span class="material-symbols-rounded">search</span></button>
+                                <input type="text" data-i18n="app.home.search_section.search_placeholder" data-i18n-attr="placeholder" id="search_words_input">
+                                <p id="search_words_output_display">N/A | N/A | N/A</p>
+                            </div>
+                        </div>
+                        <div id="sepperator"></div>
+                        <div id="add_words">
+                            <h3 id="add_words_title" data-i18n="app.home.add_section.add_title"></h3>
+                            <input type="text" data-i18n="app.home.add_section.add_german_placeholder" data-i18n-attr="placeholder" id="add_words_german_input">
+                            <input type="text" data-i18n="app.home.add_section.add_english_placeholder" data-i18n-attr="placeholder" id="add_words_english_input">
+                            <button id="add_words_add" data-i18n="app.home.add_section.add_button"></button>
+                        </div>
+                        <div id="sepperator"></div>
+                        <div id="delete_words">
+                            <h3 id="delete_words_title" data-i18n="app.home.delete_section.delete_title"></h3>
+                            <select id="delete_words_select">
+                                <option value="message" data-i18n="app.home.delete_section.delete_select_default"></option>
+                            </select>
+                            <button id="delete_words_delete" data-i18n="app.home.delete_section.delete_button"></button>
+                        </div>
+                        <div id="sepperator"></div>
+                        <div id="your_words">
+                            <h3 id="your_words_title" data-i18n="app.home.your_words_section.your_words_title"></h3>
+                            <textarea id="your_words_list" cols="30" rows="10" readonly></textarea>
                         </div>
                     </div>
-                    <div id="sepperator"></div>
-                    <div id="add_words">
-                        <h3 id="add_words_title" data-i18n="app.home.add_section.add_title"></h3>
-                        <input type="text" data-i18n="app.home.add_section.add_german_placeholder" data-i18n-attr="placeholder" id="add_words_german_input">
-                        <input type="text" data-i18n="app.home.add_section.add_english_placeholder" data-i18n-attr="placeholder" id="add_words_english_input">
-                        <button id="add_words_add" data-i18n="app.home.add_section.add_button"></button>
+                    <div id="vocab_section" class="section">
+                        <h2 data-i18n="app.home.english.vocabulary.section"></h2>
+                        <button id="vocabopen" data-i18n="app.home.english.vocabulary.section"></button>
                     </div>
                     <div id="sepperator"></div>
-                    <div id="delete_words">
-                        <h3 id="delete_words_title" data-i18n="app.home.delete_section.delete_title"></h3>
-                        <select id="delete_words_select">
-                            <option value="message" data-i18n="app.home.delete_section.delete_select_default"></option>
-                        </select>
-                        <button id="delete_words_delete" data-i18n="app.home.delete_section.delete_button"></button>
+                    <div id="grammarchecker_section" class="section">
+                        <h2 data-i18n="app.home.english.grammar.section"></h2>
+                        <button id="grammarchecker" data-i18n="app.home.english.grammar.section"></button>
                     </div>
                     <div id="sepperator"></div>
-                    <div id="your_words">
-                        <h3 id="your_words_title" data-i18n="app.home.your_words_section.your_words_title"></h3>
-                        <textarea id="your_words_list" cols="30" rows="10" readonly></textarea>
+                    <div id="youtube_feed_section" class="section">
+                        <h2 data-i18n="app.home.english.youtube.title"></h2>
+                        <div id="scroll-bar_start"></div>
+                        <div id="scroll-bar">
+                            <button id="navigator-left" class="navigator"><span class="material-symbols-rounded">navigate_before</span></button>
+                            <div id="video-container" class="video-container">
+                                <!-- Videos goes here -->
+                            </div>
+                            <button id="navigator-right" class="navigator"><span class="material-symbols-rounded">navigate_next</span></button>
+                        </div>
+                        <div id="scroll-bar_end"></div>
+                    </div>
+                    <div id="sepperator"></div>
+                    <div id="exercise_history_section" class="section">
+                        <h2 data-i18n="app.home.english.history.title"></h2>
                     </div>
                 </div>
                 <div id="german">

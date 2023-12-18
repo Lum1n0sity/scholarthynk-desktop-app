@@ -36,20 +36,29 @@ app:
       english: English
       german: German
       math: Math
-    search_section:
-      search_title: Search words
-      search_placeholder: Search
-    add_section:
-      add_title: Add new words
-      add_german_placeholder: German
-      add_english_placeholder: English
-      add_button: Add
-    delete_section:
-      delete_title: Delete words
-      delete_select_default: Select words to delete
-      delete_button: Delete
-    your_words_section:
-      your_words_title: Your words
+    english:
+      vocabulary:
+        section: Vocabulary
+        search_section:
+          search_title: Search words
+          search_placeholder: Search
+        add_section:
+          add_title: Add new words
+          add_german_placeholder: German
+          add_english_placeholder: English
+          add_button: Add
+        delete_section:
+          delete_title: Delete words
+          delete_select_default: Select words to delete
+          delete_button: Delete
+        your_words_section:
+          your_words_title: Your words
+      grammar:
+        section: Grammar-Checker
+      youtube:
+        title: Recommended English YouTube Videos
+      history:
+        title: Exercise History
   discover:
     title: ScholarThynk - Discover
     tab_en: English
