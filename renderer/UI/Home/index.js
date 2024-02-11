@@ -1,100 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const { ipcRenderer, dialog, shell } = require('electron');
-const Store = require('electron-store');
-const i18next = require('i18next');
-const fsBackend = require('i18next-fs-backend');
-const { google } = require('googleapis');
+const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require('../../../utils.js');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const store = new Store();
-    const api_addr = "http://192.168.5.21:3000";
-    const root = document.documentElement;
 
-    function switchAppearance()
-    {
-        const mode = store.get('mode');
-
-        if (mode == null)
-        {
-            root.style.setProperty('--background', '#161616');
-            root.style.setProperty('--primary', '#2F2F2F');
-            root.style.setProperty('--selected-primary', '#454545c7');
-            root.style.setProperty('--text-color', '#ffffff');
-            root.style.setProperty('--alt-primary', '#1C1C1C');
-        }
-        else
-        {
-            if (mode === 'light')
-            {
-                root.style.setProperty('--background', '#E0E0E0');
-                root.style.setProperty('--primary', '#CCCCCC');
-                root.style.setProperty('--selected-primary', '#A0A0A0C7');
-                root.style.setProperty('--text-color', '#000000');
-                root.style.setProperty('--alt-primary', '#D8D8D8');
-            }
-            else
-            {
-                root.style.setProperty('--background', '#161616');
-                root.style.setProperty('--primary', '#2F2F2F');
-                root.style.setProperty('--selected-primary', '#454545c7');
-                root.style.setProperty('--text-color', '#ffffff');
-                root.style.setProperty('--alt-primary', '#1C1C1C');
-            }
-        }
-    }
-
-    switchAppearance();
-
-    const dataToSendLoadVocab = ({ username: store.get('username') });
-    const your_words_list = document.getElementById('your_words_list');
-    const delete_words_select = document.getElementById('delete_words_select');
-
-    const user = document.getElementById('user');
-    
-    function updateUILanguage() 
-    {
-        document.querySelectorAll('[data-i18n]').forEach((element) => {
-            const key = element.getAttribute('data-i18n');
-            const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
-
-            if (attribute === 'placeholder') 
-            {
-                  element.setAttribute(attribute, i18next.t(key));
-            }
-            else if (attribute === 'textContent')
-            {
-                  element.textContent = i18next.t(key);
-            }
-            else 
-            {
-                  element[attribute] = i18next.t(key);
-            }
-        });
-    }
-
-    const storedLang = store.get('lang') || 'en';
-
-    await i18next
-    .use(fsBackend)
-    .init({
-      lng: storedLang,
-      fallbackLng: 'en',
-      backend: {
-        loadPath: `${__dirname}/../../Translation/{{lng}}.yaml`
-      }
-    }, 
-    (err, t) => {
-        if (err) 
-        {
-              console.error('Error initializing i18next:', err);
-              return;
-        }
-
-        updateUILanguage();
-    });
-
-    fetch(`${api_addr}/vocab/load`, {
+    fetch(`${config.apiUrl}/vocab/load`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -127,12 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("Fetch Error: ", error);
     });
 
-    const body = document.body;
-
-    const nav_discover = document.getElementById('nav_discover');
-    const nav_courses = document.getElementById('nav_courses');
-    const nav_logout = document.getElementById('nav_logout');
-
     const subject_select = document.getElementById('subject_select');
     const english = document.getElementById('english');
     const german = document.getElementById('german');
@@ -153,9 +56,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const search_words_search = document.getElementById('search_words_search');
     const search_words_output_display = document.getElementById('search_words_output_display');
 
-    const user_options = document.getElementById('user_options');
-    const settings_user_options = document.getElementById('settings_user_options');
-    const feedback_user_options = document.getElementById('feedback_user_options');
+    // * Grammar Checker
+
+    const grammarchecker = document.getElementById('grammarchecker');
+    const grammarchecker_popup = document.getElementById('grammarchecker_popup');
+    const close_grammarchecker = document.getElementById('close_grammarchecker');
+
+    const start_check = document.getElementById('start_check');
+    const text_input = document.getElementById('text_input');
+
+    let subjectLang;
 
     // * Video feed
 
@@ -164,6 +74,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     const navigatorRight = document.getElementById('navigator-right');
 
     const videoContainer = document.getElementById('video-container');
+
+    // * Subject select Functionality
+
+    subject_select.addEventListener('change', () => {
+        const subjectI = subject_select.selectedIndex;
+        const subject = subject_select.options[subjectI].value;
+
+        if (subject == 'english')
+        {
+            english.style.display = 'block';
+            german.style.display = 'none';
+            math.style.display = 'none';
+            subjectLang = 'en';
+        }
+        else if (subject == 'german')
+        {
+            english.style.display = 'none';
+            german.style.display = 'block';
+            math.style.display = 'none';
+            subjectLang = 'de';
+        }
+        else if (subject == 'math')
+        {
+            english.style.display = 'none';
+            german.style.display = 'none';
+            math.style.display = 'block';
+        }
+    });
 
     // * Vocabulary features Functionality
 
@@ -183,61 +121,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    nav_discover.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        window.location.href = '../Discover/discover.html';
-    });
-
-    nav_courses.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        window.location.href = '../Courses/courses.html';
-    });
-
-    nav_logout.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        window.location.href = "../Login/login.html";
-        store.set('loggedIn', false);
-        store.set('loggedOut', true);
-        store.delete('authToken');
-    });
-
-    user.addEventListener('click', () => {
-        user_options.style.display = user_options.style.display === 'block' ? 'none' : 'block';
-    });
-
-    settings_user_options.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        window.location.href = '../Settings/settings.html';
-    });
-
-    subject_select.addEventListener('change', () => {
-        const subjectI = subject_select.selectedIndex;
-        const subject = subject_select.options[subjectI].value;
-
-        if (subject == 'english')
-        {
-            english.style.display = 'block';
-            german.style.display = 'none';
-            math.style.display = 'none';
-        }
-        else if (subject == 'german')
-        {
-            english.style.display = 'none';
-            german.style.display = 'block';
-            math.style.display = 'none';
-        }
-        else if (subject == 'math')
-        {
-            english.style.display = 'none';
-            german.style.display = 'none';
-            math.style.display = 'block';
-        }
-    });
-
     add_words_add.addEventListener('click', () => {
         const german_word = document.getElementById('add_words_german_input').value;
         const english_word = document.getElementById('add_words_english_input').value;
@@ -249,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const dataToSendAddVocab = ({ word1: german_word, word2: english_word, username: username });
 
             console.log(dataToSendAddVocab);
-            fetch(`${api_addr}/vocab/add`, {
+            fetch(`${config.apiUrl}/vocab/add`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -292,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const dataToSendDeleteVocab = ({ german: germanWord, english: englishWord, username: username });
 
-        fetch(`${api_addr}/vocab/delete`, {
+        fetch(`${config.apiUrl}/vocab/delete`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -390,7 +273,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 {
                     let dataToSendVocabSearch = { input, username };
         
-                    fetch(`${api_addr}/search`, {
+                    fetch(`${config.apiUrl}/search`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -418,9 +301,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // * Grammarchecker Functionality
+    // ! Grammarchecker features is on Hold! View ClickUp Board (App-ScholarThynk);
+
+    grammarchecker.addEventListener('click', () => {
+        grammarchecker_popup.style.display = 'block';
+    });
+
+    close_grammarchecker.addEventListener('click', () => {
+        grammarchecker_popup.style.display = 'none';
+    });
+
+    start_check.addEventListener('click', () => {
+        const text = text_input.value;
+
+        if (text.length != 0)
+        {
+            const dataToSendGrammarCheck = ({ text: text, lang: subjectLang });
+
+            fetch(`${config.apiUrl}/grammar/check`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataToSendGrammarCheck)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Fetch error: ', error);
+            });
+        }
+    });
+
     // * Video feed Functionality
 
-    async function getVideos() {
+    async function getVideos() 
+    {
         const apiKey = 'AIzaSyAvoQu_3_sTw9soEv2w7qtOwVXQSELxqM4';
       
         const service = google.youtube({ version: 'v3', auth: apiKey });
@@ -463,7 +382,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             titleElement.textContent = videoTitle;
             titleElement.className = 'vid_title';
 
-            if (videoTitle.length > 16.8) {
+            if (videoTitle.length > 16.8) 
+            {
                 titleElement.style.whiteSpace = 'normal';
             }
 
@@ -478,15 +398,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentFeedIndex = 0;
 
-    function scrollVideos(direction) {
+    function scrollVideos(direction) 
+    {
         const videos = document.querySelectorAll('.video');
         const videoWidth = videos.length > 0 ? videos[0].offsetWidth : 0;
         const containerWidth = scrollBar.offsetWidth;
         const maxIndex = videos.length - Math.floor(containerWidth / videoWidth);
     
-        if (direction == 'left' && currentFeedIndex > 0) {
+        if (direction == 'left' && currentFeedIndex > 0) 
+        {
             currentFeedIndex--;
-        } else if (direction == 'right' && currentFeedIndex < maxIndex) {
+        } 
+        else if (direction == 'right' && currentFeedIndex < maxIndex) 
+        {
             currentFeedIndex++;
         }
     

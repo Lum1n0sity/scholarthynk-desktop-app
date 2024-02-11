@@ -13,14 +13,14 @@ body {
 }
 
 #register_container {
-    height: 60vh;
+    height: 70vh;
     width: 30vw;
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: var(--primary);
-    border-radius: 0px 10px 00px 0px;
+    border-radius: 0px 10px 10px 0px;
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 70%;
     transform: translate(-70%, -50%);
 }
@@ -58,6 +58,10 @@ body {
     transition: .5s;
 }   
 
+#email_input:focus {
+    border-left: 2px solid var(--secondary);
+    transition: .1s;
+}
 
 #username_input {
     font-size: 1.7vw;
@@ -83,11 +87,11 @@ body {
 }
 
 #pw {
+    display: flex;
+    align-items: center;
     position: relative;
     top: 9vw;
     left: 10%;
-    align-items: center;
-    display: flex;
 }
 
 #password_input {
@@ -110,6 +114,7 @@ body {
 }
 
 #show_pw {
+    height: calc(100% - 4px);
     border-radius: 0px 6px 6px 0px;
     border-left: none;
     border-right: none;
@@ -134,7 +139,7 @@ body {
 }
 
 #hide_pw {
-    padding: 10px;
+    height: calc(100% - 4px);
     border-radius: 0px 6px 6px 0px;
     border-left: none;
     border-right: none;
@@ -145,9 +150,8 @@ body {
     padding: 10px;
     outline: none;
     cursor: pointer;
+    margin-left: -.1vw;
     transition: .5s;
-    position: absolute;
-    right: 6vw;
     display: none;
 }
 
@@ -184,11 +188,11 @@ body {
 #sign_in {
     background-color: var(--secondary);
     width: 20vw;
-    height: 60vh;
+    height: 70vh;
     border-radius: 10px 0px 0px 10px;
     border-right: var(--selected-secondary) 2px solid;
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 20%;
     transform: translate(44%, -50%);
 }
@@ -223,6 +227,39 @@ body {
     transition: .5s;
 }
 
+.select {
+    font-size: 1.7vw;
+    width: 24vw;
+    position: relative;
+    margin-top: 34%;
+    left: 10%;
+    border-radius: 6px;
+    border-bottom: 2px solid var(--disabled);
+    border-right: none;
+    border-top: none;
+    border-left: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    transition: .5s;
+}
+
+#remember_div {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    display: flex;
+}
+
+#remember_checkbox {
+    margin-top: .2vh;
+}
+
+#remember_div p {
+    font-size: 1.8vw;
+    margin-left: .5vw;
+}
+
 input[type="checkbox"] {
     appearance: none;
     width: 2vw;
@@ -231,28 +268,16 @@ input[type="checkbox"] {
     border: 2px solid #fff;
     border-radius: 5px;
     cursor: pointer;
-    position: relative;
-    top: 10vw;
-    left: 30%;
+    margin-left: 10%;
 }
-  
+
 input[type="checkbox"]:checked:after {
     font-family: "Material Symbols Rounded";
     content: "\e876";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    bottom: .3vh;
     color: #ffffffff;
     font-size: 1.8vw;
-}
-  
-
-#remember_div p {
-    font-size: 1.8vw;
-    position: relative;
-    top: 7.5vw;
-    left: 38%;
 }
 
 #register {
@@ -266,11 +291,14 @@ input[type="checkbox"]:checked:after {
     background-color: transparent;
     color: var(--text-color);
     font-weight: bold;
-    position: absolute;
-    top: 75%;
-    left: 25%;
     cursor: pointer;
+    transform: translateX(50%);
     transition: .5s;
+    margin-top: 5vh;
+}
+
+#register p {
+    display: inline;
 }
 
 #register span {

@@ -1,104 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=MuseoModerno&family=Quicksand&family=Roboto&display=swap');
-
-* {
-    margin: 0;
-    font-family: 'Quicksand', sans-serif;
-}
-
-body {
-    background-color: var(--background);
-    color: var(--text-color);
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-
-#main_grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    height: 100vh;
-    width: 100vw;
-    grid-gap: 10px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-
-#nav_bar {
-    grid-row: 1;
-    grid-column: 1;
-    background-color: var(--primary);
-    height: 100vh;
-    width: 5vw;
-    text-align: center;
-}
-
-#nav_logo {
-    width: 4vw;
-    margin-top: .5vw;
-    border-radius: 11.52px;
-}
-
-#nav_bar button:not(#nav_home) {
-    color: var(--text-color);
-    margin-top: 1vh;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    transition: .5s;
-}
-
-#nav_home {
-    color: var(--text-color);
-    margin-top: 1vh;
-    background-color: var(--selected-primary);
-    border: none;
-    outline: none;
-    cursor: pointer;
-    border-radius: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-#nav_bar span {
-    font-size: 1.7vw;
-}
-
-#nav_bar p {
-    font-size: .8vw;
-    text-align: center;
-}
-
-#nav_lower {
-    position: absolute;
-    bottom: 1vh;
-    width: 5vw;
-}
-
-#nav_bar button:not(#nav_plan):hover {
-    background-color: var(--selected-primary);
-    border-radius: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    transition: .5s;
-}
-
-#nav_bar button#nav_plan:hover {
-    background-color: var(--selected-primary);
-    border-radius: 5px;
-    transition: .5s;
-}
-
-#page_content {
-    background-color: transparent;
-    height: 100vh;
-    width: 95vw;
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: grid;
-}
-
 #subject_select {
     padding: 10px;
     font-size: 1.7vw;
@@ -114,6 +13,10 @@ body {
     cursor: pointer;
 }
 
+#english {
+    display: none;
+}
+
 #german {
     width: 95vw;
     height: 100vh;
@@ -123,12 +26,12 @@ body {
 #math {
     width: 95vw;
     height: 100vh;
-    display: none;
+    display: block;
 }
 
 /** Basic Section styling */
 
-.section:not(#vocab_section, #grammarchecker_section) {
+.section:not(#vocab_section, #grammarchecker_section, #calculator_section, #formula_section) {
     height: 37.5%;
 }
 
@@ -138,6 +41,14 @@ body {
 
 #grammarchecker_section {
     height: 12.5%;
+}
+
+#calculator_section {
+    height: 47.5%;
+}
+
+#formula_section {
+    height: 15%;
 }
 
 /** English-Vocabulary */
@@ -529,6 +440,103 @@ body {
     transition: .5s;
 }
 
+#grammarchecker_popup {
+    display: none;
+    width: 94vw;
+    height: 99vh;
+    z-index: 104;
+    border-radius: 10px;
+    margin-top: .5vh;
+    margin-left: .5vw;
+    background-color: var(--alt-primary);
+    position: absolute;
+}
+
+#close_grammarchecker {
+    background-color: transparent;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50px;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    position: absolute;
+    right: 2vw;
+    top: 2vw;
+    cursor: pointer;
+    transition: .5s;
+}
+
+#close_grammarchecker span {
+    font-size: 1.7vw;
+    transform: translateY(5%);
+}
+
+#close_grammarchecker:hover {
+    background-color: var(--selected-primary);
+    transition: .5s;
+}
+
+#grammarchecker_popup h3 {
+    font-size: 2.3vw;
+    margin-top: 1vw;
+    margin-left: 2vw;
+    height: 2vw;
+}
+
+#text_input {
+    resize: none;
+    position: absolute;
+    left: 2vw;
+    top: 5vw;
+    width: 40vw;
+    height: 20vw;
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid var(--primary);
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    font-size: 1.7vw;
+}
+
+#text_input::-webkit-scrollbar {
+    width: 5px;
+}
+
+#text_input::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#text_input::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+#text_input::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#start_check {
+    background-color: var(--secondary);
+    font-size: 1.5vw;
+    padding: 10px;
+    position: absolute;
+    left: 2vw;
+    top: 27vw;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: .5s;
+}
+
+#start_check:hover {
+    background-color: var(--selected-secondary);
+    transition: .5s;
+}
+
 /** Video feed styling */
 
 /** Video Styling */
@@ -594,7 +602,7 @@ body {
 
 #scroll-bar_end {
     position: absolute;
-    top: 17vw;
+    top: 18vw;
     right: 0;
     width: 2.5vw;
     height: 34%;
@@ -611,11 +619,29 @@ body {
     margin-left: 2vw;
     display: flex;
     align-items: center;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     z-index: 99;
     position: relative; 
+}
+
+#scroll-bar::-webkit-scrollbar {
+    height: .4vw;
+}
+
+#scroll-bar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#scroll-bar::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 50px;
+    /* width: 2px;; */
+}
+
+#scroll-bar::-webkit-scrollbar-thumb:hover {
+    background: var(--selected-primary);
 }
 
 .navigator {
@@ -663,7 +689,76 @@ body {
     margin-top: 1vw;
 }
 
- /** Other options styling */
+/*! SUBJECT CHANGE */
+
+/** Math SUBJECT */
+
+#calculator_section h2 {
+    font-size: 1.6vw;
+    margin-left: 2vw;
+    margin-top: 2vw;
+}
+
+.numb:not(#numb_0) {
+    background-color: var(--primary);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    width: 3vw;
+    height: 3vw;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .2s;
+    z-index: 100;
+}
+
+.numb:hover {
+    background-color: var(--secondary);
+    transition: .2s;
+}
+
+#numb_0 {
+    background-color: var(--primary);
+    font-size: 1.5vw;
+    color: var(--text-color);
+    width: 5vw;
+    height: 3vw;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+#numb_0:hover {
+    background-color: var(--secondary);
+    transition: .2s;
+}
+
+.row {
+    z-index: 99;
+}
+
+#row_3 {
+    background-color: red;
+}
+
+#row_2 {
+    background-color: purple;
+}
+
+#row_1 {
+    background-color: green;
+}
+
+/*! SUBJECT CHANGE */
+
+/** German SUBJECT */
+
+
+
+/** Other options styling */
 
 #sepperator {
    background-color: var(--primary); 

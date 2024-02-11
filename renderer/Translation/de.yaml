@@ -11,7 +11,13 @@ app:
     error_username: Benutzername exestiert schon!
     error_server: Keine Verbindung zum Server!
     error_server_try_again: Versuche es später erneut
-  login:
+  verification:
+    teacher:
+      placeholder_school: Tragen Sie Ihre Schule ein.
+      title_code: Geben Sie den Bestätigungscode ein
+      code_tries_display: Versuche übrich
+      code_return_start: Zurück zum Login
+  login: 
     title: Login
     placeholder_username: Benutzername
     placeholder_password: Passwort

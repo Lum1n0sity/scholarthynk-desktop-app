@@ -9,8 +9,12 @@ app:
     switch_text: Welcome Back!
     switch_btn: Sign In
     error_username: Username already exists!
-    error_server: Unable to connect to server!
-    error_server_try_again: Try again later
+  verification:
+    teacher:
+      placeholder_school: Enter your school
+      title_code: Enter the verification code
+      code_tries_display: Tries left
+      code_return_start: Back to Login
   login:
     title: Sign In
     placeholder_username: Username
@@ -55,8 +59,14 @@ app:
           your_words_title: Your words
       grammar:
         section: Grammar-Checker
+        start_check: Start Correction
       youtube:
         title: Recommended English YouTube Videos
+      history:
+        title: Exercise History
+    math:
+      calculator:
+        section: Calculator
       history:
         title: Exercise History
   discover:

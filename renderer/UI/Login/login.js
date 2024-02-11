@@ -2,7 +2,7 @@ const { ipcRenderer } = require('electron');
 const Store = require('electron-store');
 
 document.addEventListener('DOMContentLoaded', () => {
-    const api_addr = "http://192.168.5.21:3000";
+    const api_addr = "http://192.168.5.196:3000";
     const store = new Store();
     const authTokenINIT = store.get('authToken');
     const loggedOut = store.get('loggedOut');

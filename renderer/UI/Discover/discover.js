@@ -1,98 +1,14 @@
-const Store = require('electron-store');
-const { ipcRenderer } = require('electron');
-const fs = require('fs');
-const path = require('path');
-const i18next = require('i18next');
-const fsBackend = require('i18next-fs-backend');
+const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require('../../../utils.js');
 
 document.addEventListener('DOMContentLoaded', async function () 
 {
     const store = new Store();
-    const api_addr = "http://192.168.5.21:3000";
-    const root = document.documentElement;
-    
-    function switchAppearance()
-    {
-        const mode = store.get('mode');
-
-        if (mode == null)
-        {
-            root.style.setProperty('--background', '#161616');
-            root.style.setProperty('--primary', '#2F2F2F');
-            root.style.setProperty('--selected-primary', '#454545c7');
-            root.style.setProperty('--text-color', '#ffffff');
-            root.style.setProperty('--alt-primary', '#1C1C1C');
-        }
-        else
-        {
-            if (mode === 'light')
-            {
-                root.style.setProperty('--background', '#E0E0E0');
-                root.style.setProperty('--primary', '#CCCCCC');
-                root.style.setProperty('--selected-primary', '#A0A0A0C7');
-                root.style.setProperty('--text-color', '#000000');
-                root.style.setProperty('--alt-primary', '#D8D8D8');
-            }
-            else
-            {
-                root.style.setProperty('--background', '#161616');
-                root.style.setProperty('--primary', '#2F2F2F');
-                root.style.setProperty('--selected-primary', '#454545c7');
-                root.style.setProperty('--text-color', '#ffffff');
-                root.style.setProperty('--alt-primary', '#1C1C1C');
-            }
-        }
-    }
-
-    switchAppearance();
-
-    function updateUILanguage() 
-    {
-        document.querySelectorAll('[data-i18n]').forEach((element) => {
-            const key = element.getAttribute('data-i18n');
-            const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
-
-            if (attribute === 'placeholder') 
-            {
-                  element.setAttribute(attribute, i18next.t(key));
-            }
-            else if (attribute === 'textContent')
-            {
-                  element.textContent = i18next.t(key);
-            }
-            else 
-            {
-                  element[attribute] = i18next.t(key);
-            }
-        });
-    }
-
-    const storedLang = store.get('lang') || 'en';
-
-    await i18next
-    .use(fsBackend)
-    .init({
-      lng: storedLang,
-      fallbackLng: 'en',
-      backend: {
-        loadPath: `${__dirname}/../../Translation/{{lng}}.yaml`
-      }
-    }, 
-    (err, t) => {
-        if (err) 
-        {
-              console.error('Error initializing i18next:', err);
-              return;
-        }
-
-        updateUILanguage();
-    });
 
     const delete_select = document.getElementById('delete_select');
 
     //* Get all topics
 
-    fetch(`${api_addr}/discover/get-topics`, {
+    fetch(`${config.apiUrl}/discover/get-topics`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -127,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async function ()
 
     const dataToSendVocabOfWeek = ({ topic: "vocab_of_the_week" });
 
-    fetch(`${api_addr}/discover/get-vocab`, {
+    fetch(`${config.apiUrl}/discover/get-vocab`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -170,9 +86,6 @@ document.addEventListener('DOMContentLoaded', async function ()
     .catch(error => {
         console.error("Fetch error: ", error);
     });
-
-    const nav_home = document.getElementById('nav_home');
-    const nav_courses = document.getElementById('nav_courses');
 
     const english_tab = document.getElementById('english_tab');
     const german_tab = document.getElementById('german_tab');
@@ -219,18 +132,6 @@ document.addEventListener('DOMContentLoaded', async function ()
     let new_selected_image;
     let isMenuDropDownOpen = false;
     let isVocabOfWeekDisplayed = true;
-
-    nav_home.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        window.location.href = '../Home/index.html';
-    });
-
-    nav_courses.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        window.location.href = '../Courses/courses.html';
-    });
     
     english_tab.addEventListener('click', () => {
         english_page.style.display = 'block';
@@ -279,7 +180,7 @@ document.addEventListener('DOMContentLoaded', async function ()
     
                 const dataToSendLoadVocab = { topic: topic };
     
-                fetch(`${api_addr}/discover/get-vocab`, {
+                fetch(`${config.apiUrl}/discover/get-vocab`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -343,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async function ()
 
             const dataToSendVocabOfWeek = ({ topic: "vocab_of_the_week" });
 
-            fetch(`${api_addr}/discover/get-vocab`, {
+            fetch(`${config.apiUrl}/discover/get-vocab`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -467,7 +368,7 @@ document.addEventListener('DOMContentLoaded', async function ()
         {
             const sendTopicsToDelete = ({ topics: selectedTopics });
 
-            fetch(`${api_addr}/discover/topics/delete`, {
+            fetch(`${config.apiUrl}/discover/topics/delete`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -539,7 +440,7 @@ document.addEventListener('DOMContentLoaded', async function ()
                 add_topic_win.style.display = 'none';
                 pop_up_background.style.display = 'none';
 
-                fetch(`${api_addr}/discover/topic/add`, {
+                fetch(`${config.apiUrl}/discover/topic/add`, {
                     method: "POST",
                     body: formData
                 })
@@ -609,7 +510,7 @@ document.addEventListener('DOMContentLoaded', async function ()
 
         const dataToSendAddVocab = ({ german: german, english: english, topic: topic });
 
-        fetch(`${api_addr}/discover/topic/add-vocab`, {
+        fetch(`${config.apiUrl}/discover/topic/add-vocab`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -669,7 +570,7 @@ document.addEventListener('DOMContentLoaded', async function ()
 
         const dataToSendDeleteVocab = ({ german: germanWord, english: englishWord, topic: topic });
 
-        fetch(`${api_addr}/discover/vocab/delete`, {
+        fetch(`${config.apiUrl}/discover/vocab/delete`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"

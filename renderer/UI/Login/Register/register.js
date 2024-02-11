@@ -1,44 +1,7 @@
-const Store = require('electron-store');
+const { config, ipcRenderer, Store } = require('../../../../utils.js');
 
 document.addEventListener('DOMContentLoaded', () => {
     const store = new Store();
-
-    const root = document.documentElement;
-    
-    function switchAppearance()
-    {
-        const mode = store.get('mode');
-
-        if (mode == null)
-        {   
-            root.style.setProperty('--background', '#161616');
-            root.style.setProperty('--primary', '#2F2F2F');
-            root.style.setProperty('--selected-primary', '#454545c7');
-            root.style.setProperty('--text-color', '#ffffff');
-            root.style.setProperty('--alt-primary', '#1C1C1C');
-        }
-        else
-        {
-            if (mode === 'light')
-            {
-                root.style.setProperty('--background', '#E0E0E0');
-                root.style.setProperty('--primary', '#CCCCCC');
-                root.style.setProperty('--selected-primary', '#A0A0A0C7');
-                root.style.setProperty('--text-color', '#000000');
-                root.style.setProperty('--alt-primary', '#D8D8D8');
-            }
-            else
-            {
-                root.style.setProperty('--background', '#161616');
-                root.style.setProperty('--primary', '#2F2F2F');
-                root.style.setProperty('--selected-primary', '#454545c7');
-                root.style.setProperty('--text-color', '#ffffff');
-                root.style.setProperty('--alt-primary', '#1C1C1C');
-            }
-        }
-    }
-
-    switchAppearance();
 
     const sign_up = document.getElementById('register');
     const switch_sign_up = document.getElementById('register_switch');
@@ -48,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const pw_input = document.getElementById('password_input');
 
     const remember_checkbox = document.getElementById('remember_checkbox');
-
-    const api_addr = "http://192.168.5.21:3000";
 
     let isPWVisible = false;
     
@@ -80,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     sign_up.addEventListener('click', () => {
+        const register_container = document.getElementById('register_container');
         const connection_error = document.getElementById('connection_error');
 
         connection_error.style.display = 'none';
@@ -87,10 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('username_input').value;
         const password = document.getElementById('password_input').value;
         const email = document.getElementById('email_input').value;
+        
+        const role_select = document.getElementById('role_select');
+        const roleI = role_select.selectedIndex;
+        const role = role_select.options[roleI].value;
 
-        dataToSendRegister = ({ username: username, password: password, email: email });
+        store.set('tempUsername', username);
 
-        fetch(`${api_addr}/user/register`, {
+        register_container.style.borderRadius = '0px 10px 10px 0px';
+
+        dataToSendRegister = ({ username: username, password: password, email: email, role: role });
+
+        fetch(`${config.apiUrl}/user/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -102,8 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.status === 401)
             {
+                register_container.style.borderRadius = '0px 10px 0px 0px';
                 register_error_message.style.display = 'block';
                 return;
+            }
+            else if (response.status === 308)
+            {
+                if (role == 'teacher')
+                {
+                    ipcRenderer.send('verify-teacher');
+                }
+                else if (role == 'dev')
+                {
+                    ipcRenderer.send('verify-dev');
+                }
             }
 
             return response.json();
@@ -127,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Fetch error: ', error);
+            register_container.style.borderRadius = '0px 10px 0px 0px';
             connection_error.style.display = 'block';
         });
     });
