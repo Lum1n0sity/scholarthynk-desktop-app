@@ -12,7 +12,7 @@ body {
     overflow-y: hidden;
 }
 
-#nav_bar {
+#nav_bar_settings {
     background-color: var(--primary);
     width: 15%;
     height: 100vh;
@@ -22,7 +22,7 @@ body {
     color: var(--text-color);
 }
 
-#nav_bar h3:not(#close_settings) {
+#nav_bar_settings h3:not(#close_settings) {
     background-color: transparent;
     border-radius: 5px;
     margin-top: .5vw;
@@ -34,7 +34,7 @@ body {
     color: var(--text-color);
 }
 
-#nav_bar h3:not(#close_settings):hover {
+#nav_bar_settings h3:not(#close_settings):hover {
     background-color: var(--disabled);
     transition: .5s;
 }

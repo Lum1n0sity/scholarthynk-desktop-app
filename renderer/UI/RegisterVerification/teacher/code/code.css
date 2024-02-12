@@ -1,0 +1,96 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-title {
+    margin-top: 5%;
+}
+
+.code-input {
+    font-size: 5vw;
+    width: 6vw;
+    height: 6vh;
+    padding: 10px;
+    text-align: center;
+    margin: .5vw;
+    margin-top: 10%;
+}
+
+.next {
+    background-color: transparent;
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+}
+
+.next:hover {
+    background-color: var(--selected-primary);
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+.next span {
+    transform: translateY(5%);
+    font-size: 7vw;
+}
+
+.back {
+    background-color: transparent;
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+}
+
+.back:hover {
+    background-color: var(--selected-primary);
+    color: var(--selected-secondary);
+    transition: .5s;
+}
+
+.back span {
+    transform: translateY(5%);
+    font-size: 7vw;
+}
+
+.tries_display_div {
+    display: flex;
+    font-size: 5vw;
+    margin-top: 4vh;
+}
+
+.back_start {
+    font-size: 7vw;
+    border-radius: 6px;
+    border: none;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    margin-top: 5vh;
+    cursor: pointer;
+    transition: .5s;
+    display: none;
+}
+
+.back_start:hover {
+    background-color: var(--selected-secondary);
+    border-radius: 50px;
+    transition: .5s;
+}

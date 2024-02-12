@@ -9,6 +9,7 @@ app:
     switch_text: Wilkommen zurück!
     switch_btn: Erstellen
     error_username: Benutzername exestiert schon!
+    error_undefined: Unable to create account!
     error_server: Keine Verbindung zum Server!
     error_server_try_again: Versuche es später erneut
   verification:
@@ -42,20 +43,36 @@ app:
       english: Englisch
       german: Deutsch
       math: Mathe
-    search_section:
-      search_title: Suche nach Wörtern
-      search_placeholder: Suche
-    add_section:
-      add_title: Füge neue Wörter hinzu
-      add_german_placeholder: Deutsch
-      add_english_placeholder: Englisch
-      add_button: Hinzufügen
-    delete_section:
-      delete_title: Wörter löschen
-      delete_select_default: Wähle Wörter zum löschen
-      delete_button: Löschen
-    your_words_section:
-      your_words_title: Deine Wörter
+    english:
+      vocabulary:
+        section: Vocabulary
+        search_section:
+          search_title: Search words
+          search_placeholder: Search
+        add_section:
+          add_title: Add new words
+          add_german_placeholder: German
+          add_english_placeholder: English
+          add_button: Add
+        delete_section:
+          delete_title: Delete words
+          delete_select_default: Select words to delete
+          delete_button: Delete
+        your_words_section:
+          your_words_title: Your words
+      grammar:
+        section: Grammar-Checker
+        start_check: Start Correction
+      youtube:
+        title: Recommended English YouTube Videos
+      history:
+        title: Exercise History
+    math:
+      calculator:
+        section: Calculator
+        result_placeholder: Result
+      history:
+        title: Exercise History
   discover:
     title: ScholarThynk - Entdecken
     tab_en: Englisch

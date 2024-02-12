@@ -4,7 +4,7 @@ const Store = require('electron-store');
 document.addEventListener('DOMContentLoaded', () => {
     const api_addr = "http://192.168.5.196:3000";
     const store = new Store();
-    const authTokenINIT = store.get('authToken');
+    const authToken = store.get('authToken');
     const loggedOut = store.get('loggedOut');
     
     const root = document.documentElement;
@@ -49,12 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const login_container = document.getElementById('login_container');
 
-    if (authTokenINIT != null && loggedOut == false)
+    if (authToken != null && loggedOut == false)
     {
-        const storedTokenObject = JSON.parse(authTokenINIT);
-        const token = storedTokenObject.value;
-
-        const dataToSendAutoLogin = { token };
+        const dataToSendAutoLogin = ({ token: authToken });
         connection_error.style.display = 'none';
 
         fetch(`${api_addr}/user/auth`, {
@@ -68,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             console.log(data);
             const allowLogin = data.allowLogin;
-            const username_storage = document.getElementById('username_view');
             const username = data.username;
 
             if (allowLogin == true) 

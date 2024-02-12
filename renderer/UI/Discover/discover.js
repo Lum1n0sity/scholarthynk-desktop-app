@@ -1,4 +1,6 @@
-const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require('../../../utils.js');
+const rootPathDiscover = require('electron-root-path').rootPath;
+const pathDiscover = require('path');
+const { fs, ipcRenderer, dialog, shell, Store, google, config } = require(pathDiscover.join(rootPathDiscover, 'utils.js'));
 
 document.addEventListener('DOMContentLoaded', async function () 
 {
@@ -233,6 +235,8 @@ document.addEventListener('DOMContentLoaded', async function ()
                 }
             }
 
+            const storedLang = store.get('lang') || 'en';
+
             if (storedLang == 'en')
             {
                 vocab_list_display_topic.textContent = "Vocab of the week";
@@ -424,8 +428,8 @@ document.addEventListener('DOMContentLoaded', async function ()
         if (topic_name != null && new_selected_image != null) 
         {
             const fileContent = fs.readFileSync(new_selected_image);
-            const fileName = path.basename(new_selected_image);
-            const fileType = path.extname(new_selected_image).toLowerCase();
+            const fileName = pathDiscover.basename(new_selected_image);
+            const fileType = pathDiscover.extname(new_selected_image).toLowerCase();
 
             const mimeType = fileType === '.jpg' || fileType === '.jpeg' ? 'image/jpeg' :
                              fileType === '.png' ? 'image/png':

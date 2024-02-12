@@ -1,4 +1,6 @@
-const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require('../../../utils.js');
+const rootPathIndex = require('electron-root-path').rootPath;
+const pathIndex = require('path');
+const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 
 document.addEventListener('DOMContentLoaded', async () => {
     const store = new Store();

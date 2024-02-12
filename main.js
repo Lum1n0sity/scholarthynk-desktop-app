@@ -4,6 +4,8 @@ const store = new Store();
 
 let mainWindow;
 let pwResetWin;
+let teacherVerificationWin;
+let devVerificationWin;
 
 async function createMainWindow() 
 {
@@ -129,7 +131,7 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) 
     {
       createMainWindow();
-    }
+    }w
   });
 
   ipcMain.on('reset', () => {
@@ -137,6 +139,13 @@ app.whenReady().then(() => {
     pwResetWin = null;
     mainWindow.webContents.send('update-dummy');
   })
+
+  ipcMain.on('teacher-verified', () => {
+    console.log('debug');
+    teacherVerificationWin.close();
+    teacherVerificationWin = null;
+    mainWindow.webContents.send('registration-successfull');
+  });
 });
 
 ipcMain.on('open-file-dialog', () => {

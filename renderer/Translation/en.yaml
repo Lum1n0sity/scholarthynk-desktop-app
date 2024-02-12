@@ -9,6 +9,7 @@ app:
     switch_text: Welcome Back!
     switch_btn: Sign In
     error_username: Username already exists!
+    error_undefined: Unable to create account!
   verification:
     teacher:
       placeholder_school: Enter your school
@@ -67,6 +68,7 @@ app:
     math:
       calculator:
         section: Calculator
+        result_placeholder: Result
       history:
         title: Exercise History
   discover:
