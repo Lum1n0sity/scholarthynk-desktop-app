@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 console.error('Error reading file: ', err);
                 document_viewer.value = 'Error loading the Terms of Service! Please contact us under raphael221@outlook.de';
+                accept.disabled = true;
             }
             else
             {
@@ -161,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     decline.addEventListener('click', () => {
         background.style.display = 'none';
         tos_pop_up.style.display = 'none';
+        accept.disabled = false;
     });
 
     tab_tos.addEventListener('click', () => {
@@ -177,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 {
                     console.error('Error reading file: ', err);
                     document_viewer.value = 'Error loading the Terms of Service! Please contact us under raphael221@outlook.de';
+                    accept.disabled = true;
                 }
                 else
                 {
@@ -200,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 {
                     console.error('Error reading file: ', err);
                     document_viewer.value = 'Error loading the Privacy Policy! Please contact us under raphael221@outlook.de';
+                    accept.disabled = true;
                 }
                 else
                 {
@@ -271,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     ipcRenderer.send('verify-teacher');
                 }
-                else if (role == 'dev')
+                else if (role == 'developer')
                 {
                     ipcRenderer.send('verify-dev');
                 }
@@ -288,6 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 store.set('username', username);                                                                          
                 store.set('role', role);
+                store.set('school', selectedSchool);
 
                 if (remember_checkbox.checked)
                 {                    

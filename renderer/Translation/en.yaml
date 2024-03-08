@@ -1,9 +1,9 @@
 app:
   register: 
     title: Sign Up
-    placeholder_email: E-Mail
-    placeholder_username: Username
-    placeholder_password: Password
+    placeholder_email: Enter your school E-Mail
+    placeholder_username: Enter your full name
+    placeholder_password: Enter your Password
     remember: Remember?
     sign_up: Sign Up
     switch_text: Welcome Back!
@@ -37,40 +37,38 @@ app:
     logout: Log out
   home:
     title: "ScholarThynk - Home"
-    subject_select:
-      english: English
-      german: German
-      math: Math
-    english:
-      vocabulary:
-        section: Vocabulary
-        search_section:
-          search_title: Search words
-          search_placeholder: Search
-        add_section:
-          add_title: Add new words
-          add_german_placeholder: German
-          add_english_placeholder: English
-          add_button: Add
-        delete_section:
-          delete_title: Delete words
-          delete_select_default: Select words to delete
-          delete_button: Delete
-        your_words_section:
-          your_words_title: Your words
-      grammar:
-        section: Grammar-Checker
-        start_check: Start Correction
-      youtube:
-        title: Recommended English YouTube Videos
-      history:
-        title: Exercise History
-    math:
-      calculator:
-        section: Calculator
-        result_placeholder: Result
-      history:
-        title: Exercise History
+    student:
+      announcements:
+        announcements_title: Announcements
+      assignments:
+        assignments_title: Assignments
+      grades:
+        grades_title: Grades
+    teacher:
+      manage_students:
+        manage_students_title: Manage students
+        search_student_placeholder: Search student
+        update_students: Update students
+      student_manager:
+        student_manager_title: Student Manager
+        grade_1: 1. Grade
+        grade_2: 2. Grade
+        grade_3: 3. Grade
+        grade_4: 4. Grade
+        grade_5: 5. Grade
+        grade_6: 6. Grade
+        grade_7: 7. Grade
+        grade_8: 8. Grade
+        grade_9: 9. Grade
+        grade_10: 10. Grade
+    dev:
+      schools:
+        schools_title: Schools
+        add_school:
+          add_school_title: Add new school
+          load_school_data: Load school data
+          submit_data: Add
+          add_school_cancel: Cancel
   discover:
     title: ScholarThynk - Discover
     tab_en: English

@@ -405,15 +405,6 @@ input[type="checkbox"]:checked:after {
     transition: .2s;
 }
 
-.background {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.493);
-    z-index: 1;
-    display: none;
-}
-
 .popup {
     width: 40vw;
     height: 80vh;

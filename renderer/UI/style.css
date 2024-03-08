@@ -16,6 +16,8 @@
 * {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
+    box-sizing: border-box;
+    outline: none;
 }
 
 body {
@@ -134,4 +136,31 @@ body {
     color: var(--text-color);
     padding: 10px;
     outline: none;
+}
+
+.button {
+    font-size: 1.5vw;
+    border-radius: 6px;
+    border: none;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+}
+
+.button:hover:not(.delete-student .warning-delete) {
+    background-color: var(--selected-secondary);
+    transition: .5s;
+}
+
+.background {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.493);
+    z-index: 1;
+    display: none;
 }

@@ -9,7 +9,7 @@ app:
     switch_text: Wilkommen zurück!
     switch_btn: Erstellen
     error_username: Benutzername exestiert schon!
-    error_undefined: Unable to create account!
+    error_undefined: Konto konnte nicht erstellt werden!
     error_server: Keine Verbindung zum Server!
     error_server_try_again: Versuche es später erneut
   verification:
@@ -39,40 +39,38 @@ app:
     logout: Abmelden
   home:
     title: "ScholarThynk - Home"
-    subject_select:
-      english: Englisch
-      german: Deutsch
-      math: Mathe
-    english:
-      vocabulary:
-        section: Vocabulary
-        search_section:
-          search_title: Search words
-          search_placeholder: Search
-        add_section:
-          add_title: Add new words
-          add_german_placeholder: German
-          add_english_placeholder: English
-          add_button: Add
-        delete_section:
-          delete_title: Delete words
-          delete_select_default: Select words to delete
-          delete_button: Delete
-        your_words_section:
-          your_words_title: Your words
-      grammar:
-        section: Grammar-Checker
-        start_check: Start Correction
-      youtube:
-        title: Recommended English YouTube Videos
-      history:
-        title: Exercise History
-    math:
-      calculator:
-        section: Calculator
-        result_placeholder: Result
-      history:
-        title: Exercise History
+    student:
+      announcements:
+        announcements_title: Neuigkeiten
+      assignments:
+        assignments_title: Hausaufgaben
+      grades:
+        grades_title: Noten
+    teacher:
+      manage_students:
+        manage_students_title: Manage Schüler
+        search_student_placeholder: Suche Schüler
+        update_students: Update Schüler
+      student_manager:
+        student_manager_title: Schüler Manager
+        grade_1: 1. Klasse
+        grade_2: 2. Klasse
+        grade_3: 3. Klasse
+        grade_4: 4. Klasse
+        grade_5: 5. Klasse
+        grade_6: 6. Klasse
+        grade_7: 7. Klasse
+        grade_8: 8. Klasse
+        grade_9: 9. Klasse
+        grade_10: 10. Klasse
+    dev:
+      schools:
+        schools_title: Schulen
+        add_school:
+          add_school_title: Neue Schule hinzufügen
+          load_school_data: Schuldaten laden
+          submit_data: Hinzufügen
+          add_school_cancel: Abbrechen
   discover:
     title: ScholarThynk - Entdecken
     tab_en: Englisch

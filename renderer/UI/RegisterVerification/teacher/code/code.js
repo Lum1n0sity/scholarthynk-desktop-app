@@ -191,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (resetSuccessfull)
             {
-                store.delete('school');
                 store.delete('email');
                 store.delete('tempUsername');
             }

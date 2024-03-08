@@ -4,9 +4,16 @@ const Store = require('electron-store');
 document.addEventListener('DOMContentLoaded', () => {
     const api_addr = "http://192.168.5.196:3000";
     const store = new Store();
-    const authToken = store.get('authToken');
+    let authToken = store.get('authToken');
     const loggedOut = store.get('loggedOut');
-    
+        
+    if (authToken != null)
+    {
+        authToken = JSON.parse(authToken);
+
+        authToken = authToken.value;
+    }
+
     const root = document.documentElement;
     
     function switchAppearance()
@@ -149,12 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const allowLogin = data != null ? data.allowLogin : null;
             const userToken = data != null ? data.token : null;
+            const role = data != null ? data.role : null;
+            const school = data != null ? data.school : null;
 
             if (allowLogin != null && userToken != null)
             {
                 if (allowLogin == true)
                 {
                     store.set('username', username);                                                                          
+                    store.set('role', role);
+                    store.set('school', school);
 
                     if (remember_checkbox.checked)
                     {                    

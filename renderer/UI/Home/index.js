@@ -1,336 +1,245 @@
 const rootPathIndex = require('electron-root-path').rootPath;
 const pathIndex = require('path');
-const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
+const { fs, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     const store = new Store();
 
-    fetch(`${config.apiUrl}/vocab/load`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataToSendLoadVocab)
-    })
-    .then(response => response.json())
-    .then(data => {
-        const foundVocab = data != null ? data.vocabFound : null;
+    const role = store.get('role');
 
-        if (foundVocab != null && foundVocab == true)
-        {
-            const vocab = data.vocab;
+    const studentFeatures = document.getElementById('student');
+    const teacherFeatures = document.getElementById('teacher');
+    const devFeatures = document.getElementById('dev');
 
-            const formattedText = vocab.map(pair => `${pair.german} | ${pair.english}`).join('\n');
-                
-            const wordPairs = formattedText.split('\n');
+    // * Teacher student base:
+    const students_list = document.getElementById('students-list');
 
-            for (const wordPair of wordPairs) {
-                const option = document.createElement('option');
-                option.value = wordPair;
-                option.textContent = wordPair;
-                delete_words_select.appendChild(option);
-            }
+    // * Dev Schools base:
+    const schools_list = document.getElementById('schools_list');
 
-            your_words_list.value = formattedText;
-        }
-    })
-    .catch(error => {
-        console.error("Fetch Error: ", error);
-    });
-
-    const subject_select = document.getElementById('subject_select');
-    const english = document.getElementById('english');
-    const german = document.getElementById('german');
-    const math = document.getElementById('math');
-    
-    // * English:
-
-    // * Vocabulary features
-
-    const vocabopen = document.getElementById('vocabopen');
-    const vocab_popup = document.getElementById('vocab_popup');
-    const close_vocab = document.getElementById('close_vocab');
-
-    const add_words_add = document.getElementById('add_words_add');
-    const delete_words_delete = document.getElementById('delete_words_delete');
-
-    const search_words_input = document.getElementById('search_words_input');
-    const search_words_search = document.getElementById('search_words_search');
-    const search_words_output_display = document.getElementById('search_words_output_display');
-
-    // * Grammar Checker
-
-    const grammarchecker = document.getElementById('grammarchecker');
-    const grammarchecker_popup = document.getElementById('grammarchecker_popup');
-    const close_grammarchecker = document.getElementById('close_grammarchecker');
-
-    const start_check = document.getElementById('start_check');
-    const text_input = document.getElementById('text_input');
-
-    let subjectLang;
-
-    // * Video feed
-
-    const scrollBar = document.getElementById('scroll-bar');
-    const navigatorLeft = document.getElementById('navigator-left');
-    const navigatorRight = document.getElementById('navigator-right');
-
-    const videoContainer = document.getElementById('video-container');
-
-    // * Subject select Functionality
-
-    subject_select.addEventListener('change', () => {
-        const subjectI = subject_select.selectedIndex;
-        const subject = subject_select.options[subjectI].value;
-
-        if (subject == 'english')
-        {
-            english.style.display = 'block';
-            german.style.display = 'none';
-            math.style.display = 'none';
-            subjectLang = 'en';
-        }
-        else if (subject == 'german')
-        {
-            english.style.display = 'none';
-            german.style.display = 'block';
-            math.style.display = 'none';
-            subjectLang = 'de';
-        }
-        else if (subject == 'math')
-        {
-            english.style.display = 'none';
-            german.style.display = 'none';
-            math.style.display = 'block';
-        }
-    });
-
-    // * Vocabulary features Functionality
-
-    vocabopen.addEventListener('click', () => {vocab_popup.style.display = 'block';});
-    close_vocab.addEventListener('click', () => {vocab_popup.style.display = 'none';});
-
-    function hideSearchOutput()
+    if (role == 'student')
     {
-        search_words_output_display.style.display = 'none'
-        search_words_input.style.borderRadius = '6px 6px 6px 6px';
+        studentFeatures.style.display = 'block';
     }
+    else if (role == 'teacher')
+    {
+        // * Get all students
+        const school = store.get('school');
+        const schoolName = ({ school: school });
 
-    document.addEventListener('click', (event) => {
-        if (!search_words_output_display.contains(event.target))
-        {
-            hideSearchOutput();
-        }
-    });
-
-    add_words_add.addEventListener('click', () => {
-        const german_word = document.getElementById('add_words_german_input').value;
-        const english_word = document.getElementById('add_words_english_input').value;
-
-        const username = store.get('username');
-
-        if (german_word && english_word != null)
-        {
-            const dataToSendAddVocab = ({ word1: german_word, word2: english_word, username: username });
-
-            console.log(dataToSendAddVocab);
-            fetch(`${config.apiUrl}/vocab/add`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(dataToSendAddVocab),
-            })
-            .then(response => response.json())
-            .then(data => {
-                const added = data != null ? data.added : null;
-
-                if (added != null && added == true)
-                {
-                    const formattedText = `${german_word} | ${english_word}`;
-
-                    your_words_list.value += (your_words_list.value ? '\n' : '') + formattedText;
-                    your_words_list.scrollTop = your_words_list.scrollHeight;
-                        
-                    const option = document.createElement('option');
-                    option.value = formattedText;
-                    option.textContent = formattedText;
-                    delete_words_select.appendChild(option);
-                }
-            })
-            .catch(error => {
-                console.error('Fetch error: ', error);
-            });
-        }
-    });
-
-    delete_words_delete.addEventListener('click', () => {
-        const selectedOption = delete_words_select.selectedIndex;
-        const wordPair = delete_words_select.options[selectedOption].value;
-
-        const words = wordPair.split('|');
-
-        const germanWord = words[0].trim();
-        const englishWord = words[1].trim();
-
-        const username = store.get('username');
-
-        const dataToSendDeleteVocab = ({ german: germanWord, english: englishWord, username: username });
-
-        fetch(`${config.apiUrl}/vocab/delete`, {
-            method: "DELETE",
+        fetch(`${config.apiUrl}/teacher/get-students`, {
+            method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(dataToSendDeleteVocab),
+            body: JSON.stringify(schoolName)
         })
         .then(response => response.json())
         .then(data => {
-            const isDeleted = data.deleted;
+            const students = data.students;
 
-            let valueToRemove = wordPair;
+            students.forEach(async (student) => {
+                let isExpanded = false;
 
-            if (isDeleted)
-            {
-                let currentValue = your_words_list.value;
-                const lines = currentValue.split('\n');
-
-                const filteredLines = lines.filter(line => line.trim() !== valueToRemove);
-
-                currentValue = filteredLines.join('\n');
-
-                const options = delete_words_select.options;
-                for (let i = options.length - 1; i >= 0; i--)
-                {
-                    if (options[i].value == wordPair)
+                const student_list_button = document.createElement('div');
+                student_list_button.classList.add('student-list-button');
+            
+                student_list_button.textContent = student;
+            
+                student_list_button.addEventListener('click', async () => {
+                    student_list_button.classList.remove('expanded');
+                    try 
                     {
-                        options[i].remove();
-                    }
-                }
+                        const studentData = await getStudentsData(student, school);
+                        
+                        if (isExpanded)
+                        {
+                            student_list_button.classList.remove('expanded');
+                            isExpanded = false;
 
-                your_words_list.value = currentValue;
+                            const p_elements = student_list_button.querySelectorAll('.student-info-p');
+                            const update_button = student_list_button.querySelector('.update-students');
+
+                            p_elements.forEach(element => {
+                                element.remove();
+                            });
+
+                            update_button.remove();
+                        }
+                        else
+                        {
+                            student_list_button.classList.add('expanded');
+                            isExpanded = true;
+
+                            const grade_p = document.createElement('p');
+                            const graduationYear_p = document.createElement('p');
+                            const update_student_btn = document.createElement('button');
+
+                            grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                            graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                            update_student_btn.textContent = 'Update';
+
+                            grade_p.classList.add('student-info-p');
+                            graduationYear_p.classList.add('student-info-p');
+                            update_student_btn.classList.add('button');
+                            update_student_btn.classList.add('update-students');
+
+                            update_student_btn.addEventListener('click', () => {
+                                openStudentManager();
+                            });
+
+                            student_list_button.appendChild(grade_p);
+                            student_list_button.appendChild(graduationYear_p);
+                            student_list_button.appendChild(update_student_btn);
+                        }
+                    } 
+                    catch (error) 
+                    {
+                        console.error('Error loading student data: ', error);
+                    }
+                });
+            
+                students_list.appendChild(student_list_button);
+            });
+        })
+        .catch(error => {
+            console.error('Fetch error', error);
+        });
+
+        teacherFeatures.style.display = 'block';
+    }
+    else if (role == 'developer')
+    {
+        // * Get all stored school names and display them in the schools list
+        fetch(`${config.apiUrl}/dev/get-schools`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
             }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const schools = data.schools;
+
+            schools.forEach(school => {
+                const schoolListItem = document.createElement('p');
+                schoolListItem.classList.add('school-list-item');
+
+                schoolListItem.textContent = school;
+
+                schools_list.appendChild(schoolListItem);
+            });
         })
         .catch(error => {
             console.error('Fetch error: ', error);
         });
-    });
 
-    search_words_input.addEventListener('keydown', async (event) => {
-        if (event.key === 'Enter') 
-        {
-            try 
-            {
-                const output = await search(search_words_input.value);
-    
-                if (output) 
-                {
-                    search_words_input.style.borderRadius = '6px 6px 0px 0px';
-                    search_words_input.style.borderBottom = 'none';
-                    search_words_output_display.style.display = 'block';
-
-                    let outputText = `${output.german} | ${output.english} | ${output.difficulty}`;
-                    
-                    search_words_output_display.textContent = outputText;
-                    search_words_output_display.scrollTop = search_words_output_display.scrollHeight;
-                } 
-            } 
-            catch (error) 
-            {
-                console.error('Error in search:', error);
-            }
-        }
-    });
-
-    search_words_search.addEventListener('click', async () => {
-        try 
-        {
-            const output = await search(search_words_input.value);
-
-            if (output) 
-            {
-                search_words_input.style.borderRadius = '6px 6px 0px 0px';
-                search_words_input.style.borderBottom = 'none';
-                search_words_output_display.style.display = 'block';
-
-                let outputText = `${output.german} | ${output.english} | ${output.difficulty}`;
-                
-                search_words_output_display.textContent = outputText;
-            } 
-        } 
-        catch (error) 
-        {
-            console.error('Error in search:', error);
-        }
-    });
-
-    async function search(input) 
-    {
-        const username = store.get('username');
-         
-        if (input.length > 0)
-        {
-            return new Promise((resolve, reject) => {
-                if (input.length !== 0) 
-                {
-                    let dataToSendVocabSearch = { input, username };
-        
-                    fetch(`${config.apiUrl}/search`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(dataToSendVocabSearch)
-                    })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        console.log(data);
-                        resolve({
-                            german: data.german,
-                            english: data.english,
-                            difficulty: data.difficulty
-                        });
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-                }
-                else 
-                {
-                    resolve(null);
-                }
-            }); 
-        }
+        devFeatures.style.display = 'block';
     }
 
-    // * Grammarchecker Functionality
-    // ! Grammarchecker features is on Hold! View ClickUp Board (App-ScholarThynk);
+    const background = document.getElementById('background');
 
-    grammarchecker.addEventListener('click', () => {
-        grammarchecker_popup.style.display = 'block';
+    // ! Student:
+
+
+    // ! Teacher:
+    // * Open / Close student manager:
+    const update_students = document.getElementById('update_students');
+    const student_manager = document.getElementById('student_manager');
+    const close_student_manager = document.getElementById('close_student_manager');
+
+    update_students.addEventListener('click', () => {
+        openStudentManager();
     });
 
-    close_grammarchecker.addEventListener('click', () => {
-        grammarchecker_popup.style.display = 'none';
-    });
+    // * Search students:
+    const input_student = document.getElementById('search_student_input');
 
-    start_check.addEventListener('click', () => {
-        const text = text_input.value;
-
-        if (text.length != 0)
+    input_student.addEventListener('keyup', (event) => {
+        if (event.key === "Enter")
         {
-            const dataToSendGrammarCheck = ({ text: text, lang: subjectLang });
+            students_list.innerHTML = '';
 
-            fetch(`${config.apiUrl}/grammar/check`, {
+            const input = input_student.value;
+            const school = store.get('school');
+    
+            const queryData = ({ input: input, school: school });
+    
+            fetch(`${config.apiUrl}/teacher/search-student`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(dataToSendGrammarCheck)
+                body: JSON.stringify(queryData)
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                const searchResults = data.searchResults;
+
+                if (searchResults.length != 0)
+                {
+                    searchResults.forEach(result => {
+                        const student_list_button = document.createElement('button');
+                        student_list_button.classList.add('student-list-button');
+
+                        student_list_button.textContent = result.name;
+                    
+                        student_list_button.addEventListener('click', async () => {
+                            student_list_button.classList.remove('expanded');
+                            try 
+                            {
+                                const studentData = await getStudentsData(student, school);
+                                
+                                if (isExpanded)
+                                {
+                                    student_list_button.classList.remove('expanded');
+                                    isExpanded = false;
+        
+                                    const p_elements = student_list_button.querySelectorAll('.student-info-p');
+                                    const update_button = student_list_button.querySelector('.update-students');
+        
+                                    p_elements.forEach(element => {
+                                        element.remove();
+                                    });
+        
+                                    update_button.remove();
+                                }
+                                else
+                                {
+                                    student_list_button.classList.add('expanded');
+                                    isExpanded = true;
+        
+                                    const grade_p = document.createElement('p');
+                                    const graduationYear_p = document.createElement('p');
+                                    const update_student_btn = document.createElement('button');
+        
+                                    grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                                    graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                                    update_student_btn.textContent = 'Update';
+        
+                                    grade_p.classList.add('student-info-p');
+                                    graduationYear_p.classList.add('student-info-p');
+                                    update_student_btn.classList.add('button');
+                                    update_student_btn.classList.add('update-students');
+        
+                                    update_student_btn.addEventListener('click', () => {
+                                        openStudentManager();
+                                    });
+        
+                                    student_list_button.appendChild(grade_p);
+                                    student_list_button.appendChild(graduationYear_p);
+                                    student_list_button.appendChild(update_student_btn);
+                                }
+                            } 
+                            catch (error) 
+                            {
+                                console.error('Error loading student data: ', error);
+                            }
+                        });
+                    
+                        students_list.appendChild(student_list_button);
+                    });
+                }
             })
             .catch(error => {
                 console.error('Fetch error: ', error);
@@ -338,7 +247,691 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // * Video feed Functionality
+    async function getStudentsData(student, school) 
+    {
+        const studentQueryData = { student: student, school: school };
+    
+        try 
+        {
+            const response = await fetch(`${config.apiUrl}/teacher/get-student-info`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(studentQueryData)
+            });
+    
+            const data = await response.json();
+            return data;
+        } 
+        catch (error) 
+        {
+            console.error('Fetch error: ', error);
+            throw error;
+        }
+    }
+
+    async function getStudents(school) 
+    {
+        const schoolQueryData = { school: school };
+        
+        try 
+        {
+            const response = await fetch(`${config.apiUrl}/teacher/get-students`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(schoolQueryData),
+            });
+
+            const data = await response.json();
+            return data;
+        }
+        catch (error) 
+        {
+            console.error('Fetch error: ', error);
+            throw error;
+        }
+    }
+
+    async function openStudentManager()
+    {
+        let isExpanded = false;
+
+        student_manager.style.display = 'block';
+        background.style.display = 'block';
+
+        // * Load students:
+
+        const school = store.get('school');
+        const studentsResult = await getStudents(school);
+
+        const students = studentsResult.students;
+
+        const gradeDivs = Array.from({ length: 10 }, (_, index) => document.getElementById(`grade_${index + 1}`));
+
+        for (const student of students)
+        {
+            const name = student;
+
+            const student_list_button = document.createElement('button');
+            student_list_button.classList.add('student-list-button');
+            student_list_button.classList.add('student-manager-student')
+            student_list_button.classList.add('draggable');
+
+            student_list_button.id = generateUniqueId();
+        
+            student_list_button.setAttribute('draggable', true);
+
+            student_list_button.textContent = name;
+
+            const studentData = await getStudentsData(name, school);
+
+            student_list_button.addEventListener('dragstart', (event) => {
+                drag(event);
+            });
+
+            student_list_button.addEventListener('click', async () => {
+                student_list_button.classList.remove('expanded');
+                try 
+                {
+                    const studentData = await getStudentsData(name, school);
+                    
+                    if (isExpanded)
+                    {
+                        student_list_button.classList.remove('expanded');
+                        isExpanded = false;
+    
+                        const p_elements = student_list_button.querySelectorAll('.student-info-p');
+                        const button = student_list_button.querySelectorAll('.button');
+
+                        p_elements.forEach(element => {
+                            element.remove();
+                        });
+
+                        button.forEach(element => {
+                            element.remove();
+                        });
+                    }
+                    else
+                    {
+                        student_list_button.classList.add('expanded');
+                        isExpanded = true;
+    
+                        const grade_p = document.createElement('p');
+                        const graduationYear_p = document.createElement('p');
+                        const btn_div = document.createElement('div');
+                        const edit_btn = document.createElement('button');
+                        const delete_btn = document.createElement('button');
+    
+                        grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                        graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                        edit_btn.textContent = 'Edit';
+                        delete_btn.textContent = 'Delete';
+    
+                        grade_p.classList.add('student-info-p');
+                        grade_p.classList.add('exclude');
+                        graduationYear_p.classList.add('student-info-p');
+                        graduationYear_p.classList.add('exclude');
+                        btn_div.classList.add('btn-div');
+                        edit_btn.classList.add('update-students');
+                        edit_btn.classList.add('button');
+                        edit_btn.classList.add('edit-student-manager');
+                        edit_btn.classList.add('exclude');
+                        delete_btn.classList.add('delete-student');
+                        delete_btn.classList.add('button');
+                        delete_btn.classList.add('exclude');
+
+                        edit_btn.addEventListener('click', () => {
+                            const student_name = getTextContentRecursive(student_list_button, 'exclude');
+                
+                            openStudentEditor(student_name);
+                        });
+
+                        delete_btn.addEventListener('click', () => {
+                            const student_name = getTextContentRecursive(student_list_button, 'exclude');
+    
+                            openDeleteWarning(student_name);
+                        });
+    
+    
+                        btn_div.appendChild(edit_btn);
+                        btn_div.appendChild(delete_btn);
+
+                        student_list_button.appendChild(grade_p);
+                        student_list_button.appendChild(graduationYear_p);
+                        student_list_button.appendChild(btn_div);
+                    }
+                } 
+                catch (error) 
+                {
+                    console.error('Error loading student data: ', error);
+                }
+            });
+        
+            const gradeDiv = gradeDivs[studentData.studentInfo.grade - 1];
+
+            if (gradeDiv) 
+            {
+                const existingButton = gradeDiv.querySelector('.add-student');
+
+                gradeDiv.insertBefore(student_list_button, existingButton);
+            } 
+            else 
+            {
+                console.error(`Invalid grade: ${studentData.studentInfo.grade}`);
+            }
+
+            // students_list.appendChild(student_list_button);
+        }
+    }
+
+    close_student_manager.addEventListener('click', () => {
+        student_manager.style.display = 'none';
+        background.style.display = 'none';
+
+        //* Unload students:
+        const students = document.querySelectorAll('.student-manager-student');
+
+        students.forEach(element => {
+            element.remove();
+        });
+    });
+
+    function allowDrop(event)
+    {
+        event.preventDefault();
+    }
+
+    function drag(event)
+    {
+        if (event.target.classList.contains('draggable'))
+        {
+            event.dataTransfer.setData('text', event.target.id)
+        }
+    }
+
+    const gradeDivs = document.querySelectorAll('.grade');
+
+    function drop(event) 
+    {
+        event.preventDefault();
+        var data = event.dataTransfer.getData('text');
+        var draggableElement = document.getElementById(data);
+        
+        if (draggableElement.classList.contains('draggable') && event.target.classList.contains('valid-drop-target')) 
+        {
+            const existingButton = event.target.querySelector('.add-student');
+            event.target.insertBefore(draggableElement, existingButton);
+
+            const school = store.get('school');
+            const student = draggableElement.textContent;
+            const gradeRaw = event.target.id;
+
+            const gradeNumber = parseInt(gradeRaw.replace(/^grade_/, ''), 10);
+
+            updateStudentData(student, school, gradeNumber);
+        }
+    }
+
+    gradeDivs.forEach(div => {
+        div.addEventListener('dragover', (event) => {
+            allowDrop(event);
+        });
+
+        div.addEventListener('drop', (event) => {
+            drop(event);
+        });
+    });
+
+    function updateStudentData(student, school, grade)
+    {
+        const updateData = ({ student: student, school: school, grade: grade });
+
+        fetch(`${config.apiUrl}/teacher/update-student-info`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updateData)
+        });
+    }
+
+    const open_add_school_btns = document.querySelectorAll('.add-student');
+    const add_student_win = document.getElementById('add_student_win');
+    const close_student_win = document.getElementById('close_add_student');
+    const add_student = document.getElementById('add-student-data');
+
+    open_add_school_btns.forEach(button => {
+        button.addEventListener('click', () => {
+            add_student_win.style.display = 'block';
+
+            const grade_input = document.getElementById('student_grade');
+            
+            const classList = button.classList;
+            
+            let gradeNumber = null;
+
+            for (const className of classList) 
+            {
+                if (className.startsWith('grade_')) 
+                {
+                    gradeNumber = parseInt(className.replace(/^grade_/, ''), 10);
+                    break;
+                }
+            }
+
+            grade_input.value = gradeNumber;
+        });
+    })
+
+    close_student_win.addEventListener('click', () => {
+        add_student_win.style.display = 'none';
+    });
+
+    add_student.addEventListener('click', async () => {
+        const name = document.getElementById('student_name').value;
+        const grade = document.getElementById('student_grade').value;
+        const school = store.get('school');
+
+        const studentData = ({ name: name, grade: grade, school: school });
+
+        fetch(`${config.apiUrl}/teacher/add-student`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(studentData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            addStudent(name, school, grade);
+        })
+        .catch(err => {
+            console.error('Fetch error: ', err);
+        });
+    });
+
+    async function addStudent(name, school, grade) 
+    {
+        const gradeDiv = document.getElementById(`grade_${grade}`);
+
+        const student_list_button = document.createElement('button');
+        student_list_button.classList.add('student-list-button');
+        student_list_button.classList.add('student-manager-student')
+        student_list_button.classList.add('draggable');
+
+        student_list_button.id = generateUniqueId();
+    
+        student_list_button.setAttribute('draggable', true);
+
+        student_list_button.textContent = name;
+
+        student_list_button.addEventListener('dragstart', (event) => {
+            drag(event);
+        });
+
+        student_list_button.addEventListener('click', async () => {
+            student_list_button.classList.remove('expanded');
+            try 
+            {
+                const studentData = await getStudentsData(name, school);
+
+                if (isExpanded)
+                {
+                    student_list_button.classList.remove('expanded');
+                    isExpanded = false;
+                
+                    const p_elements = student_list_button.querySelectorAll('.student-info-p');
+                    const button = student_list_button.querySelectorAll('.button');
+
+                    p_elements.forEach(element => {
+                        element.remove();
+                    });
+
+                    button.forEach(element => {
+                        element.remove();
+                    });
+                }
+                else
+                {
+                    student_list_button.classList.add('expanded');
+                    isExpanded = true;
+
+                    const grade_p = document.createElement('p');
+                    const graduationYear_p = document.createElement('p');
+                    const btn_div = document.createElement('div');
+                    const edit_btn = document.createElement('button');
+                    const delete_btn = document.createElement('button');
+
+                    grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                    graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                    edit_btn.textContent = 'Edit';
+                    delete_btn.textContent = 'Delete';
+
+                    grade_p.classList.add('student-info-p');
+                    grade_p.classList.add('exclude');
+                    graduationYear_p.classList.add('student-info-p');
+                    graduationYear_p.classList.add('exclude');
+                    btn_div.classList.add('btn-div');
+                    edit_btn.classList.add('update-students');
+                    edit_btn.classList.add('button');
+                    edit_btn.classList.add('edit-student-manager');
+                    edit_btn.classList.add('exclude');
+                    delete_btn.classList.add('delete-student');
+                    delete_btn.classList.add('button');
+                    delete_btn.classList.add('exclude');
+
+                    edit_btn.addEventListener('click', () => {
+                        const student_name = getTextContentRecursive(student_list_button, 'exclude');
+            
+                        openStudentEditor(student_name);
+                    });
+
+                    delete_btn.addEventListener('click', () => {
+                        const student_name = getTextContentRecursive(student_list_button, 'exclude');
+
+                        openDeleteWarning(student_name);
+                    });
+
+                    btn_div.appendChild(edit_btn);
+                    btn_div.appendChild(delete_btn);
+
+                    student_list_button.appendChild(grade_p);
+                    student_list_button.appendChild(graduationYear_p);
+                    student_list_button.appendChild(btn_div);
+                }
+            } 
+            catch (error) 
+            {
+                console.error('Error loading student data: ', error);
+            }
+        });
+    
+        const add_student = gradeDiv.querySelector('.add-student');
+
+        gradeDiv.insertBefore(student_list_button, add_student);
+    }
+
+    const edit_student_win = document.getElementById('edit_student_win');
+    const close_edit_win = document.getElementById('close_edit_student');
+    const update_student_data = document.getElementById('edit-student-data');
+
+    async function openStudentEditor(name)
+    {
+        edit_student_win.style.display = 'block';
+
+        // * Load student data
+        const school = store.get('school');
+
+        const studentData = await getStudentsData(name, school);
+        
+        const name_input = document.getElementById('student_name_edit');
+        const grade_input = document.getElementById('student_grade_edit');
+        const year_input = document.getElementById('student_grad_year_edit');
+
+        name_input.value = name;
+        grade_input.value = studentData.studentInfo.grade;
+        year_input.value = studentData.studentInfo.expectedGraduationYear;
+    }
+
+    close_edit_win.addEventListener('click', () => {
+        edit_student_win.style.display = 'none';
+
+        // * Unload data
+        const name_input = document.getElementById('student_name_edit');
+        const grade_input = document.getElementById('student_grade_edit');
+        const year_input = document.getElementById('student_grad_year_edit');
+        
+        name_input.value = '';
+        grade_input.value = '';
+        year_input.value = '';
+    });
+
+    update_student_data.addEventListener('click', () => {
+        const school = store.get('school');
+        const name = document.getElementById('student_name_edit').value;
+        const grade = document.getElementById('student_grade_edit').value;
+        const year = document.getElementById('student_grad_year_edit').value;
+
+        const updatedData = ({ school: school, name: name, grade: grade, year: year });
+
+        fetch(`${config.apiUrl}/teacher/update-student`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const updated = data.updated;
+            const grade_updated = data.grade; 
+
+            if (updated)
+            {
+                const buttons = student_manager.querySelectorAll('button');
+                
+                let student;
+                buttons.forEach(button => {
+                    if (button.textContent.trim() === name)
+                    {
+                      student = button;
+                    }
+                });
+
+                const gradeDiv = document.getElementById(`grade_${grade_updated}`);
+                const add_student = gradeDiv.querySelector('.add-student');
+
+                gradeDiv.insertBefore(student, add_student);
+
+                edit_student_win.style.display = 'none';
+
+                // * Unload data
+                const name_input = document.getElementById('student_name_edit');
+                const grade_input = document.getElementById('student_grade_edit');
+                const year_input = document.getElementById('student_grad_year_edit');
+                
+                name_input.value = '';
+                grade_input.value = '';
+                year_input.value = '';
+            }
+        })
+        .catch(err => {
+            console.error('Fetch error: ', err);
+        });
+    });
+
+    const delete_warning = document.getElementById('delete_warning');
+    const delete_warning_cancel = document.getElementById('delete_warning_cancel');
+    const delete_warning_delete = document.getElementById('delete_warning_delete');
+
+    function openDeleteWarning(name)
+    {
+        delete_warning.style.display = 'block';
+        store.set('delete-student', name);
+    }
+
+    delete_warning_cancel.addEventListener('click', () => {
+        delete_warning.style.display = 'none';
+    });
+
+    delete_warning_delete.addEventListener('click', () => {
+        const name = store.get('delete-student');
+        const school = store.get('school');
+
+        if (name.length != 0)
+        {
+            store.delete('delete-student');
+            
+            const studentRemoveData = ({ school: school, name: name });
+
+            fetch(`${config.apiUrl}/teacher/delete-student`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(studentRemoveData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const removed = data.removed;
+
+                if (removed)
+                {
+                    delete_warning.style.display = 'none';
+
+                    const buttons = student_manager.querySelectorAll('button');
+                
+                    let student;
+                    buttons.forEach(button => {
+                        if (button.textContent.trim() === name)
+                        {
+                          student = button;
+                        }
+                    });
+
+                    student.remove();
+                }
+            })
+            .catch(err => {
+                console.error('Fetch error: ', err);
+            });
+        }
+        else
+        {
+            delete_warning.style.display = 'none';
+        }
+    });
+        
+    // ! Developer:
+    // * Add School:
+    const open_add_school = document.getElementById('add-school');
+    const add_school_win = document.getElementById('add-school-win');
+    const load_school_data = document.getElementById('load_school_data');
+    const submit_data = document.getElementById('submit_data');
+    const cancel_adding_school = document.getElementById('cancel_adding_school');
+
+    let schoolDataFile = '';
+
+    open_add_school.addEventListener('click', () => {
+        background.style.display = 'block';
+        add_school_win.style.display = 'flex';
+    });
+
+    cancel_adding_school.addEventListener('click', () => {
+        background.style.display = 'none';
+        add_school_win.style.display = 'none';
+    });
+
+    load_school_data.addEventListener('click', () => {
+        ipcRenderer.send('open-file-dialog');
+                
+        ipcRenderer.on('selected-file', (event, filePath) => {
+            schoolDataFile = filePath;
+        });
+
+        ipcRenderer.on('file-dialog-canceled', (event) => {
+            schoolDataFile = '';
+            background.style.display = 'none';
+            add_school_win.style.display = 'none';
+        });
+    });
+
+    submit_data.addEventListener('click', () => {
+        if (schoolDataFile.length != 0) 
+        {
+            load_school_data.style.border = "none";
+    
+            fs.readFile(schoolDataFile, 'utf-8', (err, fileData) => {
+                if (err) 
+                {
+                    console.error('Error reading file: ', err);
+                } 
+                else 
+                {
+                    try 
+                    {
+                        const jsonData = JSON.parse(fileData);
+    
+                        fetch(`${config.apiUrl}/dev/add-school`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(jsonData)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            const schoolAdded = data != null ? data.schoolAdded : null;
+
+                            if (schoolAdded)
+                            {
+                                const schoolListItem = document.createElement('p');
+                                schoolListItem.classList.add('school-list-item');
+                                
+                                schoolListItem.textContent = jsonData.schoolName;
+
+                                schools_list.appendChild(schoolListItem);
+
+                                background.style.display = 'none';
+                                add_school_win.style.display = 'none';
+                            }
+                            else
+                            {
+                                console.error('Error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch error: ', error);
+                        });
+                    } 
+                    catch (parseError) 
+                    {
+                        console.error('Error parsing JSON: ', parseError);
+                    }
+                }
+            });
+        } 
+        else 
+        {
+            load_school_data.style.border = "2px solid #ab0000";
+        }
+    });
+
+    function generateUniqueId() 
+    {
+        return 'btn_' + Math.floor(Math.random() * 1000);
+    }
+
+    function getTextContentRecursive(element, excludeClassName) 
+    {
+        let textContent = '';
+    
+        for (const node of element.childNodes) 
+        {
+          if (node.nodeType === 3) 
+          {
+            textContent += node.textContent.trim();
+          } 
+          else if (node.nodeType === 1 && !node.classList.contains(excludeClassName)) 
+          {
+            textContent += getTextContentRecursive(node, excludeClassName);
+          }
+        }
+    
+        return textContent;
+    }
+});
+
+/*
+    * Video feed Functionality
+
+    const rootPathIndex = require('electron-root-path').rootPath;
+    const pathIndex = require('path');
+    const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 
     async function getVideos() 
     {
@@ -430,4 +1023,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     navigatorRight.addEventListener('click', () => {
         scrollVideos('right');
     });    
-});
+*/

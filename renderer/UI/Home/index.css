@@ -1,4 +1,684 @@
+.role-div {
+    height: 100vh;
+    width: 95vw;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+}
 
+.section {
+    height: 33vh;
+}
+
+.section-title {
+    font-size: 1.7vw;
+    margin-left: 2vw;
+    margin-top: 3vh;
+}
+
+.close {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    background: transparent;
+    position: absolute;
+    right: 1%;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.close span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
+}
+
+.close:hover {
+    color: var(--warning);
+    background-color: var(--alt-primary);
+    transition: .5s;
+}
+
+/** Teacher features styling */
+
+.manage-students-container {
+    background-color: var(--primary);
+    width: 30%;
+    height: 35%;
+    border-radius: 6px;
+    margin-top: 2%;
+    margin-left: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.manage-students-title {
+    font-size: 1.7vw;
+    margin-top: 2%;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.manage-students-list {
+    margin-top: 2%;
+    width: 90%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-students {
+    font-size: 1.4vw;
+    width: 100%;
+    border: none;
+    height: max-content;
+}
+
+.students-list {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.students-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.students-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.students-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.students-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.student-list-button {
+    margin-top: 2%;
+    width: 90%;
+    text-align: start;
+    padding: 10px;
+    font-size: 1.2vw;
+    background: transparent;
+    border-radius: 6px;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+}
+
+.student-list-button:hover {
+    background-color: var(--disabled);
+}
+
+.expanded {
+    min-height: 13vh;
+    background: var(--disabled);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.expanded::-webkit-scrollbar {
+    width: 5px;
+}
+
+.expanded::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.expanded::-webkit-scrollbar-thumb {
+    background: #5c5c5c;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.expanded::-webkit-scrollbar-thumb:hover {
+    background: #6d6d6d;
+}
+
+.update-students {
+    font-size: 1.2vw;
+    margin-top: 2.5%;
+}
+
+.student-manager-div {
+    width: 90vw;
+    height: 80vh;
+    background-color: var(--alt-primary);
+    border-radius: 10px;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    margin-left: 2.5vw;
+    margin-top: 10vh;
+    display: none;
+}
+
+.student-manager-header {
+    background-color: var(--secondary);
+    width: 100%;
+    height: 12%;
+    border-radius: 10px 10px 0px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.student-manager-title
+{
+    text-align: center;
+    font-size: 2vw;
+}
+
+.student-manager-student {
+    margin-left: 5%
+}
+
+.main-body {
+    white-space: nowrap;
+    width: 100%;
+    height: 88%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.grade {
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    height: 100%;
+    width: 24.7%;
+    border-left: 2px solid var(--disabled);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.grade > * {
+    display: block;
+}
+
+.grade::-webkit-scrollbar {
+    width: 0;
+}
+
+.grade::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.end-grade {
+    border-right: 2px solid var(--disabled);
+}
+
+.main-body::-webkit-scrollbar {
+    height: 8px;
+}
+
+.main-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.main-body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    height: 8px;
+}
+
+.main-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.grade-title {
+    font-size: 1.5vw;
+    margin-top: 2%;
+    text-align: center;
+}
+
+.add-student {
+    margin-top: 2%;
+    margin-left: 5%;
+    width: 90%;
+    text-align: start;
+    padding: 10px;
+    font-size: 1.2vw;
+    background: transparent;
+    border-radius: 6px;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.add-student p {
+    margin-left: 2%;
+}
+
+.add-student:hover {
+    background-color: var(--disabled);
+}
+
+.add-student-win {
+    background-color: var(--primary);
+    width: 30%;
+    height: 20%;
+    border-radius: 5px;
+    z-index: 4;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.add-student-win-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.add-student-win-header h3 {
+    font-size: 1.7vw;
+    text-align: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 2%;
+}
+
+.close-add-student {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    background: transparent;
+    position: absolute;
+    right: 1%;
+    top: 3%;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.close-add-student span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
+}
+
+.close-add-student:hover {
+    color: var(--warning);
+    background-color: var(--alt-primary);
+    transition: .5s;
+}
+
+.student-info {
+    margin-top: 2%;
+}
+
+.student-name {
+    width: 15vw;
+    margin-left: 12%;
+}
+
+.student-grade {
+    width: 5vw;
+    margin-left: .5%;
+}
+
+.submit {
+    font-size: 1.5vw;
+    margin-left: 50%;
+    margin-top: 2%;
+    transform: translateX(-50%);
+}
+
+.edit-student-win {
+    width: 30%;
+    height: 34%;
+    background-color: var(--primary);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    z-index: 4;
+    display: none;
+}
+
+.edit-student-win-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.edit-student-win-header h3 {
+    font-size: 1.7vw;
+    text-align: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 2%;
+}
+
+.close-edit-student {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    background: transparent;
+    position: absolute;
+    right: 1%;
+    top: 3%;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.close-edit-student span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
+}
+
+.close-edit-student:hover {
+    color: var(--warning);
+    background-color: var(--alt-primary);
+    transition: .5s;
+}
+
+.label {
+    font-size: 1.5vw;
+}
+
+.row_1 {
+    display: flex;
+    width: 100%;
+    height: max-content;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 1%;
+}
+
+.row_2 {
+    display: flex;
+    width: 100%;
+    height: max-content;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 1%;
+}
+
+.name-edit {
+    margin-left: 11.5%;
+}
+
+.student-name-edit {
+    width: 15vw;
+    margin-left: 11%;
+}
+
+.grade-edit {
+    margin-left: 39%;
+}
+
+.student-grade-edit {
+    width: 4.9vw;
+    margin-left: 1%;
+}
+
+.year {
+    margin-left: 11.5%;
+    margin-top: 1%;
+}
+
+.student-grad-year-edit {
+    width: 10vw;
+    margin-left: 11%;
+    margin-top: 1%;
+}
+
+.edit {
+    font-size: 1.5vw;
+    margin-left: 50%;
+    margin-top: 2%;
+    transform: translateX(-50%);
+}
+
+.delete-student {
+    font-size: 1.3vw;
+    padding: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: transparent;
+    border: 2px solid var(--warning);
+    margin-left: 5%;
+    transition: color .5s linear;
+    position: relative;
+    z-index: 1;
+}
+
+.delete-student::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--warning);
+    z-index: -1;
+    transition: transform 1s;
+    transform-origin: 0 0;
+    transform: scaleX(0);
+}
+
+.delete-student:hover::before {
+    transform: scaleX(1);
+    transition: transform 1s;
+}
+
+.delete-student-warning {
+    background-color: var(--primary);
+    width: 20%;
+    height: 15%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    display: none;
+    z-index: 4;
+}
+
+.delete-student-warning h3 {
+    font-size: 1.7vw;
+    text-align: center;
+    margin-top: 2%;
+}
+
+.warning-cancel {
+    font-size: 1.4vw;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 7%;
+    margin-left: 10%;
+}
+
+.warning-delete {
+    background-color: var(--secondary);
+    font-size: 1.4vw;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 7%;
+    margin-left: 23%;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .5s;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+}
+
+.warning-delete:hover {
+    background-color: var(--warning);
+}
+
+/** Developer features styling */
+
+.schools-container {
+    background-color: var(--primary);
+    width: 30%;
+    height: 30%;
+    border-radius: 6px;
+    margin-top: 2%;
+    margin-left: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.schools-title {
+    font-size: 1.7vw;
+    margin-top: 2%;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.schools-list {
+    height: 50%;
+    width: 90%;
+    margin-top: 2%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.schools-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.schools-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.schools-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.schools-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.options-div {
+    width: 50%;
+    height: 30%;
+    margin-top: 1%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.add {
+    background-color: transparent;
+    width: 3vw;
+    height: 3vw;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.add span {
+    transform: translateY(10%);
+    font-size: 1.5vw;
+}
+
+.add:hover {
+    background-color: var(--alt-primary);
+    color: var(--secondary);
+    transition: .2s;
+}
+
+.delete {
+    background-color: transparent;
+    width: 3vw;
+    height: 3vw;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.delete span {
+    transform: translateY(10%);
+    font-size: 1.5vw;
+}
+
+.delete:hover {
+    background-color: var(--alt-primary);
+    color: var(--warning);
+    transition: .2s;
+}
+
+.add-school-container {
+    background-color: var(--primary);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+    border-radius: 6px;
+    z-index: 2;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.add-school-title {
+    font-size: 1.7vw;
+    text-align: center;
+}
+
+.get-school-data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.get-school-data span {
+    font-size: 1.5vw;
+}
+
+.school-list-item {
+    font-size: 1.5vw;
+    margin: 2%;
+    cursor: default;
+}
 
 /** Other options styling */
 
