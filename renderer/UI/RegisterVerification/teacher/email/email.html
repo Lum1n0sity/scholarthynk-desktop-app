@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="email.css">
+        <link rel="stylesheet" href="../../../style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+        
+        <script src="email.js"></script>
+        <script src="../../../renderer.js"></script>
+    </head>
+    <body>  
+        <div id="school-select" class="school-select">
+            <div id="input-school" class="input-school">
+                <input type="text" class="input-verify school-input" id="school" data-i18n="app.verification.teacher.placeholder_school" data-i18n-attr="placeholder">
+                <div id="search-output" class="search-output">
+                    <!-- Search output goes here -->
+                </div>
+            </div>
+            <div class="selected-school" id="selected-school">
+                <!-- Selected school goes here -->
+            </div>
+            <button id="next-select" class="next"><span class="material-symbols-rounded">arrow_forward</span></button>
+        </div>
+        <div id="send-email-div" class="send-email-div">
+            <div class="email-container">
+                <input type="text" id="part1-email" class="half-input">
+                <p id="part2-email" class="half-email">@N/A.de</p>
+            </div>
+            <button id="back" class="back"><span class="material-symbols-rounded">arrow_back</span></button>
+            <button id="next-email" class="next"><span class="material-symbols-rounded">arrow_forward</span></button>
+        </div>
+    </body>
+</html>

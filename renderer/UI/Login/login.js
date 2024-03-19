@@ -2,11 +2,18 @@ const { ipcRenderer } = require('electron');
 const Store = require('electron-store');
 
 document.addEventListener('DOMContentLoaded', () => {
-    const api_addr = "http://192.168.5.21:3000";
+    const api_addr = "http://192.168.5.196:3000";
     const store = new Store();
-    const authTokenINIT = store.get('authToken');
+    let authToken = store.get('authToken');
     const loggedOut = store.get('loggedOut');
-    
+        
+    if (authToken != null)
+    {
+        authToken = JSON.parse(authToken);
+
+        authToken = authToken.value;
+    }
+
     const root = document.documentElement;
     
     function switchAppearance()
@@ -49,12 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const login_container = document.getElementById('login_container');
 
-    if (authTokenINIT != null && loggedOut == false)
+    if (authToken != null && loggedOut == false)
     {
-        const storedTokenObject = JSON.parse(authTokenINIT);
-        const token = storedTokenObject.value;
-
-        const dataToSendAutoLogin = { token };
+        const dataToSendAutoLogin = ({ token: authToken });
         connection_error.style.display = 'none';
 
         fetch(`${api_addr}/user/auth`, {
@@ -68,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             console.log(data);
             const allowLogin = data.allowLogin;
-            const username_storage = document.getElementById('username_view');
             const username = data.username;
 
             if (allowLogin == true) 
@@ -153,12 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const allowLogin = data != null ? data.allowLogin : null;
             const userToken = data != null ? data.token : null;
+            const role = data != null ? data.role : null;
+            const school = data != null ? data.school : null;
 
             if (allowLogin != null && userToken != null)
             {
                 if (allowLogin == true)
                 {
                     store.set('username', username);                                                                          
+                    store.set('role', role);
+                    store.set('school', school);
 
                     if (remember_checkbox.checked)
                     {                    

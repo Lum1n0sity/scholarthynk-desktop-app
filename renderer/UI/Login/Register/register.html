@@ -4,34 +4,64 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sign Up - ScholarThynk</title>
-        <link rel="stylesheet" href="register.css">
         <link rel="stylesheet" href="../../style.css">
+        <link rel="stylesheet" href="register.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
         
         <script src="register.js"></script>
+        <script src="../../renderer.js"></script>
     </head>
     <body>
+        <div class="loader-container" id="loader">
+            <span class="loader"></span>
+        </div>
+        <div id="tos_pop_up" class="popup">
+            <div class="tab-bar">
+                <button class="tab selected" id="tos">Terms of Service</button>
+                <button class="tab" id="privacy_policy">Privacy Policy</button>
+            </div>
+            <div class="view" id="view">
+                <textarea id="document-view" class="document-view" cols="30" rows="10" readonly></textarea>
+                <div class="footer">
+                    <button id="decline" class="button">Decline</button>
+                    <button id="accept" class="button">Accept</button>
+                </div>
+            </div>
+        </div>
+        <div class="background" id="background"></div>
         <div id="register_container">
-            <h3>Sign Up</h3>
+            <h3 data-i18n="app.register.title"></h3>
             <img src="../Images/Logo.png" id="logo">
-            <input type="email" placeholder="E-Mail" id="email_input">
-            <input type="text" placeholder="Username" id="username_input">
+            <input type="email" data-i18n="app.register.placeholder_email" data-i18n-attr="placeholder" id="email_input">
+            <input type="text" data-i18n="app.register.placeholder_username" data-i18n-attr="placeholder" id="username_input">
             <div id="pw">
-                <input type="password" placeholder="Password" id="password_input">
+                <input type="password" data-i18n="app.register.placeholder_password" data-i18n-attr="placeholder" id="password_input">
                 <button id="show_pw"><span class="material-symbols-rounded">visibility</span></button>
                 <button id="hide_pw"><span class="material-symbols-rounded">visibility_off</span></button>
             </div>
+            <select id="role_select" class="select">
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="developer">Developer</option>
+            </select>
+            <div id="input-school" class="input-school">
+                <input type="text" class="input school-search-input" id="school" data-i18n="app.verification.teacher.placeholder_school" data-i18n-attr="placeholder">
+                <div id="search-output" class="search-output">
+                    <!-- Search output goes here -->
+                </div>
+            </div>
             <div id="remember_div">
                 <input type="checkbox" id="remember_checkbox">
-                <p>Remember?</p>
+                <p data-i18n="app.register.remember"></p>
             </div>
-            <button id="register">Sign Up <span class="material-symbols-rounded">login</span></button>
+            <button id="register"><p data-i18n="app.register.sign_up"></p> <span class="material-symbols-rounded">login</span></button>
         </div>
         <div id="sign_in">
-            <h3>Welcome Back!</h3>
-            <button id="register_switch">Sign In</button>
+            <h3 data-i18n="app.register.switch_text"></h3>
+            <button id="register_switch" data-i18n="app.register.switch_btn"></button>
         </div>
-        <p id="error_msg">Username already exists!</p>
+        <p id="error_msg" data-i18n="app.register.error_username"></p>
+        <p id="error_msg_undefined" data-i18n="app.register.error_undefined"></p>
         <p id="connection_error">Unable to connect to the server! <br> Try again later</p>
     </body>
 </html>

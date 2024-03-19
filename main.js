@@ -4,6 +4,8 @@ const store = new Store();
 
 let mainWindow;
 let pwResetWin;
+let teacherVerificationWin;
+let devVerificationWin;
 
 async function createMainWindow() 
 {
@@ -44,7 +46,49 @@ function createPWResetWin()
   pwResetWin.show();
   pwResetWin.setMinimumSize(500, 600);
   pwResetWin.setMinimizable = false;
-  pwResetWin.menuBarVisible = true;
+  pwResetWin.menuBarVisible = false;
+}
+  
+function teacherVerification()
+{
+  teacherVerificationWin = new BrowserWindow({
+    title: 'ScholarThynk - Verification',
+    width: 500,
+    height: 550,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true
+    },
+  });
+
+  teacherVerificationWin.loadFile('renderer/UI/RegisterVerification/teacher/email/email.html');
+
+  teacherVerificationWin.show();
+  teacherVerificationWin.setMinimumSize(500, 500);
+  teacherVerificationWin.setMinimizable = false;
+  teacherVerificationWin.menuBarVisible = true;
+}
+
+function devVerification()
+{
+  devVerificationWin = new BrowserWindow({
+    title: 'ScholarThynk - Verification',
+    width: 500,
+    height: 550,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true
+    },
+  });
+
+  devVerificationWin.loadFile('renderer/UI/RegisterVerification/dev/code.html');
+
+  devVerificationWin.show();
+  devVerificationWin.setMinimumSize(500, 600);
+  devVerificationWin.setMinimizable = false;
+  devVerificationWin.menuBarVisible = true;
 }
 
 function openFileDialog() 
@@ -95,6 +139,13 @@ app.whenReady().then(() => {
     pwResetWin = null;
     mainWindow.webContents.send('update-dummy');
   })
+
+  ipcMain.on('teacher-verified', () => {
+    console.log('debug');
+    teacherVerificationWin.close();
+    teacherVerificationWin = null;
+    mainWindow.webContents.send('registration-successfull');
+  });
 });
 
 ipcMain.on('open-file-dialog', () => {
@@ -110,4 +161,12 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('email-received', () => {
   createPWResetWin();
+});
+
+ipcMain.on('verify-teacher', () => {
+  teacherVerification();
+});
+
+ipcMain.on('verify-dev', () => {
+  devVerification();
 });

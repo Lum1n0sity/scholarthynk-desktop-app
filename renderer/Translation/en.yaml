@@ -1,16 +1,21 @@
 app:
   register: 
     title: Sign Up
-    placeholder_email: E-Mail
-    placeholder_username: Username
-    placeholder_password: Password
+    placeholder_email: Enter your school E-Mail
+    placeholder_username: Enter your full name
+    placeholder_password: Enter your Password
     remember: Remember?
     sign_up: Sign Up
     switch_text: Welcome Back!
     switch_btn: Sign In
     error_username: Username already exists!
-    error_server: Unable to connect to server!
-    error_server_try_again: Try again later
+    error_undefined: Unable to create account!
+  verification:
+    teacher:
+      placeholder_school: Enter your school
+      title_code: Enter the verification code
+      code_tries_display: Tries left
+      code_return_start: Back to Login
   login:
     title: Sign In
     placeholder_username: Username
@@ -32,24 +37,60 @@ app:
     logout: Log out
   home:
     title: "ScholarThynk - Home"
-    subject_select:
-      english: English
-      german: German
-      math: Math
-    search_section:
-      search_title: Search words
-      search_placeholder: Search
-    add_section:
-      add_title: Add new words
-      add_german_placeholder: German
-      add_english_placeholder: English
-      add_button: Add
-    delete_section:
-      delete_title: Delete words
-      delete_select_default: Select words to delete
-      delete_button: Delete
-    your_words_section:
-      your_words_title: Your words
+    student:
+      announcements:
+        announcements_title: Announcements
+      assignments:
+        assignments_title: Assignments
+      grades:
+        grades_title: Grades
+    teacher:
+      manage_students:
+        manage_students_title: Manage students
+        search_student_placeholder: Search student
+        update_students: Update students
+      student_manager:
+        student_manager_title: Student Manager
+        grade_1: 1. Grade
+        grade_2: 2. Grade
+        grade_3: 3. Grade
+        grade_4: 4. Grade
+        grade_5: 5. Grade
+        grade_6: 6. Grade
+        grade_7: 7. Grade
+        grade_8: 8. Grade
+        grade_9: 9. Grade
+        grade_10: 10. Grade
+        grade: Grade
+        year: Expected Graduation year
+        delete: Delete
+        edit: Edit
+        add_student: Add student
+      add_student:
+        title: Add new student
+        placeholder_name: Name
+        placeholder_grade: Grade
+        add: Add
+      edit_student:
+        title: Edit student
+        label_name: Name
+        label_grade: Grade
+        label_year: Graduation year
+        update: Update
+      delete_warning:
+        title: Are you sure?
+        cancel: Cancel
+        delete: Delete
+    dev:
+      schools:
+        schools_title: Schools
+        add_school:
+          add_school_title: Add new school
+          load_school_data: Load school data
+          submit_data: Add
+          add_school_cancel: Cancel
+      console:
+        input_placeholder: Enter a command
   discover:
     title: ScholarThynk - Discover
     tab_en: English

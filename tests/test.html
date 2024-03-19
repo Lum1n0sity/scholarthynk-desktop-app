@@ -1,0 +1,501 @@
+<html
+  lang="en"
+  style="
+    --background: #161616;
+    --primary: #2f2f2f;
+    --selected-primary: #454545c7;
+    --text-color: #ffffff;
+    --alt-primary: #1c1c1c;
+  "
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="app.home.title">ScholarThynk - Home</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
+    <div id="main_grid">
+      <nav id="nav_bar">
+        <img src="Images/Logo.png" id="nav_logo" />
+        <button id="nav_home">
+          <span class="material-symbols-rounded">home</span><br />
+          <p data-i18n="app.nav_bar.home">Home</p>
+        </button>
+        <button id="nav_discover">
+          <span class="material-symbols-rounded">search</span><br />
+          <p data-i18n="app.nav_bar.discover">Discover</p>
+        </button>
+        <button id="nav_courses">
+          <span class="material-symbols-rounded">play_circle</span><br />
+          <p data-i18n="app.nav_bar.courses">Courses</p>
+        </button>
+        <button id="nav_plan">
+          <span class="material-symbols-rounded">menu_book</span><br />
+          <p data-i18n="app.nav_bar.study_plan">Study-plan</p>
+        </button>
+        <button id="nav_dates">
+          <span class="material-symbols-rounded">calendar_month</span><br />
+          <p data-i18n="app.nav_bar.dates">Dates</p>
+        </button>
+        <button id="nav_learn">
+          <span class="material-symbols-rounded">neurology</span><br />
+          <p data-i18n="app.nav_bar.learn">Learn</p>
+        </button>
+        <div id="nav_lower">
+          <button id="nav_notification">
+            <span class="material-symbols-rounded">notifications</span>
+          </button>
+          <button id="nav_logout">
+            <span class="material-symbols-rounded">logout</span><br />
+            <p data-i18n="app.nav_bar.logout">Log out</p>
+          </button>
+        </div>
+      </nav>
+      <div id="page_content">
+        <div id="student" class="role-div">
+          <div class="announcements-school section">
+            <h3
+              class="section-title"
+              data-i18n="app.home.student.announcements.announcements_title"
+            >
+              Announcements
+            </h3>
+          </div>
+          <div class="assignments section">
+            <h3
+              class="section-title"
+              data-i18n="app.home.student.assignments.assignments_title"
+            >
+              Assignments
+            </h3>
+          </div>
+          <div class="grades section">
+            <h3
+              class="section-title"
+              data-i1j8n="app.home.student.grades.grades_title"
+            ></h3>
+          </div>
+        </div>
+        <div id="teacher" class="role-div">
+          <div class="manage-students-container">
+            <h3
+              class="manage-students-title"
+              data-i18n="app.home.teacher.manage_students.manage_students_title"
+            >
+              Manage students
+            </h3>
+            <div class="manage-students-list">
+              <input
+                type="text"
+                id="search_student_input"
+                class="input search-students"
+                data-i18n="app.home.teacher.manage_students.search_student_placeholder"
+                data-i18n-attr="placeholder"
+                placeholder="Search student"
+              />
+              <div class="students-list" id="students-list">
+                <!-- Here are the students going -->
+              </div>
+            </div>
+            <button
+              id="update_students"
+              class="update-students button"
+              data-i18n="app.home.teacher.manage_students.update_students"
+            >
+              Update students
+            </button>
+          </div>
+          <div class="student-progress-container">
+            <h3>View student progress</h3>
+            <input
+              type="text"
+              placeholder="Search student"
+              class="input search-students progress-search"
+            />
+            <div class="students" id="student_search_output">
+              <!-- Here are the students going -->
+            </div>
+          </div>
+          <div class="student-manager-div" id="student_manager">
+            <div class="student-manager-header">
+              <h3
+                class="student-manager-title"
+                data-i18n="app.home.teacher.student_manager.student_manager_title"
+              >
+                Student Manager
+              </h3>
+              <button class="close" id="close_student_manager">
+                <span class="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <div class="main-body valid-drop-target">
+              <div class="grade" id="grade_1">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_1"
+                >
+                  1. Grade
+                </p>
+                <button class="add-student grade_1">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_2">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_2"
+                >
+                  2. Grade
+                </p>
+                <button class="add-student grade_2">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_3">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_3"
+                >
+                  3. Grade
+                </p>
+                <button class="add-student grade_3">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_4">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_4"
+                >
+                  4. Grade
+                </p>
+                <button class="add-student grade_4">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_5">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_5"
+                >
+                  5. Grade
+                </p>
+                <button class="add-student grade_5">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_6">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_6"
+                >
+                  6. Grade
+                </p>
+                <button class="add-student grade_6">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_7">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_7"
+                >
+                  7. Grade
+                </p>
+                <button class="add-student grade_7">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_8">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_8"
+                >
+                  8. Grade
+                </p>
+                <button class="add-student grade_8">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade valid-drop-target" id="grade_9">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_9"
+                >
+                  9. Grade
+                </p>
+                <button class="add-student grade_9">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+              <div class="grade end-grade valid-drop-target" id="grade_10">
+                <p
+                  id="grade_title"
+                  class="grade-title"
+                  data-i18n="app.home.teacher.student_manager.grade_10"
+                >
+                  10. Grade
+                </p>
+                <button class="add-student grade_10">
+                  <span class="material-symbols-rounded">add</span>
+                  <p data-i18n="app.home.teacher.student_manager.add_student">
+                    Add student
+                  </p>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="add-student-win" id="add_student_win">
+            <div class="add-student-win-header">
+              <h3 data-i18n="app.home.teacher.add_student.title">
+                Add new student
+              </h3>
+              <button class="close-add-student" id="close_add_student">
+                <span class="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <div class="student-info">
+              <input
+                type="text"
+                data-i18n="app.home.teacher.add_student.placeholder_name"
+                data-i18n-attr="placeholder"
+                id="student_name"
+                class="input student-name"
+                placeholder="Name"
+              />
+              <input
+                type="text"
+                data-i18n="app.home.teacher.add_student.placeholder_grade"
+                data-i18n-attr="placeholder"
+                id="student_grade"
+                class="input student-grade"
+                placeholder="Grade"
+              />
+            </div>
+            <button
+              class="submit button"
+              id="add-student-data"
+              data-i18n="app.home.teacher.add_student.add"
+            >
+              Add
+            </button>
+          </div>
+          <div class="edit-student-win" id="edit_student_win">
+            <div class="edit-student-win-header">
+              <h3 data-i18n="app.home.teacher.edit_student.title">
+                Edit student
+              </h3>
+              <button class="close-edit-student" id="close_edit_student">
+                <span class="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <div class="student-info">
+              <div class="row_1">
+                <p
+                  class="label name-edit"
+                  data-i18n="app.home.teacher.edit_student.label_name"
+                >
+                  Name
+                </p>
+                <p
+                  class="label grade-edit"
+                  data-i18n="app.home.teacher.edit_student.label_grade"
+                >
+                  Grade
+                </p>
+              </div>
+              <div class="row_2">
+                <input
+                  type="text"
+                  id="student_name_edit"
+                  class="input student-name-edit"
+                  readonly=""
+                />
+                <input
+                  type="text"
+                  id="student_grade_edit"
+                  class="input student-grade-edit"
+                />
+              </div>
+              <p
+                class="label year"
+                data-i18n="app.home.teacher.edit_student.label_year"
+              >
+                Graduation year
+              </p>
+              <input
+                type="text"
+                id="student_grad_year_edit"
+                class="input student-grad-year-edit"
+              />
+            </div>
+            <button
+              class="edit button"
+              id="edit-student-data"
+              data-i18n="app.home.teacher.edit_student.update"
+            >
+              Update
+            </button>
+          </div>
+          <div class="delete-student-warning" id="delete_warning">
+            <h3 data-i18n="app.home.teacher.delete_warning.title">
+              Are you sure?
+            </h3>
+            <div>
+              <button
+                data-i18n="app.home.teacher.delete_warning.cancel"
+                class="warning-cancel button"
+                id="delete_warning_cancel"
+              >
+                Cancel
+              </button>
+              <button
+                data-i18n="app.home.teacher.delete_warning.delete"
+                class="warning-delete"
+                id="delete_warning_delete"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="dev" class="role-div" style="display: block">
+          <div class="schools-container">
+            <h3
+              class="schools-title"
+              data-i18n="app.home.dev.schools.schools_title"
+            >
+              Schools
+            </h3>
+            <div id="schools_list" class="schools-list">
+              <!-- Here are the schools going -->
+              <p class="school-list-item">Example School</p>
+              <p class="school-list-item">Montessori Forchheim</p>
+            </div>
+            <div class="options-div">
+              <button class="add" id="add-school">
+                <span class="material-symbols-rounded">add</span>
+              </button>
+              <button class="delete" id="delete-school">
+                <span class="material-symbols-rounded">delete</span>
+              </button>
+            </div>
+          </div>
+          <div class="add-school-container" id="add-school-win">
+            <h3
+              class="add-school-title"
+              data-i18n="app.home.dev.schools.add_school.add_school_title"
+            >
+              Add new school
+            </h3>
+            <button id="load_school_data" class="get-school-data button">
+              <span class="material-symbols-rounded">description</span>
+              <p data-i18n="app.home.dev.schools.add_school.load_school_data">
+                Load school data
+              </p>
+            </button>
+            <div class="options-div">
+              <button
+                id="submit_data"
+                class="submit button"
+                data-i18n="app.home.dev.schools.add_school.submit_data"
+              >
+                Add
+              </button>
+              <button
+                id="cancel_adding_school"
+                class="cancel button"
+                data-i18n="app.home.dev.schools.add_school.add_school_cancel"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+          <button class="toggle-console" id="toggle_console">
+            <span class="material-symbols-rounded">terminal</span>
+          </button>
+          <div class="dev-console" id="dev-console" style="display: flex">
+            <div class="console-output" id="console_output">
+              <p class="console_element log">No Logs</p>
+            </div>
+            <input
+              type="text"
+              class="command-input"
+              id="command_input"
+              data-i18n="app.home.dev.console.input_placeholder"
+              data-i18n-attr="placeholder"
+              placeholder="Enter a command"
+            />
+          </div>
+        </div>
+        <div class="user-prev" id="user" style="margin-right: 31%">
+          <img src="Images/testuserimg.png" class="profile-pic" />
+          <div class="user-info">
+            <h3 id="username">Lum1n0sity</h3>
+            <p id="school_role">SynTech - Developer</p>
+          </div>
+        </div>
+        <div id="user_options" class="user-options" style="margin-right: 31%">
+          <button
+            id="feedback_user_options"
+            class="feedback user-options-buttons button"
+          >
+            <span class="material-symbols-rounded">feedback</span>
+            <p>Feedback</p>
+          </button>
+          <button
+            id="settings_user_options"
+            class="settings user-options-buttons button"
+          >
+            <span class="material-symbols-rounded">settings</span>
+            <p>Settings</p>
+          </button>
+        </div>
+        <div class="background" id="background"></div>
+        <!-- <button id="share"><span class="material-symbols-rounded">ios_share</span></button> -->
+      </div>
+    </div>
+  </body>
+</html>

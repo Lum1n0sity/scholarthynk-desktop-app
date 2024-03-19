@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../../../style.css">
+        <link rel="stylesheet" href="code.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+        
+        <script src="code.js"></script>
+        <script src="../../../renderer.js"></script>
+    </head>
+    <body>
+        <h1 class="page-title" data-i18n="app.verification.teacher.title_code"></h1>
+        <div>
+            <input type="text" class="code-input input-verify" id="code1" maxlength="1" pattern="[0-9]" required>
+            <input type="text" class="code-input input-verify" id="code2" maxlength="1" pattern="[0-9]" required>
+            <input type="text" class="code-input input-verify" id="code3" maxlength="1" pattern="[0-9]" required>
+            <input type="text" class="code-input input-verify" id="code4" maxlength="1" pattern="[0-9]" required>
+            <input type="text" class="code-input input-verify" id="code5" maxlength="1" pattern="[0-9]" required>
+            <input type="text" class="code-input input-verify" id="code6" maxlength="1" pattern="[0-9]" required>
+        </div>
+        <div class="tries_display_div">
+            <p id="tries-display-text" data-i18n="app.verification.teacher.code_tries_display"></p>
+            <p id="tries-display"></p>
+        </div>
+        <button id="return-register-page" class="back_start" data-i18n="app.verification.teacher.code_return_start"></button>
+        <button id="back" class="back"><span class="material-symbols-rounded">arrow_back</span></button>
+    </body>
+</html>

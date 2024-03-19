@@ -9,9 +9,16 @@ app:
     switch_text: Wilkommen zurück!
     switch_btn: Erstellen
     error_username: Benutzername exestiert schon!
+    error_undefined: Konto konnte nicht erstellt werden!
     error_server: Keine Verbindung zum Server!
     error_server_try_again: Versuche es später erneut
-  login:
+  verification:
+    teacher:
+      placeholder_school: Tragen Sie Ihre Schule ein.
+      title_code: Geben Sie den Bestätigungscode ein
+      code_tries_display: Versuche übrich
+      code_return_start: Zurück zum Login
+  login: 
     title: Login
     placeholder_username: Benutzername
     placeholder_password: Passwort
@@ -32,24 +39,56 @@ app:
     logout: Abmelden
   home:
     title: "ScholarThynk - Home"
-    subject_select:
-      english: Englisch
-      german: Deutsch
-      math: Mathe
-    search_section:
-      search_title: Suche nach Wörtern
-      search_placeholder: Suche
-    add_section:
-      add_title: Füge neue Wörter hinzu
-      add_german_placeholder: Deutsch
-      add_english_placeholder: Englisch
-      add_button: Hinzufügen
-    delete_section:
-      delete_title: Wörter löschen
-      delete_select_default: Wähle Wörter zum löschen
-      delete_button: Löschen
-    your_words_section:
-      your_words_title: Deine Wörter
+    student:
+      announcements:
+        announcements_title: Neuigkeiten
+      assignments:
+        assignments_title: Hausaufgaben
+      grades:
+        grades_title: Noten
+    teacher:
+      manage_students:
+        manage_students_title: Manage Schüler
+        search_student_placeholder: Suche Schüler
+        update_students: Updatete Schüler
+      student_manager:
+        student_manager_title: Schüler Manager
+        grade_1: 1. Klasse
+        grade_2: 2. Klasse
+        grade_3: 3. Klasse
+        grade_4: 4. Klasse
+        grade_5: 5. Klasse
+        grade_6: 6. Klasse
+        grade_7: 7. Klasse
+        grade_8: 8. Klasse
+        grade_9: 9. Klasse
+        grade_10: 10. Klasse
+        add_student: Schüler hinzufügen
+      add_student:
+        title: Schüler hinzufügen
+        placeholder_name: Name
+        placeholder_grade: Klasse
+        add: Hinzufügen
+      edit_student:
+        title: Schüler bearbeiten
+        label_name: Name
+        label_grade: Klasse
+        label_year: Abschlussjahr
+        update: Update
+      delete_warning:
+        title: Sind Sie sicher?
+        cancel: Abbrechen
+        delete: Löschen
+    dev:
+      schools:
+        schools_title: Schulen
+        add_school:
+          add_school_title: Neue Schule hinzufügen
+          load_school_data: Schuldaten laden
+          submit_data: Hinzufügen
+          add_school_cancel: Abbrechen
+      console:
+        input_placeholder: Gebe einen Befehl ein
   discover:
     title: ScholarThynk - Entdecken
     tab_en: Englisch

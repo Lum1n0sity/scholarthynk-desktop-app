@@ -13,12 +13,12 @@ body {
 }
 
 #register_container {
-    height: 60vh;
+    height: 80vh;
     width: 30vw;
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: var(--primary);
-    border-radius: 0px 10px 00px 0px;
+    border-radius: 0px 10px 10px 0px;
     position: absolute;
     top: 50%;
     left: 70%;
@@ -43,9 +43,8 @@ body {
 #email_input {
     font-size: 1.7vw;
     width: 23vw;
-    position: relative;
-    top: 7vw;
-    left: 10%;
+    margin-top: 14vh;
+    margin-left: 10%;
     border-radius: 6px;
     border-bottom: 2px solid var(--disabled);
     border-right: none;
@@ -58,13 +57,16 @@ body {
     transition: .5s;
 }   
 
+#email_input:focus {
+    border-left: 2px solid var(--secondary);
+    transition: .1s;
+}
 
 #username_input {
     font-size: 1.7vw;
     width: 23vw;
-    position: relative;
-    top: 8vw;
-    left: 10%;
+    margin-top: 1vh;
+    margin-left: 10%;
     border-radius: 6px;
     border-bottom: 2px solid var(--disabled);
     border-right: none;
@@ -83,11 +85,10 @@ body {
 }
 
 #pw {
-    position: relative;
-    top: 9vw;
-    left: 10%;
-    align-items: center;
     display: flex;
+    align-items: center;
+    margin-top: 1vh;
+    margin-left: 10%;
 }
 
 #password_input {
@@ -110,6 +111,7 @@ body {
 }
 
 #show_pw {
+    height: calc(100% - 4px);
     border-radius: 0px 6px 6px 0px;
     border-left: none;
     border-right: none;
@@ -134,7 +136,7 @@ body {
 }
 
 #hide_pw {
-    padding: 10px;
+    height: calc(100% - 4px);
     border-radius: 0px 6px 6px 0px;
     border-left: none;
     border-right: none;
@@ -145,9 +147,8 @@ body {
     padding: 10px;
     outline: none;
     cursor: pointer;
+    margin-left: -.1vw;
     transition: .5s;
-    position: absolute;
-    right: 6vw;
     display: none;
 }
 
@@ -160,44 +161,59 @@ body {
     transition: .5s;
 }
 
-#error_msg{
+#error_msg {
     font-size: 1.5vw;
-    background-color: rgba(255, 0, 0, 0.453);
+    background-color: rgba(167, 0, 0);
     width: 29.95vw;
     text-align: center;
     padding-top: 15px;
     padding-bottom: 15px;
-    border-radius: 0px 0px 10px 10px;
-    border-top: none;
-    border-left: 2px solid red;
-    border-right: 2px solid red;
-    border-bottom: 2px solid red;
+    border-radius: 10px;
+    border: 2px solid red;
     position: absolute;
-    top: 80vh;
-    left: 63.95vw;
-    transform: translateX(-50%);
+    top: 5%;
+    right: -35%;
     font-weight: bold;
     z-index: 50;
-    display: none;
+    transition: .2s;
+}
+
+#error_msg_undefined {
+    font-size: 1.5vw;
+    background-color: rgba(167, 0, 0);
+    width: 29.95vw;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 10px;
+    border: 2px solid red;
+    position: absolute;
+    top: 5%;
+    right: -35%;
+    font-weight: bold;
+    z-index: 50;
+    transition: .2s;
 }
 
 #sign_in {
     background-color: var(--secondary);
     width: 20vw;
-    height: 60vh;
+    height: 80vh;
     border-radius: 10px 0px 0px 10px;
     border-right: var(--selected-secondary) 2px solid;
     position: absolute;
     top: 50%;
     left: 20%;
     transform: translate(44%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #sign_in h3 {
     font-size: 2vw;
-    position: absolute;
-    left: 13%;
-    top: 35%;
+    margin-bottom: 2vh;
 }
 
 #register_switch {
@@ -211,9 +227,6 @@ body {
     background-color: transparent;
     color: var(--text-color);
     font-weight: bold;
-    position: absolute;
-    top: 45%;
-    left: 28%;
     cursor: pointer;
     transition: .5s;
 }
@@ -221,6 +234,107 @@ body {
 #register_switch:hover {
     background-color: #ffffff7d;
     transition: .5s;
+}
+
+.select {
+    font-size: 1.7vw;
+    width: 24vw;
+    margin-top: 1vh;
+    margin-left: 10%;
+    border-radius: 6px;
+    border-bottom: 2px solid var(--disabled);
+    border-right: none;
+    border-top: none;
+    border-left: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    transition: .5s;
+}
+
+.school-search-input {
+    font-size: 1.7vw;
+    width: 23vw;
+    margin-top: 1vh;
+    margin-left: 10%;
+    border-radius: 6px;
+    border-bottom: 2px solid var(--disabled);
+    border-right: none;
+    border-top: none;
+    border-left: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+    outline: none;
+    transition: .5s;
+}
+
+.search-output {
+    width: 23vw;
+    max-height: 20vh;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    position: absolute;
+    z-index: 101;
+    margin-left: 10%;
+    padding: 10px;
+    display: none;
+    border-radius: 0px 0px 6px 6px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.search-output::-webkit-scrollbar {
+    width: 5px;
+}
+
+.search-output::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.search-output::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.search-output::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.school-button {
+    width: max-content;
+    margin-left: 50%;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    transform: translateX(-50%);
+    font-size: 1.5vw;
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.school-button:hover {
+    color: var(--secondary);
+    transition: .5s;
+}
+
+#remember_div {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    display: flex;
+}
+
+#remember_checkbox {
+    margin-top: .2vh;
+}
+
+#remember_div p {
+    font-size: 1.8vw;
+    margin-left: .5vw;
 }
 
 input[type="checkbox"] {
@@ -231,28 +345,16 @@ input[type="checkbox"] {
     border: 2px solid #fff;
     border-radius: 5px;
     cursor: pointer;
-    position: relative;
-    top: 10vw;
-    left: 30%;
+    margin-left: 10%;
 }
-  
+
 input[type="checkbox"]:checked:after {
     font-family: "Material Symbols Rounded";
     content: "\e876";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    bottom: .3vh;
     color: #ffffffff;
     font-size: 1.8vw;
-}
-  
-
-#remember_div p {
-    font-size: 1.8vw;
-    position: relative;
-    top: 7.5vw;
-    left: 38%;
 }
 
 #register {
@@ -266,11 +368,14 @@ input[type="checkbox"]:checked:after {
     background-color: transparent;
     color: var(--text-color);
     font-weight: bold;
-    position: absolute;
-    top: 75%;
-    left: 25%;
     cursor: pointer;
+    transform: translateX(50%);
     transition: .5s;
+    margin-top: 6vh;
+}
+
+#register p {
+    display: inline;
 }
 
 #register span {
@@ -285,21 +390,193 @@ input[type="checkbox"]:checked:after {
 
 #connection_error {
     font-size: 1.5vw;
-    background-color: rgba(255, 0, 0, 0.453);
+    background-color: rgba(167, 0, 0);
     width: 29.95vw;
     text-align: center;
     padding-top: 15px;
     padding-bottom: 15px;
-    border-radius: 0px 0px 10px 10px;
-    border-top: none;
-    border-left: 2px solid red;
-    border-right: 2px solid red;
-    border-bottom: 2px solid red;
+    border-radius: 10px;
+    border: 2px solid red;
     position: absolute;
-    top: 80vh;
-    left: 63.95vw;
-    transform: translateX(-50%);
+    top: 5%;
+    right: -35%;
     font-weight: bold;
     z-index: 50;
+    transition: .2s;
+}
+
+.popup {
+    width: 40vw;
+    height: 80vh;
+    background: var(--primary);
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
     display: none;
 }
+
+.tab-bar {
+    background-color: var(--secondary);
+    height: 10%;
+    width: 100%;
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 2px solid var(--disabled);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab {
+    font-size: 1.5vw;
+    border-radius: 6px;
+    border: none;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--primary);
+    color: var(--text-color);
+    margin: 5%;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.tab:hover {
+    background-color: var(--disabled);
+    border-radius: 50px;
+    transition: .5s;
+}
+
+.selected {
+    background-color: var(--disabled);
+    border-radius: 50px;
+}
+    
+.view {
+    height: 100%;
+}
+
+.document-view {
+    background-color: var(--alt-primary);
+    resize: none;
+    border: none;
+    width: 90%;
+    height: 70%;
+    margin-top: 2%;
+    margin-left: 5%;
+    border-radius: 6px;
+    outline: none;
+    padding: 5px;
+    color: var(--text-color);
+}
+
+.document-view::-webkit-scrollbar {
+    width: 5px;
+}
+
+.document-view::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.document-view::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.document-view::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+    
+.footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 17%;
+}
+
+.button {
+    font-size: 2vw;
+    border-radius: 6px;
+    border: none;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+}
+
+.button:hover {
+    background-color: var(--selected-secondary);
+    transition: .5s;
+}
+
+#decline {
+    margin-right: 5%;
+}
+
+.loader-container {
+    position: absolute;
+    z-index: 2;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.loader {
+    width: 16px;
+    height: 16px;
+    box-shadow: 0 30px, 0 -30px;
+    border-radius: 4px;
+    background: currentColor;
+    display: block;
+    margin: -50px auto 0;
+    position: relative;
+    color: #FFF;
+    transform: translateY(30px);
+    box-sizing: border-box;
+    animation: animloader 2s ease infinite;
+}
+
+.loader::after,
+.loader::before {
+    content: '';  
+    box-sizing: border-box;
+    width: 16px;
+    height: 16px;
+    box-shadow: 0 30px, 0 -30px;
+    border-radius: 4px;
+    background: currentColor;
+    color: #FFF;
+    position: absolute;
+    left: 30px;
+    top: 0;
+    animation: animloader 2s 0.2s ease infinite;
+}
+
+.loader::before {
+    animation-delay: 0.4s;
+    left: 60px;
+}
+  
+@keyframes animloader {
+    0% {
+      top: 0;
+      color: white;
+    }
+    50% {
+      top: 30px;
+      color: rgba(255, 255, 255, 0.2);
+    }
+    100% {
+      top: 0;
+      color: white;
+    }
+}      

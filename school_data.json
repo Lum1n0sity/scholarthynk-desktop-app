@@ -1,0 +1,28 @@
+{
+    "schoolName":"Montessori Forchheim",
+    "emailEnding": "@montessori-forchheim.de",
+    "students": [
+        {
+            "name": "Student 1",
+            "grade": 9,
+            "expectedGraduationYear": 2025
+        },
+        {
+            "name": "Student 2",
+            "grade": 10,
+            "expectedGraduationYear": 2024
+        }
+    ],
+    "teachers": [
+        {
+            "name": "Teacher 1",
+            "subject": "Math",
+            "class": 9
+        },
+        {
+            "name": "Teacher 2",
+            "subject": "English",
+            "class": 10
+        }
+    ]
+}
