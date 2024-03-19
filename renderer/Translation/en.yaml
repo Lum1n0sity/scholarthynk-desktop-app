@@ -61,6 +61,26 @@ app:
         grade_8: 8. Grade
         grade_9: 9. Grade
         grade_10: 10. Grade
+        grade: Grade
+        year: Expected Graduation year
+        delete: Delete
+        edit: Edit
+        add_student: Add student
+      add_student:
+        title: Add new student
+        placeholder_name: Name
+        placeholder_grade: Grade
+        add: Add
+      edit_student:
+        title: Edit student
+        label_name: Name
+        label_grade: Grade
+        label_year: Graduation year
+        update: Update
+      delete_warning:
+        title: Are you sure?
+        cancel: Cancel
+        delete: Delete
     dev:
       schools:
         schools_title: Schools
@@ -69,6 +89,8 @@ app:
           load_school_data: Load school data
           submit_data: Add
           add_school_cancel: Cancel
+      console:
+        input_placeholder: Enter a command
   discover:
     title: ScholarThynk - Discover
     tab_en: English

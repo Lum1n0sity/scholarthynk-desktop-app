@@ -11,6 +11,10 @@
     --alt-primary: #1C1C1C;
     --warning: #ab0000;
     --warning-hover: #8f0000;
+    --warn-background: #615200;
+    --error-background: #5d0000;
+    --warn-border: #a18600;
+    --error-border: #8f0000;
 }
 
 * {
@@ -151,7 +155,7 @@ body {
     transition: .5s;
 }
 
-.button:hover:not(.delete-student .warning-delete) {
+.button:hover:not(.delete-student, .warning-delete) {
     background-color: var(--selected-secondary);
     transition: .5s;
 }
@@ -163,4 +167,36 @@ body {
     background-color: rgba(0, 0, 0, 0.493);
     z-index: 1;
     display: none;
+}
+
+.console-output {
+    width: 100%;   
+    height: 94%;
+    overflow-y: auto;
+}
+
+.console_element {
+    width: 95%;
+    margin: 2.5%;
+    font-size: .9vw;
+}
+
+.log {
+    border-top: 1px solid var(--disabled);
+    border-bottom: 1px solid var(--disabled);
+    padding: 5px;
+}
+
+.warn {
+    background-color: var(--warn-background);
+    border-top: 1px solid var(--warn-border);
+    border-bottom: 1px solid var(--warn-border);
+    padding: 5px;
+}
+
+.error {
+    background-color: var(--error-background);
+    border-top: 1px solid var(--error-border);
+    border-bottom: 1px solid var(--error-border);
+    padding: 5px;
 }

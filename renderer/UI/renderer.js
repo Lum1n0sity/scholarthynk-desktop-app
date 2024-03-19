@@ -6,13 +6,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const store = new storeJSRenderer();
     const root = document.documentElement;
 
+    /**
+    * Changes the appearance of the web page based on the value stored in the `mode` variable.
+    * 
+    * @returns {void}
+    */
+
     function switchAppearance() 
     {
-        /**
-         * Changes the appearance of the web page based on the value stored in the `mode` variable.
-         * 
-         * @returns {void}
-         */
         const mode = store.get('mode');
 
         if (mode == null) 
@@ -46,16 +47,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     switchAppearance();
     
+    /**
+    * Updates the language of the user interface elements based on the translations provided by the i18next library.
+    *
+    * @example
+    * updateUILanguage();
+    *
+    * @returns {void} None
+    */
+
     function updateUILanguage() 
     {
-       /**
-       * Updates the language of the user interface elements based on the translations provided by the i18next library.
-       *
-       * @example
-       * updateUILanguage();
-       *
-       * @returns {void} None
-       */
        document.querySelectorAll('[data-i18n]').forEach((element) => {
           const key = element.getAttribute('data-i18n');
           const attribute = element.getAttribute('data-i18n-attr') || 'textContent';
@@ -130,10 +132,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         store.set('loggedIn', false);
         store.set('loggedOut', true);
         store.delete('authToken');
+        store.delete('school');
+        store.delete('role');
+        store.delete('username');
     });
 
     user.addEventListener('click', () => {
-        user_options.style.display = user_options.style.display === 'block' ? 'none' : 'block';
+        user_options.style.display = user_options.style.display === 'flex' ? 'none' : 'flex';
     });
 
     settings_user_options.addEventListener('click', (event) => {

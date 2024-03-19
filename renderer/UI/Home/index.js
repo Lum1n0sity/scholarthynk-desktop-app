@@ -1,15 +1,29 @@
 const rootPathIndex = require('electron-root-path').rootPath;
 const pathIndex = require('path');
-const { fs, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
+const { fs, getCurrentLine, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
+const devConsoleClass = require('../console');
 
 document.addEventListener('DOMContentLoaded', () => {
+    const devConsole = new devConsoleClass('console_output');
     const store = new Store();
 
     const role = store.get('role');
+    const lang = store.get('lang');
 
     const studentFeatures = document.getElementById('student');
     const teacherFeatures = document.getElementById('teacher');
     const devFeatures = document.getElementById('dev');
+
+    // * User display
+    const username_display = document.getElementById('username');
+    const orga_role = document.getElementById('school_role');
+
+    username_display.textContent = store.get('username');
+    
+    const orga_role_text = `${store.get('school')} - ${role.charAt(0).toUpperCase() + role.slice(1)}`;
+    orga_role.textContent = orga_role_text;
+
+    const command_input = document.getElementById('command_input');
 
     // * Teacher student base:
     const students_list = document.getElementById('students-list');
@@ -23,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else if (role == 'teacher')
     {
-        // * Get all students
+        // * ID: 1; Get all students
         const school = store.get('school');
         const schoolName = ({ school: school });
 
@@ -75,9 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             const graduationYear_p = document.createElement('p');
                             const update_student_btn = document.createElement('button');
 
-                            grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
-                            graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
                             update_student_btn.textContent = 'Update';
+                            if (lang == 'en')
+                            {
+                                grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                                graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                            }
+                            else if (lang == 'de')
+                            {
+                                grade_p.textContent = `Klasse: ${studentData.studentInfo.grade}`;
+                                graduationYear_p.textContent = `Abschlussjahr: ${studentData.studentInfo.expectedGraduationYear}`;
+                            }
 
                             grade_p.classList.add('student-info-p');
                             graduationYear_p.classList.add('student-info-p');
@@ -131,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         })
         .catch(error => {
+            devConsole.error('Fetch error');
             console.error('Fetch error: ', error);
         });
 
@@ -213,9 +236,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const graduationYear_p = document.createElement('p');
                                     const update_student_btn = document.createElement('button');
         
-                                    grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
-                                    graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
-                                    update_student_btn.textContent = 'Update';
+                                    if (lang == 'en')
+                                    {
+                                        grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                                        graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                                        edit_btn.textContent = 'Edit';
+                                    }
+                                    else if (lang == 'de')
+                                    {
+                                        grade_p.textContent = `Klasse: ${studentData.studentInfo.grade}`;
+                                        graduationYear_p.textContent = `Abschlussjahr: ${studentData.studentInfo.expectedGraduationYear}`;
+                                        edit_btn.textContent = 'Bearbeiten';
+                                    }
         
                                     grade_p.classList.add('student-info-p');
                                     graduationYear_p.classList.add('student-info-p');
@@ -365,10 +397,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         const edit_btn = document.createElement('button');
                         const delete_btn = document.createElement('button');
     
-                        grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
-                        graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
-                        edit_btn.textContent = 'Edit';
-                        delete_btn.textContent = 'Delete';
+                        if (lang == 'en')
+                        {
+                            grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                            graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                            edit_btn.textContent = 'Edit';
+                            delete_btn.textContent = 'Delete';
+                        }
+                        else if (lang == 'de')
+                        {
+                            grade_p.textContent = `Klasse: ${studentData.studentInfo.grade}`;
+                            graduationYear_p.textContent = `Abschlussjahr: ${studentData.studentInfo.expectedGraduationYear}`;
+                            edit_btn.textContent = 'Bearbeiten';
+                            delete_btn.textContent = 'Löschen';
+                        }
     
                         grade_p.classList.add('student-info-p');
                         grade_p.classList.add('exclude');
@@ -605,10 +647,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     const edit_btn = document.createElement('button');
                     const delete_btn = document.createElement('button');
 
-                    grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
-                    graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
-                    edit_btn.textContent = 'Edit';
-                    delete_btn.textContent = 'Delete';
+                    if (lang == 'en')
+                    {
+                        grade_p.textContent = `Grade: ${studentData.studentInfo.grade}`;
+                        graduationYear_p.textContent = `Expected Graduation Year: ${studentData.studentInfo.expectedGraduationYear}`;
+                        edit_btn.textContent = 'Edit';
+                        delete_btn.textContent = 'Delete';
+                    }
+                    else if (lang == 'de')
+                    {
+                        grade_p.textContent = `Klasse: ${studentData.studentInfo.grade}`;
+                        graduationYear_p.textContent = `Abschlussjahr: ${studentData.studentInfo.expectedGraduationYear}`;
+                        edit_btn.textContent = 'Bearbeiten';
+                        delete_btn.textContent = 'Löschen';
+                    }
 
                     grade_p.classList.add('student-info-p');
                     grade_p.classList.add('exclude');
@@ -806,6 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
         
     // ! Developer:
+
     // * Add School:
     const open_add_school = document.getElementById('add-school');
     const add_school_win = document.getElementById('add-school-win');
@@ -881,16 +934,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                             else
                             {
-                                console.error('Error');
+                                console.error('Unable to add school!');
+                                devConsole.error('Unable to add school!');
                             }
                         })
                         .catch(error => {
                             console.error('Fetch error: ', error);
+                            devConsole.error('Fetch error');
                         });
                     } 
                     catch (parseError) 
                     {
                         console.error('Error parsing JSON: ', parseError);
+                        devConsole.error(`Error parsing JSON: ${parseError}`);
                     }
                 }
             });
@@ -924,6 +980,64 @@ document.addEventListener('DOMContentLoaded', () => {
     
         return textContent;
     }
+
+    // * Delete school:
+
+
+
+    // * Dev Console:
+    const toggle_console = document.getElementById('toggle_console');
+    const dev_console = document.getElementById('dev-console');
+
+    const user_card = document.getElementById('user');
+    const user_options = document.getElementById('user_options');
+
+    toggle_console.addEventListener('click', () => {
+        dev_console.style.display = dev_console.style.display === 'flex' ? 'none' : 'flex';
+
+        if (dev_console.style.display == 'flex')
+        {
+            user_card.style.marginRight = '46%';
+            user_options.style.marginRight = '46%';
+
+            // * Load data:
+            devConsole.openConsole();
+            devConsole.loadMessages();
+        }
+        else if (dev_console.style.display == 'none')
+        {
+            user_card.style.marginRight = '1%';
+            user_options.style.marginRight = '1%';
+
+            // * Unload data:
+            devConsole.closeConsole();
+            document.getElementById('console_output');
+            console_output.innerHTML = '';
+        }
+    });
+
+    command_input.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter')
+        {
+            const command = command_input.value;
+
+            if (command == 'clear')
+            {
+                devConsole.clear();
+                command_input.value = '';
+            }
+            else if (command == 'getDOM')
+            {
+                devConsole.getDOM();
+                command_input.value = '';
+            }
+            else if (command == 'displayNetwork')
+            {
+                devConsole.displayNetwork();
+                command_input.value = '';
+            }
+        }
+    });
 });
 
 /*

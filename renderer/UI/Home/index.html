@@ -50,6 +50,13 @@
                         </div>
                         <button id="update_students" class="update-students button" data-i18n="app.home.teacher.manage_students.update_students"></button>
                     </div>
+                    <div class="student-progress-container">
+                        <h3>View student progress</h3>
+                        <input type="text" placeholder="Search student" class="input search-students progress-search">
+                        <div class="students" id="student_search_output">
+                            <!-- Here are the students going -->
+                        </div>
+                    </div>
                     <div class="student-manager-div" id="student_manager">
                         <div class="student-manager-header">
                             <h3 class="student-manager-title" data-i18n="app.home.teacher.student_manager.student_manager_title"></h3>
@@ -58,81 +65,81 @@
                         <div class="main-body valid-drop-target">
                             <div class="grade" id="grade_1">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_1"></p>
-                                <button class="add-student grade_1"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_1"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_2">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_2"></p>
-                                <button class="add-student grade_2"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_2"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_3">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_3"></p>
-                                <button class="add-student grade_3"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_3"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_4">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_4"></p>
-                                <button class="add-student grade_4"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_4"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_5">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_5"></p>
-                                <button class="add-student grade_5"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_5"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_6" >
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_6"></p>
-                                <button class="add-student grade_6"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_6"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_7">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_7"></p>
-                                <button class="add-student grade_7"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_7"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_8">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_8"></p>
-                                <button class="add-student grade_8"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_8"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade valid-drop-target" id="grade_9">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_9"></p>
-                                <button class="add-student grade_9"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_9"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                             <div class="grade end-grade valid-drop-target" id="grade_10">
                                 <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_10"></p>
-                                <button class="add-student grade_10"><span class="material-symbols-rounded">add</span> <p>Add Student</p></button>
+                                <button class="add-student grade_10"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
                             </div>
                         </div>
                     </div>
                     <div class="add-student-win" id="add_student_win">
                         <div class="add-student-win-header">
-                            <h3>Add new student</h3>
+                            <h3 data-i18n="app.home.teacher.add_student.title"></h3>
                             <button class="close-add-student" id="close_add_student"><span class="material-symbols-rounded">close</span></button>
                         </div>
                         <div class="student-info">
-                            <input type="text" placeholder="Name" id="student_name" class="input student-name">
-                            <input type="text" placeholder="Grade" id="student_grade" class="input student-grade">
+                            <input type="text" data-i18n="app.home.teacher.add_student.placeholder_name" data-i18n-attr="placeholder" id="student_name" class="input student-name">
+                            <input type="text" data-i18n="app.home.teacher.add_student.placeholder_grade" data-i18n-attr="placeholder" id="student_grade" class="input student-grade">
                         </div>
-                        <button class="submit button" id="add-student-data">Add</button>
+                        <button class="submit button" id="add-student-data" data-i18n="app.home.teacher.add_student.add"></button>
                     </div>
                     <div class="edit-student-win" id="edit_student_win">
                         <div class="edit-student-win-header">
-                            <h3>Edit student</h3>
+                            <h3 data-i18n="app.home.teacher.edit_student.title"></h3>
                             <button class="close-edit-student" id="close_edit_student"><span class="material-symbols-rounded">close</span></button>
                         </div>
                         <div class="student-info">
                             <div class="row_1">
-                                <p class="label name-edit">Name</p>
-                                <p class="label grade-edit">Grade</p>
+                                <p class="label name-edit" data-i18n="app.home.teacher.edit_student.label_name"></p>
+                                <p class="label grade-edit" data-i18n="app.home.teacher.edit_student.label_grade"></p>
                             </div>
                             <div class="row_2">
                                 <input type="text" id="student_name_edit" class="input student-name-edit" readonly>
                                 <input type="text" id="student_grade_edit" class="input student-grade-edit">
                             </div>
-                            <p class="label year">Graduation year</p>
+                            <p class="label year" data-i18n="app.home.teacher.edit_student.label_year"></p>
                             <input type="text" id="student_grad_year_edit" class="input student-grad-year-edit">
                         </div>
-                        <button class="edit button" id="edit-student-data">Update</button>
+                        <button class="edit button" id="edit-student-data" data-i18n="app.home.teacher.edit_student.update"></button>
                     </div>
                     <div class="delete-student-warning" id="delete_warning">
-                        <h3>Are you sure?</h3>
+                        <h3 data-i18n="app.home.teacher.delete_warning.title"></h3>
                         <div>
-                            <button class="warning-cancel button" id="delete_warning_cancel">Cancel</button>
-                            <button class="warning-delete" id="delete_warning_delete">Delete</button>
+                            <button data-i18n="app.home.teacher.delete_warning.cancel" class="warning-cancel button" id="delete_warning_cancel"></button>
+                            <button data-i18n="app.home.teacher.delete_warning.delete" class="warning-delete" id="delete_warning_delete"></button>
                         </div>
                     </div>
                 </div>
@@ -155,11 +162,24 @@
                             <button id="cancel_adding_school" class="cancel button" data-i18n="app.home.dev.schools.add_school.add_school_cancel"></button>
                         </div>
                     </div>
+                    <button class="toggle-console" id="toggle_console"><span class="material-symbols-rounded">terminal</span></button>
+                    <div class="dev-console" id="dev-console">
+                        <div class="console-output" id="console_output">
+                            
+                        </div>
+                        <input type="text" class="command-input" id="command_input" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
+                    </div>
                 </div>
-                <img src="Images/testuserimg.png" id="user">
-                <div id="user_options">
-                    <button id="feedback_user_options"><span class="material-symbols-rounded">feedback</span></button>
-                    <button id="settings_user_options"><span class="material-symbols-rounded">settings</span></button>
+                <div class="user-prev" id="user">
+                    <img src="Images/testuserimg.png" class="profile-pic">
+                    <div class="user-info">
+                        <h3 id="username">Username</h3>
+                        <p id="school_role">Organisation - Role</p>
+                    </div>
+                </div>
+                <div id="user_options" class="user-options">
+                    <button id="feedback_user_options" class="feedback user-options-buttons button"><span class="material-symbols-rounded">feedback</span> <p>Feedback</p></button>
+                    <button id="settings_user_options" class="settings user-options-buttons button"><span class="material-symbols-rounded">settings</span> <p>Settings</p></button>
                 </div>
                 <div class="background" id="background"></div>
                 <!-- <button id="share"><span class="material-symbols-rounded">ios_share</span></button> -->

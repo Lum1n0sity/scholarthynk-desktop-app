@@ -1,3 +1,77 @@
+.user-prev {
+    background-color: var(--primary);
+    width: 20%;
+    height: 10%;
+    justify-self: end;
+    position: absolute;
+    margin-right: 1%;
+    bottom: 2%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.user-prev:hover {
+    background-color: var(--selected-primary);
+}
+
+.profile-pic {
+    width: 4vw;
+    height: 4vw;
+    border-radius: 5px;
+    margin-left: 3%;
+}
+
+.user-info {
+    margin-left: 5%;
+}
+
+.user-options {
+    position: absolute;
+    justify-self: end;
+    margin-right: 1%;
+    bottom: 13%;
+    width: 20%;
+    height: max-content;
+    padding: 10px;
+    background-color: var(--primary);
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-options-buttons p {
+    display: inline;
+    margin-left: 2%;
+}
+
+.feedback {
+    font-size: 1.4vw;
+    margin-bottom: 3%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.feedback:hover {
+    border-radius: 50px;
+}
+
+.settings {
+    font-size: 1.4vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.settings:hover {
+    border-radius: 50px;
+}
+
 .role-div {
     height: 100vh;
     width: 95vw;
@@ -369,9 +443,10 @@
 .edit-student-win-header h3 {
     font-size: 1.7vw;
     text-align: center;
-    margin-left: 50%;
+    margin-left: 48%;
     transform: translateX(-50%);
     margin-top: 2%;
+    width: max-content;
 }
 
 .close-edit-student {
@@ -516,7 +591,8 @@
     padding-left: 10px;
     padding-right: 10px;
     margin-top: 7%;
-    margin-left: 10%;
+    position: absolute;
+    left: 10%;
 }
 
 .warning-delete {
@@ -527,7 +603,8 @@
     padding-left: 10px;
     padding-right: 10px;
     margin-top: 7%;
-    margin-left: 23%;
+    position: absolute;
+    right: 10%;
     border-radius: 6px;
     cursor: pointer;
     transition: .5s;
@@ -538,6 +615,54 @@
 
 .warning-delete:hover {
     background-color: var(--warning);
+}
+
+.student-progress-container {
+    position: absolute;
+    top: 3.7%;
+    left: 34%;
+    width: 30%;
+    height: 35%;
+    background: var(--primary);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.student-progress-container h3 {
+    font-size: 1.7vw;
+    margin-top: 2%;
+}
+
+.progress-search {
+    width: 90%;
+    margin-top: 2%;
+}
+
+.students {
+    width: 80%;
+    height: 62%;
+    margin-top: 2%;
+    overflow-y: auto;
+}
+
+.students::-webkit-scrollbar {
+    width: 5px;
+}
+
+.students::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.students::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.students::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 /** Developer features styling */
@@ -680,109 +805,56 @@
     cursor: default;
 }
 
-/** Other options styling */
-
-#sepperator {
-   background-color: var(--primary); 
-   height: .2vh;
-   width: 90vw;
-   margin-left: 2vw;
-}
-
-#user {
-    position: absolute;
-    top: 2vw;
-    right: 2vw;
-    width: 5vw;
-    height: 5vw;
-    border-radius: 50%;
-    border: 5px solid var(--secondary);
-    box-shadow: 1px 8px 19px -8px rgba(255,255,255,0.23);
-    cursor: pointer;
-}
-
-#user_options {
-    background-color: var(--primary);
-    position: absolute;
-    top: 8vw;
-    right: 3vw;
-    width: 3.5vw;
-    height: 7vw;
-    border-radius: 50px;
-    display: none;
-}
-
-#feedback_user_options {
-    margin-left: .25vw;
-    margin-top: .25vw;
-    border-radius: 50%;
-    width: 3vw;
-    height: 3vw;
-    cursor: pointer;
-    background-color: transparent;
-    transition: .5s;
-    color: var(--text-color);
-    border: none;
-    outline: none;
-}
-
-#feedback_user_options span {
-    font-size: 2vw;
-}
-
-#feedback_user_options:hover {
-    background-color: #1c1c1ca1;
-    transition: .5s;
-}
-
-#settings_user_options {
-    margin-left: .25vw;
-    margin-top: .5vw;
-    width: 3vw;
-    height: 3vw;
-    border-radius: 50%;
-    cursor: pointer;
-    background-color: transparent;
-    transition: .5s;
-    color: var(--text-color);
-    border: none;
-    outline: none;
-}
-
-#settings_user_options span {
-    font-size: 2vw;
-}
-
-#settings_user_options:hover {
-    background-color: #1c1c1ca1;
-    transition: .5s;
-}
-
-/* #share {
-    position: absolute;
-    bottom: 2vw;
-    right: 2vw;
+.toggle-console {
     width: 4vw;
     height: 4vw;
-    border-radius: 50%;
-    border: none;
+    position: absolute;
+    right: 1%;
+    top: 2%;
     background-color: var(--secondary);
-    color: var(--text-color);
     cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    outline: none;
     transition: .5s;
+    color: var(--text-color);
+    z-index: 4;
 }
 
-#share span {
-    font-size: 1.7vw;
-    transition: .5s;
-}
-
-#share:hover {
-    background-color: var(--selected-secondary);
-    transition: .5s;
-}
-
-#share:hover span {
+.toggle-console span {
     font-size: 2vw;
+    transform: translate(-1%,5%);
+}
+
+.toggle-console:hover {
+    background-color: var(--selected-secondary);
+}
+
+.dev-console {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 3;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 45%;
+    height: 100%;
+    background-color: var(--primary);
+    display: none;
+    flex-direction: column;
+    align-items: center;
     transition: .5s;
-} */
+}
+
+.command-input {
+    position: absolute;
+    bottom: 0;
+    font-size: 1.5vw;
+    width: 100%;
+    border: none;
+    border-top: 2px solid var(--disabled);
+    outline: none;
+    background-color: var(--alt-primary);
+    color: var(--text-color);
+    padding: 10px;
+}

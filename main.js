@@ -131,7 +131,7 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) 
     {
       createMainWindow();
-    }w
+    }
   });
 
   ipcMain.on('reset', () => {

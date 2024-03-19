@@ -50,7 +50,7 @@ app:
       manage_students:
         manage_students_title: Manage Schüler
         search_student_placeholder: Suche Schüler
-        update_students: Update Schüler
+        update_students: Updatete Schüler
       student_manager:
         student_manager_title: Schüler Manager
         grade_1: 1. Klasse
@@ -63,6 +63,22 @@ app:
         grade_8: 8. Klasse
         grade_9: 9. Klasse
         grade_10: 10. Klasse
+        add_student: Schüler hinzufügen
+      add_student:
+        title: Schüler hinzufügen
+        placeholder_name: Name
+        placeholder_grade: Klasse
+        add: Hinzufügen
+      edit_student:
+        title: Schüler bearbeiten
+        label_name: Name
+        label_grade: Klasse
+        label_year: Abschlussjahr
+        update: Update
+      delete_warning:
+        title: Sind Sie sicher?
+        cancel: Abbrechen
+        delete: Löschen
     dev:
       schools:
         schools_title: Schulen
@@ -71,6 +87,8 @@ app:
           load_school_data: Schuldaten laden
           submit_data: Hinzufügen
           add_school_cancel: Abbrechen
+      console:
+        input_placeholder: Gebe einen Befehl ein
   discover:
     title: ScholarThynk - Entdecken
     tab_en: Englisch
