@@ -1,6 +1,6 @@
 const rootPathSettings = require('electron-root-path').rootPath;
 const pathSettings = require('path');
-const { ipcRenderer, Store, config } = require(pathSettings.join(rootPathSettings, 'utils.js'));
+const { ipcRenderer, Store, config, fs } = require(pathSettings.join(rootPathSettings, 'utils.js'));
 
 document.addEventListener('DOMContentLoaded', async () => {
     const store = new Store();
@@ -69,9 +69,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const change_edit_username = document.getElementById('change_edit_username');
     const username_409 = document.getElementById('username_409');
 
+    const next = document.getElementById('next');
+    const changeStart = document.getElementById('changeStart');
+    const uploadButton = document.getElementById('upload');
+    const profilePicWin = document.getElementById('profile_pic_win');
+    const profilePicPrev = document.getElementById('profile_pic_prev');
+    const profile_pic = document.getElementById('profile_pic');
+
     const password_edit_btn = document.getElementById('password_edit_btn');
 
     let updated = false;
+    let filePathProfilePic = null;
 
     // * Settings navbar:
 
@@ -128,6 +136,107 @@ document.addEventListener('DOMContentLoaded', async () => {
         store.set('mode', 'dark');
         light_mode.style.backgroundColor = 'transparent';
         dark_mode.style.backgroundColor = '#454545c7';
+    });
+
+    // * Account Profile Picture change:
+
+    changeStart.addEventListener('click', () => {
+        background.style.display = 'block';
+        profilePicWin.style.display = 'flex';
+    });
+
+    uploadButton.addEventListener('click', () => {
+        filePathProfilePic = null;
+        profilePicPrev.innerHTML = '';
+
+        ipcRenderer.send('open-file-dialog');
+
+        ipcRenderer.on('selected-file', (event, filePath) => {
+            filePathProfilePic = filePath;
+
+            const prevImg = document.createElement('img');
+
+            prevImg.src = filePath;
+            prevImg.classList.add('profilePrevImg');
+
+            profilePicPrev.appendChild(prevImg);
+        });
+    });
+
+    next.addEventListener('click', () => {
+        if (filePathProfilePic != null)
+        {
+            const username = store.get('username');
+            
+            const formData = new FormData();
+
+            formData.append('username', username);
+
+            const fileContent = fs.readFileSync(filePathProfilePic);
+            const fileName = pathSettings.basename(filePathProfilePic);
+            const fileType = pathSettings.extname(filePathProfilePic).toLowerCase();
+        
+            const mimeType =
+                fileType === '.jpg' || fileType === '.jpeg'
+                    ? 'image/jpeg'
+                    : fileType === '.png'
+                    ? 'image/png'
+                    : null;
+        
+            if (mimeType) 
+            {
+                formData.append('profilePic', new Blob([fileContent], { type: mimeType }), fileName);
+            }
+
+            fetch(`${config.apiUrl}/update/profilePic`, {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                background.style.display = 'none';
+                profilePicWin.style.display = 'none';
+
+                const updated = data.updated;
+
+                if (updated)
+                {
+                    const username = { username: store.get('username') };
+
+                    fetch(`${configRenderer.apiUrl}/get/profilePic`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(username),
+                    })
+                    .then(response => {
+                        if (!response.ok) 
+                        {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        filePathProfilePic = null;
+                        const imageUrl = URL.createObjectURL(blob);
+                
+                        profile_pic.src = imageUrl;
+                    })
+                    .catch(error => {
+                        console.error('Fetch error: ', error);
+                    }); 
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error: ', error);
+            });
+        }
+        else
+        {
+            background.style.display = 'none';
+            profilePicWin.style.display = 'none';
+        }
     });
 
     // * Account; account removal, username/password change and password request:

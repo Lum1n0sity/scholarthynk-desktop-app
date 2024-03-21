@@ -1,6 +1,6 @@
 const rootPathCodeT = require('electron-root-path').rootPath;
 const pathCodeT = require('path');
-const { config, ipcRenderer, Store } = require(pathCodeT.join(rootPathCodeT, 'utils.js'));
+const { config, ipcRenderer, Store, fs } = require(pathCodeT.join(rootPathCodeT, 'utils.js'));
 
 document.addEventListener('DOMContentLoaded', () => {
     const store = new Store();
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '../../../Login/Register/register.html';
     });
 
-    function verifyCode() 
+    async function verifyCode() 
     {
         let allInputsFilled = true;
         for (let i = 0; i < code_inputs.length; i++) 
@@ -92,20 +92,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (code != null) 
             {
-                const school = store.get('school');
-                const email = store.get('email');
+                const school = store.get('school');;
                 const username = store.get('tempUsername');
                 const password = store.get('tempPassword');
                 const register_email = store.get('tempEmail');
-
-                const dataToSendVerifyTeacher = ({ code: code, school: school, email: email, username: username, password: password, register_email: register_email });
+                const pathProfilePic = store.get('tempProfilePic');
+                
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+                formData.append('email', register_email);
+                formData.append('school', school);
+                formData.append('code', code);
+                
+                if (pathProfilePic != null) 
+                {
+                    const fileContent = fs.readFileSync(pathProfilePic);
+                    const fileName = pathCodeT.basename(pathProfilePic);
+                    const fileType = pathCodeT.extname(pathProfilePic).toLowerCase();
+                
+                    const mimeType =
+                        fileType === '.jpg' || fileType === '.jpeg'
+                            ? 'image/jpeg'
+                            : fileType === '.png'
+                            ? 'image/png'
+                            : null;
+                
+                    if (mimeType) 
+                    {
+                        formData.append('profilePic', new Blob([fileContent], { type: mimeType }), fileName);
+                    }
+                } 
+                else 
+                {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 100;
+                    canvas.height = 100;
+                    const ctx = canvas.getContext('2d');
+                
+                    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    ctx.fillStyle = randomColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                    ctx.font = '24px Arial';
+                    ctx.fillStyle = 'white';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                
+                    const initials = username
+                        .split(' ')
+                        .map((word) => word.charAt(0))
+                        .join('');
+                
+                    const textX = canvas.width / 2;
+                    const textY = canvas.height / 2;
+                
+                    ctx.fillText(initials.toUpperCase(), textX, textY);
+                
+                    const blob = await new Promise((resolve) => {
+                        canvas.toBlob((b) => resolve(b), 'image/png');
+                    });
+                
+                    formData.append('profilePic', blob, `profile_pic_${username}.png`);
+                }
 
                 fetch(`${config.apiUrl}/verify-teacher-auth`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }, 
-                    body: JSON.stringify(dataToSendVerifyTeacher)
+                    body: formData
                 })
                 .then(response => {
                     if (response.status == 422) 
@@ -193,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 store.delete('email');
                 store.delete('tempUsername');
+                store.delete('tempProfilePic');
             }
         })
         .catch(error => {

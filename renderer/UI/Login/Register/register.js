@@ -26,9 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const tab_tos = document.getElementById('tos');
     const tab_pp = document.getElementById('privacy_policy');
 
+    const profilePicWin = document.getElementById('profile_pic_win');
+    const profilePicPrev = document.getElementById('profile_pic_prev');
+    const uploadButton = document.getElementById('upload');
+    const next = document.getElementById('next');
+
     let isPWVisible = false;
     let selectedSchool = '';
     let selectedTab = 'tos';
+    let filePathProfilePic = '';
 
     const filePathToS = path.join(rootPathRegister, 'terms_of_service.txt');
     const filePathPP = path.join(rootPathRegister, 'privacy_policy.txt');
@@ -102,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         results.forEach(result => {
                             const school = document.createElement('button');
                                 
-                            const name = result.name;
+                            const name = result.schoolName;
 
                             school.classList.add('school-button');
                             school.textContent = name;
@@ -215,30 +221,101 @@ document.addEventListener('DOMContentLoaded', () => {
 
     accept.addEventListener('click', () => {
         tos_pop_up.style.display = 'none';
-        loader.style.display = 'block';
-        const connection_error = document.getElementById('connection_error');
+        profilePicWin.style.display = 'flex';
+    });
 
+    uploadButton.addEventListener('click', () => {
+        ipcRenderer.send('open-file-dialog');
+
+        ipcRenderer.on('selected-file', (event, filePath) => {
+            filePathProfilePic = filePath;
+
+            const prevImg = document.createElement('img');
+
+            prevImg.src = filePath;
+            prevImg.classList.add('profilePrevImg');
+
+            profilePicPrev.appendChild(prevImg);
+        });
+    });
+
+    next.addEventListener('click', async () => {
         const username = document.getElementById('username_input').value;
         const password = document.getElementById('password_input').value;
         const email = document.getElementById('email_input').value;
-        
         const role_select = document.getElementById('role_select');
         const roleI = role_select.selectedIndex;
         const role = role_select.options[roleI].value;
-
-        if (selectedSchool.length == 0)
-        {
+        
+        if (selectedSchool.length == 0) {
             selectedSchool = input_school.value;
         }
         
-        dataToSendRegister = ({ username: username, password: password, email: email, role: role, school: selectedSchool });
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+        formData.append('email', email);
+        formData.append('role', role);
+        formData.append('school', selectedSchool);
+        
+        if (filePathProfilePic != null && filePathProfilePic.length != 0) 
+        {
+            const fileContent = fs.readFileSync(filePathProfilePic);
+            const fileName = pathRegister.basename(filePathProfilePic);
+            const fileType = pathRegister.extname(filePathProfilePic).toLowerCase();
+        
+            const mimeType =
+                fileType === '.jpg' || fileType === '.jpeg'
+                    ? 'image/jpeg'
+                    : fileType === '.png'
+                    ? 'image/png'
+                    : null;
+        
+            if (mimeType) 
+            {
+                formData.append('profilePic', new Blob([fileContent], { type: mimeType }), fileName);
+            }
+        } 
+        else 
+        {
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 100;
+            const ctx = canvas.getContext('2d');
+        
+            const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            ctx.fillStyle = randomColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+            ctx.font = '24px Arial';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+        
+            const initials = username
+                .split(' ')
+                .map((word) => word.charAt(0))
+                .join('');
+        
+            const textX = canvas.width / 2;
+            const textY = canvas.height / 2;
+        
+            ctx.fillText(initials.toUpperCase(), textX, textY);
+        
+            const blob = await new Promise((resolve) => {
+                canvas.toBlob((b) => resolve(b), 'image/png');
+            });
+        
+            formData.append('profilePic', blob, `profile_pic_${username}.png`);
+        }
+
+        profilePicWin.style.display = 'none';
+        loader.style.display = 'block';
+        const connection_error = document.getElementById('connection_error');
 
         fetch(`${config.apiUrl}/user/register`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSendRegister),
+            body: formData,
         })
         .then (response => {
             const register_error_message = document.getElementById('error_msg');
@@ -248,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 background.style.display = 'none';
                 register_error_message.style.right = '2%';
+                loader.style.display = 'none';
 
                 setTimeout(() => {
                     register_error_message.style.right = '-35%';
@@ -259,6 +337,17 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 background.style.display = 'none';
                 error_msg_undefined.style.right = '2%';
+                loader.style.display = 'none';
+
+                setTimeout(() => {
+                    error_msg_undefined.style.right = '-35%';
+                }, 10000);
+            }
+            else if (response.status === 400)
+            {
+                background.style.display = 'none';
+                error_msg_undefined.style.right = '2%';
+                loader.style.display = 'none';
 
                 setTimeout(() => {
                     error_msg_undefined.style.right = '-35%';
@@ -271,7 +360,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     store.set('tempUsername', username);
                     store.set('tempPassword', password);
                     store.set('tempEmail', email);
-                    store.set('remember', remember_checkbox.checked)
+                    store.set('remember', remember_checkbox.checked);
+                    store.set('')
 
                     ipcRenderer.send('verify-teacher');
                 }

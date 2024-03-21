@@ -1,6 +1,6 @@
 const rootPath = require('electron-root-path').rootPath;
 const path = require('path');
-const { fsBackend, i18next, ipcRenderer: rendererJSIpcRenderer, Store: storeJSRenderer } = require(path.join(rootPath, 'utils.js'));
+const { fsBackend, i18next, ipcRenderer: rendererJSIpcRenderer, Store: storeJSRenderer, config: configRenderer } = require(path.join(rootPath, 'utils.js'));
 
 document.addEventListener('DOMContentLoaded', async () => {
     const store = new storeJSRenderer();
@@ -104,8 +104,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     const nav_logout = document.getElementById('nav_logout');
 
     const user_options = document.getElementById('user_options');
+    const profile_pic = document.getElementById('profile_pic');
     const settings_user_options = document.getElementById('settings_user_options');
     const feedback_user_options = document.getElementById('feedback_user_options');
+
+    const username = { username: store.get('username') };
+
+    fetch(`${configRenderer.apiUrl}/get/profilePic`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(username),
+    })
+    .then(response => {
+        if (!response.ok) 
+        {
+            throw new Error('Network response was not ok');
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const imageUrl = URL.createObjectURL(blob);
+
+        profile_pic.src = imageUrl;
+    })
+    .catch(error => {
+        console.error('Fetch error: ', error);
+    });    
 
     nav_home.addEventListener('click', (event) => {
         event.preventDefault();
