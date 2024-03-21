@@ -203,7 +203,7 @@ body {
     border-right: var(--selected-secondary) 2px solid;
     position: absolute;
     top: 50%;
-    left: 20%;
+    left: 20.5%;
     transform: translate(44%, -50%);
     display: flex;
     flex-direction: column;
@@ -237,8 +237,8 @@ body {
 }
 
 .select {
-    font-size: 1.7vw;
-    width: 24vw;
+    font-size: 1.5vw;
+    width: 23vw;
     margin-top: 1vh;
     margin-left: 10%;
     border-radius: 6px;
@@ -256,6 +256,7 @@ body {
 .school-search-input {
     font-size: 1.7vw;
     width: 23vw;
+    height: 6vh;
     margin-top: 1vh;
     margin-left: 10%;
     border-radius: 6px;
@@ -519,6 +520,76 @@ input[type="checkbox"]:checked:after {
 
 #decline {
     margin-right: 5%;
+}
+
+.profile-pic-win {
+    width: 25%;
+    height: 40vh;
+    background: var(--primary);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 6;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-pic-win-title {
+    font-size: 1.5vw;
+    text-align: center;
+    margin-top: 0.5vw;
+}
+
+.profile-pic-prev {
+    background-color: var(--alt-primary);
+    width: 13vw;
+    height: 13vw;
+    border-radius: 5px;
+    margin-top: 2%;
+    border: 2px solid var(--disabled);
+}
+
+.profilePrevImg {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.upload {
+    font-size: 1.5vw;
+    margin-top: 3%;
+}
+
+.upload p {
+    display: inline;
+}
+
+.skip {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    font-size: 1.5vw;
+    background: transparent;
+    border: none;
+    outline: none;
+    transition: .5s;
+    cursor: pointer;
+    color: var(--text-color);
+    border-radius: 50px;
+    width: 3vw;
+    height: 3vw;
+}
+
+.skip span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
+}
+
+.skip:hover {
+    background-color: var(--alt-primary);
 }
 
 .loader-container {
