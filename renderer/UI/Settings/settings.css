@@ -66,6 +66,76 @@ body {
     display: block;
 }
 
+.profile-pic-win {
+    width: 25%;
+    height: 40vh;
+    background: var(--primary);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 6;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-pic-win-title {
+    font-size: 1.5vw;
+    text-align: center;
+    margin-top: 0.5vw;
+}
+
+.profile-pic-prev {
+    background-color: var(--alt-primary);
+    width: 13vw;
+    height: 13vw;
+    border-radius: 5px;
+    margin-top: 2%;
+    border: 2px solid var(--disabled);
+}
+
+.profilePrevImg {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.upload {
+    font-size: 1.5vw;
+    margin-top: 3%;
+}
+
+.upload p {
+    display: inline;
+}
+
+.skip {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    font-size: 1.5vw;
+    background: transparent;
+    border: none;
+    outline: none;
+    transition: .5s;
+    cursor: pointer;
+    color: var(--text-color);
+    border-radius: 50px;
+    width: 3vw;
+    height: 3vw;
+}
+
+.skip span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
+}
+
+.skip:hover {
+    background-color: var(--alt-primary);
+}
+
 #account_settings_title {
     font-size: 2vw;
     position: relative;
@@ -84,14 +154,13 @@ body {
     position: relative;
     top: 5vw;
     left: 20vw;
-    z-index: 100;
     color: var(--text-color);
 }
 
 #user_info img {
     width: 3.5vw;
     height: 3.5vw;
-    border-radius: 50%;
+    border-radius: 5px;
     margin-top: .8vw;
     margin-left: 2vw;
     z-index: 101;
@@ -116,14 +185,12 @@ body {
     color: var(--text-color);
     top: 5.2vw;
     left: 20vw;
-    z-index: 99;
 }
 
 #displays {
     width: 25vw;
     height: 10vw;
     position: absolute;
-    z-index: 100;
     background-color: transparent;
 }
 
@@ -132,7 +199,6 @@ body {
     position: relative;
     top: .5vw;
     left: 1vw;
-    z-index: 101;
     color: var(--text-color);
 }
 
@@ -143,7 +209,6 @@ body {
     border-radius: 6px;
     color: var(--text-color);
     outline: none;
-    z-index: 101;
     position: relative;
     top: 2vw;
     left: 1vw;
@@ -155,7 +220,6 @@ body {
     height: 10vw;
     margin-left: 20vw;
     position: absolute;
-    z-index: 100;
 }
 
 #username_edit_btn {
@@ -172,7 +236,6 @@ body {
     outline: none;
     cursor: pointer;
     transition: .5s;
-    z-index: 101;
 }
 
 #username_edit_btn:hover {
@@ -194,7 +257,6 @@ body {
     outline: none;
     cursor: pointer;
     transition: .5s;
-    z-index: 101;
 }
 
 #password_edit_btn:hover {
@@ -202,11 +264,32 @@ body {
     transition: .5s;
 }
 
-#account_remove {
+.profile-pic-div {
     background-color: transparent;
     width: 20vw;
     position: absolute;
     top: 24vw;
+    left: 20vw;
+    width: 30vw;
+    height: 5vw;
+}
+
+.profile-pic-h3 {
+    font-size: 1.5vw;
+}
+
+.update-profile-pic {
+    font-size: 1.3vw;
+    margin-top: 2%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#account_remove {
+    background-color: transparent;
+    width: 20vw;
+    position: absolute;
+    top: 30vw;
     left: 20vw;
     width: 30vw;
     height: 5vw;
@@ -838,6 +921,6 @@ input:checked + .slider:before {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 102;
+    z-index: 1;
     display: none;
 }

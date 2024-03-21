@@ -26,7 +26,7 @@
                 <div id="account_settings">
                     <h2 id="account_settings_title" data-i18n="app.settings.account.title"></h2>
                     <div id="user_info">
-                        <img src="Images/testuserimg.png" alt="">
+                        <img src="Images/testuserimg.png" alt="" id="profile_pic">
                         <h2 id="username">N/A</h2>
                     </div>
                     <div id="lower_card">
@@ -38,6 +38,10 @@
                             <button id="username_edit_btn" data-i18n="app.settings.account.edit_btn"></button>
                             <button id="password_edit_btn" data-i18n="app.settings.account.reset_pw"></button>
                         </div>
+                    </div>
+                    <div class="profile-pic-div">
+                        <h3 class="profile-pic-h3">Profile Picture</h3>
+                        <button class="button update-profile-pic" id="changeStart">Update</button>
                     </div>
                     <div id="account_remove">
                         <h3 id="account_remove_title" data-i18n="app.settings.account.remove.title"></h3>
@@ -101,6 +105,14 @@
                 <div id="username_409">
                     <h3 id="title_409" data-i18n="app.settings.account.edit.username.error_409.title"></h3>
                 </div>
+            </div>
+            <div class="profile-pic-win" id="profile_pic_win">
+                <h3 class="profile-pic-win-title">Update profile picture</h3>
+                <div class="profile-pic-prev" id="profile_pic_prev">
+                    
+                </div>
+                <button class="button upload" id="upload"><span class="material-symbols-rounded">upload</span> <p>Upload</p></button>
+                <button class="skip" id="next"><span class="material-symbols-rounded">arrow_forward</span></button>
             </div>
             <div id="background"></div>
         </div>
