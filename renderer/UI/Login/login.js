@@ -126,6 +126,68 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = './Register/register.html';
     });
 
+    document.addEventListener('keydown', (event) => {
+        const username = document.getElementById('username_input').value;
+        const password = document.getElementById('password_input').value;
+
+        if (event.key == 'Enter' && username.length != 0 && password.length != 0)
+        {
+            connection_error.style.display = 'none';
+            login_error_message.style.display = 'none';
+            login_container.style.borderRadius = '10px 0px 0px 10px';
+            
+            const dataToSendLogin = ({ username: username, password: password });
+            
+            fetch(`${api_addr}/user/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataToSendLogin),
+            })
+            .then (response => {
+                if (response.status === 401)
+                {
+                    login_container.style.borderRadius = '10px 0px 0px 0px';
+                    login_error_message.style.display = 'block';
+                    return;
+                }
+            
+                return response.json();
+            })
+            .then(data => {
+                const allowLogin = data != null ? data.allowLogin : null;
+                const userToken = data != null ? data.token : null;
+                const role = data != null ? data.role : null;
+                const school = data != null ? data.school : null;
+            
+                if (allowLogin != null && userToken != null)
+                {
+                    if (allowLogin == true)
+                    {
+                        store.set('username', username);                                                                          
+                        store.set('role', role);
+                        store.set('school', school);
+                    
+                        if (remember_checkbox.checked)
+                        {                    
+                            const data = { value: userToken };
+                            store.set('authToken', JSON.stringify(data));
+                            store.set('loggedIn', true);
+                        }
+                    
+                        window.location.href = '../Home/index.html';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error: ', error);
+                login_container.style.borderRadius = '10px 0px 0px 0px';
+                connection_error.style.display = 'block';
+            });
+        }
+    });
+    
     sign_in.addEventListener('click', () => {
         const username = document.getElementById('username_input').value;
         const password = document.getElementById('password_input').value;
