@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     orga_role.textContent = orga_role_text;
 
     const command_input = document.getElementById('command_input');
+    const command_input_student = document.getElementById('command_input_student');
+    const command_input_teacher = document.getElementById('command_input_teacher');
 
     // * Teacher student base:
     const students_list = document.getElementById('students-list');
@@ -1041,6 +1043,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // * Dev Console:
     const toggle_console = document.getElementById('toggle_console');
+
+    const toggle_console_student = document.getElementById('toggle_console_student');
+    const console_student = document.getElementById('dev-console-student');
+
+    const toggle_console_teacher = document.getElementById('toggle_console_teacher');
+    const console_teacher = document.getElementById('dev-console-teacher');
+
     const dev_console = document.getElementById('dev-console');
 
     const user_card = document.getElementById('user');
@@ -1059,6 +1068,57 @@ document.addEventListener('DOMContentLoaded', () => {
             devConsole.loadMessages();
         }
         else if (dev_console.style.display == 'none')
+        {
+            user_card.style.marginRight = '1%';
+            user_options.style.marginRight = '1%';
+
+            // * Unload data:
+            devConsole.closeConsole();
+            document.getElementById('console_output');
+            console_output.innerHTML = '';
+        }
+    });
+
+    // * Toggle Console Student 
+    toggle_console_student.addEventListener('click', () => {
+        console_student.style.display = console_student.style.display === 'flex' ? 'none' : 'flex';
+
+        if (console_student.style.display == 'flex')
+        {
+            user_card.style.marginRight = '46%';
+            user_options.style.marginRight = '46%';
+
+            // * Load data:
+            devConsole.openConsole();
+            devConsole.loadMessages();
+        }
+        else if (console_student.style.display == 'none')
+        {
+            user_card.style.marginRight = '1%';
+            user_options.style.marginRight = '1%';
+
+            // * Unload data:
+            devConsole.closeConsole();
+            document.getElementById('console_output');
+            console_output.innerHTML = '';
+        }
+    });
+
+    // * Toggle Console Teacher
+    toggle_console_teacher.addEventListener('click', () => {
+        console.log('test');
+        console_teacher.style.display = console_teacher.style.display === 'flex' ? 'none' : 'flex';
+
+        if (console_teacher.style.display == 'flex')
+        {
+            user_card.style.marginRight = '46%';
+            user_options.style.marginRight = '46%';
+
+            // * Load data:
+            devConsole.openConsole();
+            devConsole.loadMessages();
+        }
+        else if (console_teacher.style.display == 'none')
         {
             user_card.style.marginRight = '1%';
             user_options.style.marginRight = '1%';
@@ -1089,6 +1149,115 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 devConsole.displayNetwork();
                 command_input.value = '';
+            }
+            else if (command.startsWith('switchRole'))
+            {
+                const match = command.match(/switchRole\(([^)]+)\)/);
+                if (match)
+                {
+                    const role = match[1].trim();
+
+                    if (['student', 'teacher', 'dev'].includes(role)) 
+                    {
+                        devConsole.switchRole(role);
+                        command_input.value = '';
+                        dev_console.style.display = 'none';
+                        user_card.style.marginRight = '1%';
+                        user_options.style.marginRight = '1%';
+                    } 
+                    else 
+                    {
+                        devConsole.error(`Invalid role: ${role}`);
+                    }
+                }
+            }
+        }
+    });
+
+    command_input_student.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter')
+        {
+            const command = command_input_student.value;
+
+            if (command == 'clear')
+            {
+                devConsole.clear();
+                command_input_student.value = '';
+            }
+            else if (command == 'getDOM')
+            {
+                devConsole.getDOM();
+                command_input_student.value = '';
+            }
+            else if (command == 'displayNetwork')
+            {
+                devConsole.displayNetwork();
+                command_input_student.value = '';
+            }
+            else if (command.startsWith('switchRole'))
+            {
+                const match = command.match(/switchRole\(([^)]+)\)/);
+                if (match)
+                {
+                    const role = match[1].trim();
+
+                    if (['student', 'teacher', 'dev'].includes(role)) 
+                    {
+                        devConsole.switchRole(role);
+                        command_input_student.value = '';
+                        console_student.style.display = 'none';
+                        user_card.style.marginRight = '1%';
+                        user_options.style.marginRight = '1%';
+                    } 
+                    else 
+                    {
+                        devConsole.error(`Invalid role: ${role}`);
+                    }
+                }
+            }
+        }
+    });
+
+    command_input_teacher.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter')
+        {
+            const command = command_input_teacher.value;
+
+            if (command == 'clear')
+            {
+                devConsole.clear();
+                command_input_teacher.value = '';
+            }
+            else if (command == 'getDOM')
+            {
+                devConsole.getDOM();
+                command_input_teacher.value = '';
+            }
+            else if (command == 'displayNetwork')
+            {
+                devConsole.displayNetwork();
+                command_input_teacher.value = '';
+            }
+            else if (command.startsWith('switchRole'))
+            {
+                const match = command.match(/switchRole\(([^)]+)\)/);
+                if (match)
+                {
+                    const role = match[1].trim();
+
+                    if (['student', 'teacher', 'dev'].includes(role)) 
+                    {
+                        devConsole.switchRole(role);
+                        command_input_teacher.value = '';
+                        console_teacher.style.display = 'none';
+                        user_card.style.marginRight = '1%';
+                        user_options.style.marginRight = '1%';
+                    } 
+                    else 
+                    {
+                        devConsole.error(`Invalid role: ${role}`);
+                    }
+                }
             }
         }
     });

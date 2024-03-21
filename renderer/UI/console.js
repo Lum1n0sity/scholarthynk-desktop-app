@@ -71,6 +71,35 @@ class devConsole {
             this.addMessage('log', request, 'resourceEntries');
         });
     }
+
+    switchRole(role) {
+        const student = document.getElementById('student');
+        const teacher = document.getElementById('teacher');
+        const dev = document.getElementById('dev');
+
+        if (role == 'student')
+        {
+            student.style.display = 'block';
+            teacher.style.display = 'none';
+            dev.style.display = 'none';
+            const toggle_console_student = document.getElementById('toggle_console_student');
+            toggle_console_student.style.display = 'block';
+        }
+        else if (role == 'teacher')
+        {
+            student.style.display = 'none';
+            teacher.style.display = 'block';
+            dev.style.display = 'none';
+            const toggle_console_teacher = document.getElementById('toggle_console_teacher');
+            toggle_console_teacher.style.display = 'block';
+        }
+        else if (role == 'dev')
+        {
+            student.style.display = 'none';
+            teacher.style.display = 'none';
+            dev.style.display = 'block';
+        }
+    }
   
     addMessage(type, message, id) {
         if (!id == 'resourceEntries')
@@ -104,7 +133,7 @@ class devConsole {
         const element = document.getElementById(this.elementId);
         element.innerHTML = '';
     }
-
+    
     openConsole() {
         this.isOpen = true;
     }

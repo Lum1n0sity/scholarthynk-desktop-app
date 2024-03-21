@@ -38,6 +38,13 @@
                     <div class="grades section">
                         <h3 class="section-title" data-i1j8n="app.home.student.grades.grades_title"></h3>
                     </div>
+                    <button class="toggle-console" id="toggle_console_student"><span class="material-symbols-rounded">terminal</span></button>
+                    <div class="dev-console-student" id="dev-console-student">
+                        <div class="console-output" id="console_output">
+                            
+                        </div>
+                        <input type="text" class="command-input" id="command_input_student" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
+                    </div>
                 </div>
                 <div id="teacher" class="role-div">
                     <div class="manage-students-container">
@@ -141,6 +148,13 @@
                             <button data-i18n="app.home.teacher.delete_warning.cancel" class="warning-cancel button" id="delete_warning_cancel"></button>
                             <button data-i18n="app.home.teacher.delete_warning.delete" class="warning-delete" id="delete_warning_delete"></button>
                         </div>
+                    </div>
+                    <button class="toggle-console toggle-console-teacher" id="toggle_console_teacher"><span class="material-symbols-rounded">terminal</span></button>
+                    <div class="dev-console-teacher" id="dev-console-teacher">
+                        <div class="console-output" id="console_output">
+                            
+                        </div>
+                        <input type="text" class="command-input" id="command_input_teacher" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
                     </div>
                 </div>
                 <div id="dev" class="role-div">
