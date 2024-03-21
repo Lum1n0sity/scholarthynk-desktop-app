@@ -983,7 +983,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // * Delete school:
 
+    const deleteSchoolWin = document.getElementById('delete_school_win');
+    const deleteSchoolOpen = document.getElementById('delete-school');
+    const closeDeleteSchool = document.getElementById('cancel_delete_school');
+    const deleteSchool = document.getElementById('delete_school');
 
+    deleteSchoolOpen.addEventListener('click', () => {
+        background.style.display = 'block';
+        deleteSchoolWin.style.display = 'flex';
+    });
+    
+    closeDeleteSchool.addEventListener('click', () => {
+        background.style.display = 'none';
+        deleteSchoolWin.style.display = 'none';
+    });
+
+    deleteSchool.addEventListener('click', () => {
+        const school = document.getElementById('school_name').value
+        const schoolData = ({ school: school });
+
+        if (school.length != 0)
+        {
+            fetch(`${config.apiUrl}/delete/school`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(schoolData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const deleted = data.deleted;
+
+                if (deleted)
+                {
+                    const children = schools_list.children;
+
+                    for (let i = 0; i < children.length; i++)
+                    {
+                        const child = children[i];
+
+                        if (child.textContent.trim() == school)
+                        {
+                            schools_list.removeChild(child);
+                            background.style.display = 'none';
+                            deleteSchoolWin.style.display = 'none';
+                            break;
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error: ', error);
+            });
+        }
+    });
 
     // * Dev Console:
     const toggle_console = document.getElementById('toggle_console');
