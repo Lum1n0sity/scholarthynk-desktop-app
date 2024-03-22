@@ -28,7 +28,6 @@ body {
     background-color: var(--background);
     color: var(--text-color);
     overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 #main_grid {
@@ -39,7 +38,6 @@ body {
     width: 100vw;
     grid-gap: 10px;
     overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 #nav_bar {
@@ -116,6 +114,25 @@ body {
     top: 0;
     right: 0;
     display: grid;
+    overflow-y: auto;
+}
+
+#page_content::-webkit-scrollbar {
+    width: 5px;
+}
+
+#page_content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#page_content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+#page_content::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .input {

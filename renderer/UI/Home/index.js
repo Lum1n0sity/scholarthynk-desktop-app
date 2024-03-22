@@ -1,6 +1,6 @@
 const rootPathIndex = require('electron-root-path').rootPath;
 const pathIndex = require('path');
-const { fs, getCurrentLine, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
+const { fs, getCurrentLine, ipcRenderer, dialog, shell, Store, google, config, Chart } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 const devConsoleClass = require('../console');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1260,6 +1260,226 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+    });
+
+    // * Monitoring
+    const ctxUptime = document.getElementById('serverUptimeChart').getContext('2d');
+    const ctxActiveUsers = document.getElementById('activeUsersChart').getContext('2d');
+    const ctxResources = document.getElementById('serverResourceChart').getContext('2d');
+    const ctxAPI = document.getElementById('apiUsageChart').getContext('2d');
+    const ctxDB = document.getElementById('dbUsageChart').getContext('2d');
+
+    const refresh_charts = document.getElementById('refresh_charts');
+    
+    // * Active Users
+    let labelsUsers = getLastNFullHours(7);
+    let dataUsers = [];
+
+    const chartUsers = new Chart(ctxActiveUsers, {
+        type: 'line',
+        data: {
+            labels: labelsUsers,
+            datasets: [{
+                label: 'Active Users',
+                data: dataUsers,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {         
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        max: 1000
+                    }
+                }]
+            }
+        }
+    })
+
+    // * Uptime
+    let labelsUptime = getLastNFullHours(5);
+    let dataUptime = [];
+
+    const chartUptime = new Chart(ctxUptime, {
+        type: 'line',
+        data: {
+            labels: labelsUptime,
+            datasets: [{
+                label: 'Server Uptime',
+                data: dataUptime,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {         
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        max: 100,
+                        min: 0,
+                        suggestedMin: 0 
+                    }
+                }]
+            }
+        }
+    });
+
+    // * Resources
+    let dataResources = [];
+    const labels = ['CPU', 'RAM', 'Storage'];
+    const chartResources = new Chart(ctxResources, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Resource Usage',
+                data: dataResources,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+            }]
+        }
+    });
+
+    // * API
+    let dataAPI = [];
+    const chartAPI = new Chart(ctxAPI, {
+        type: 'bar',
+        data: {
+            labels: ['Total Requests', 'Requests by Hour'],
+            datasets: [{
+                label: 'API Usage',
+                data: dataAPI,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    let dataDB = [];
+    const chartDB = new Chart(ctxDB, {
+        type: 'bar',
+        data: {
+            labels: ['Total Requests', 'Requests by Hour'],
+            datasets: [{
+                label: 'DB Usage',
+                data: dataDB,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    // * Get data
+
+    function getLastNFullHours(numHours) 
+    {
+        const lastHours = [];
+        const now = new Date();
+
+        const currentHour = now.getHours();
+
+        for (let i = 0; i < numHours; i++) {
+            const hour = (currentHour - i + 24) % 24;
+            lastHours.unshift(`${hour}:00`);
+        }
+
+        return lastHours;
+    }
+
+    function getChartData()
+    {
+        const now = new Date();
+        const currentHour = `${now.getHours()} ${now.getDate()} ${now.getMonth() + 1}`;
+        const getChartData = ({ currentHour: currentHour })
+
+        fetch(`${config.apiUrl}/dev/get-chart-data`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(getChartData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const usersData = data.usersData;
+            const uptimeData = data.uptimeData;
+            const serverUsage = data.serverUsage;
+            const apiUsage = data.apiUsage; 
+            const dbUsage = data.dbUsage;
+
+            const apiUsageArray = [apiUsage.totalRequests, apiUsage.requestsByHour];
+            const dbUsageArray = [dbUsage.totalQueries, dbUsage.queriesByHour];
+
+            dataUsers.splice(0, dataUsers.length, ...usersData);
+            dataUptime.splice(0, dataUptime.length, ...uptimeData);
+            dataResources.splice(0, serverUsage.length, ...serverUsage);
+            dataAPI.splice(0, apiUsageArray.length, ...apiUsageArray);
+            dataDB.splice(0, dbUsageArray.length, ...dbUsageArray);
+
+            chartUsers.update();
+            chartUptime.update();
+            chartResources.update();
+            chartAPI.update();
+            chartDB.update();
+        })
+        .catch(error => {
+            devConsole.error('Fetch error');
+        });
+    }
+
+    // * Update data hourly
+    function updateDataAtNextFullHour() {
+        const now = new Date();
+        const minutesUntilNextHour = 60 - now.getMinutes();
+        const millisecondsUntilNextHour = minutesUntilNextHour * 60 * 1000;
+        
+        setTimeout(() => {
+            labelsUsers = getLastNFullHours(7);
+            labelsUptime = getLastNFullHours(5);
+            getChartData();
+
+            updateDataAtNextFullHour();
+        }, millisecondsUntilNextHour);
+    }
+
+    getChartData();
+    updateDataAtNextFullHour();    
+
+    refresh_charts.addEventListener('click', () => {
+        getChartData();
+        labelsUsers = getLastNFullHours(7);
+        labelsUptime = getLastNFullHours(5);
+        getChartData();
     });
 });
 

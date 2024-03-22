@@ -8,6 +8,7 @@ const timers = require('timers');
 const i18next = require('i18next');
 const fsBackend = require('i18next-fs-backend');
 const { google } = require('googleapis');
+const Chart = require('chart.js/auto');
 
 module.exports = {
     Store,
@@ -22,4 +23,5 @@ module.exports = {
     i18next,
     fsBackend,
     google,
+    Chart,
 }

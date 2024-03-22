@@ -154,13 +154,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     nav_logout.addEventListener('click', (event) => {
         event.preventDefault();
 
-        window.location.href = "../Login/login.html";
-        store.set('loggedIn', false);
-        store.set('loggedOut', true);
-        store.delete('authToken');
-        store.delete('school');
-        store.delete('role');
-        store.delete('username');
+        const username = store.get('username');
+        const userData = ({ username: username});
+
+        fetch(`${configRenderer.apiUrl}/user/updateStatus`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const updated = data.updated;
+
+            if (updated)
+            {
+                window.location.href = "../Login/login.html";
+                store.set('loggedIn', false);
+                store.set('loggedOut', true);
+                store.delete('authToken');
+                store.delete('school');
+                store.delete('role');
+                store.delete('username');
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error: ', error);
+        });
     });
 
     user.addEventListener('click', () => {

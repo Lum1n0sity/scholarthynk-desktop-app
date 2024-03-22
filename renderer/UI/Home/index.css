@@ -670,10 +670,9 @@
 .schools-container {
     background-color: var(--primary);
     width: 30%;
-    height: 30%;
     border-radius: 6px;
-    margin-top: 2%;
-    margin-left: 2%;
+    margin-top: 1%;
+    margin-left: 1%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -896,6 +895,7 @@
     flex-direction: column;
     align-items: center;
     transition: .5s;
+    border-left: 1px solid var(--alt-primary);
 }
 
 .dev-console-student {
@@ -912,6 +912,7 @@
     flex-direction: column;
     align-items: center;
     transition: .5s;
+    border-left: 1px solid var(--alt-primary);
 }
 
 .dev-console-teacher {
@@ -928,6 +929,7 @@
     flex-direction: column;
     align-items: center;
     transition: .5s;
+    border-left: 1px solid var(--alt-primary);
 }
 
 .command-input {
@@ -941,4 +943,40 @@
     background-color: var(--alt-primary);
     color: var(--text-color);
     padding: 10px;
+}
+
+.row {
+    display: flex;
+    width: 95vw;
+    height: max-content;
+    flex-direction: row;
+}
+
+.chart {
+    background: var(--primary);
+    width: 30%;
+    height: 32%;
+    border-radius: 5px;
+    margin-left: 1%;
+    margin-top: 1%;
+    padding: 1%;
+}
+
+.chart h2 {
+    font-size: 1.5vw;
+    text-align: center;
+} 
+
+.refresh {
+    border-radius: 50%;
+    position: absolute;
+    right: 1%;
+    top: 12%;
+    width: 4vw;
+    height: 4vw;
+}
+
+.refresh span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
 }

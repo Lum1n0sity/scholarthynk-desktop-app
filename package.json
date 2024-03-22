@@ -12,6 +12,7 @@
   "dependencies": {
     "@google-cloud/translate": "^8.0.2",
     "@googleapis/youtube": "^13.0.0",
+    "chart.js": "^4.4.2",
     "crypto": "^1.0.1",
     "electron": "^26.2.2",
     "electron-i18n": "^1.3136.0",

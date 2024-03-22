@@ -158,16 +158,51 @@
                     </div>
                 </div>
                 <div id="dev" class="role-div">
-                    <div class="schools-container">
-                        <h3 class="schools-title" data-i18n="app.home.dev.schools.schools_title"></h3>
-                        <div id="schools_list" class="schools-list">
-                            <!-- Here are the schools going -->
+                    <div class="row">
+                        <div class="schools-container">
+                            <h3 class="schools-title" data-i18n="app.home.dev.schools.schools_title"></h3>
+                            <div id="schools_list" class="schools-list">
+                                <!-- Here are the schools going -->
+                            </div>
+                            <div class="options-div">
+                                <button class="add" id="add-school"><span class="material-symbols-rounded">add</span></button>
+                                <button class="delete" id="delete-school"><span class="material-symbols-rounded">delete</span></button>
+                            </div>
                         </div>
-                        <div class="options-div">
-                            <button class="add" id="add-school"><span class="material-symbols-rounded">add</span></button>
-                            <button class="delete" id="delete-school"><span class="material-symbols-rounded">delete</span></button>
+                        <div class="chart">
+                            <h2>Active Users</h2>
+                            <div style="width: 100%;">
+                                <canvas id="activeUsersChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart">
+                            <h2>Server Uptime (%)</h2>
+                            <div style="width: 100%;">
+                                <canvas id="serverUptimeChart"></canvas>
+                            </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="chart">
+                            <h2>Server Resource Usage (%)</h2>
+                            <div style="width: 100%;">
+                                <canvas id="serverResourceChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart">
+                            <h2>API Usage</h2>
+                            <div style="width: 100%;">
+                                <canvas id="apiUsageChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart">
+                            <h2>DB Usage</h2>
+                            <div style="width: 100%;">
+                                <canvas id="dbUsageChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="button refresh" id="refresh_charts"><span class="material-symbols-rounded">refresh</span></button>
                     <div class="add-school-container" id="add-school-win">
                         <h3 class="add-school-title" data-i18n="app.home.dev.schools.add_school.add_school_title"></h3>
                         <button id="load_school_data" class="get-school-data button"><span class="material-symbols-rounded">description</span> <p data-i18n="app.home.dev.schools.add_school.load_school_data"></p></button>
