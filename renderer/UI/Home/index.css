@@ -4,7 +4,7 @@
     height: 10%;
     justify-self: end;
     position: absolute;
-    margin-right: 1%;
+    margin-right: 7%;
     bottom: 2%;
     display: flex;
     flex-direction: row;
@@ -32,7 +32,7 @@
 .user-options {
     position: absolute;
     justify-self: end;
-    margin-right: 1%;
+    margin-right: 7%;
     bottom: 13%;
     width: 20%;
     height: max-content;
@@ -861,7 +861,7 @@
     outline: none;
     transition: .5s;
     color: var(--text-color);
-    z-index: 4;
+    z-index: 1;
 }
 
 .toggle-console span {
@@ -967,6 +967,10 @@
     text-align: center;
 } 
 
+.resources {
+    height: 61.5vh;
+}
+
 .refresh {
     border-radius: 50%;
     position: absolute;
@@ -979,4 +983,162 @@
 .refresh span {
     font-size: 1.5vw;
     transform: translateY(10%);
+}
+
+.toggle-dev-chat {
+    border-radius: 50%;
+    position: absolute;
+    right: 1%;
+    bottom: 3%;
+    width: 4vw;
+    height: 4vw;
+}
+
+.toggle-dev-chat span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
+}
+
+.chat-window {
+    width: 90vw;
+    height: 90vh;
+    position: absolute;
+    top: 4vh;
+    left: 2.5vw;
+    background-color: var(--primary);
+    z-index: 5;
+    border-radius: 5px;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+}
+
+.close-chat-win {
+    top: 2%;
+}
+
+.close-chat-win:hover {
+    color: var(--text-color);
+}
+
+.dev-list-container {
+    width: 30%;
+    height: 27%;
+    position: absolute;
+    left: 32%;
+    bottom: 2%;
+    background-color: var(--primary);
+    border-radius: 5px;
+}
+
+.dev-list-title {
+    font-size: 1.5vw;
+    text-align: center;
+    margin-top: 1%;
+}
+
+.dev-list {
+    width: 100%;
+    width: 100%;
+    height: 80%;
+    margin-top: 2%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.dev-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.dev-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dev-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.dev-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.add-dev-open {
+    position: absolute;
+    top: 1%;
+    left: .7%;
+}
+
+.add-dev-win {
+    position: absolute;
+    top: 50%;
+    left: 47%;
+    width: 30%;
+    height: 30%;
+    transform: translate(-50%, -50%);
+    background-color: var(--primary);
+    z-index: 5;
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.close-add-dev {
+    top: 2%;
+}
+
+.close-add-dev:hover {
+    color: var(--text-color);
+}
+
+.add-dev-title {
+    font-size: 1.7vw;
+    text-align: center;
+    margin-top: 3%;
+}
+
+.add-dev-username {
+    width: 60%;
+    margin-top: 2%;
+}
+
+.add-dev-email {
+    width: 60%;
+    margin-top: 2%;
+}
+
+.add-dev {
+    font-size: 1.5vw;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 5%; 
+}
+
+.developer-list-item {
+    font-size: 1.5vw;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1%;
+    width: 90%;
+    margin-left: 5%;
+}
+
+.remove-dev {
+    font-size: 1vw;
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.remove-dev:hover {
+    text-decoration: underline;
 }

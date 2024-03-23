@@ -170,36 +170,43 @@
                             </div>
                         </div>
                         <div class="chart">
-                            <h2>Active Users</h2>
+                            <h2 data-i18n="app.home.dev.dashboard.active_users"></h2>
                             <div style="width: 100%;">
                                 <canvas id="activeUsersChart"></canvas>
                             </div>
                         </div>
                         <div class="chart">
-                            <h2>Server Uptime (%)</h2>
+                            <h2 data-i18n="app.home.dev.dashboard.server_uptime"></h2>
                             <div style="width: 100%;">
                                 <canvas id="serverUptimeChart"></canvas>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="chart">
-                            <h2>Server Resource Usage (%)</h2>
+                        <div class="chart resources">
+                            <h2 data-i18n="app.home.dev.dashboard.resource_usage"></h2>
                             <div style="width: 100%;">
                                 <canvas id="serverResourceChart"></canvas>
                             </div>
                         </div>
                         <div class="chart">
-                            <h2>API Usage</h2>
+                            <h2 data-i18n="app.home.dev.dashboard.api_usage"></h2>
                             <div style="width: 100%;">
                                 <canvas id="apiUsageChart"></canvas>
                             </div>
                         </div>
                         <div class="chart">
-                            <h2>DB Usage</h2>
+                            <h2 data-i18n="app.home.dev.dashboard.db_usage"></h2>
                             <div style="width: 100%;">
                                 <canvas id="dbUsageChart"></canvas>
                             </div>
+                        </div>
+                    </div>
+                    <div class="dev-list-container">
+                        <h3 class="dev-list-title" data-i18n="app.home.dev.dashboard.developer.title"></h3>
+                        <button class="add add-dev-open" id="open_add_dev"><span class="material-symbols-rounded">add</span></button>
+                        <div class="dev-list" id="dev_list">
+                            <!-- Devs go here -->
                         </div>
                     </div>
                     <button class="button refresh" id="refresh_charts"><span class="material-symbols-rounded">refresh</span></button>
@@ -225,6 +232,17 @@
                             
                         </div>
                         <input type="text" class="command-input" id="command_input" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
+                    </div>
+                    <button class="button toggle-dev-chat" id="toggle_dev_chat"><span class="material-symbols-rounded">chat</span></button>
+                    <div class="chat-window" id="dev_chat_win">
+                        <button class="close close-chat-win" id="close_dev_chat"><span class="material-symbols-rounded">close</span></button>
+                    </div>
+                    <div class="add-dev-win" id="add_dev_win">
+                        <button class="close close-add-dev" id="close_dev_win"><span class="material-symbols-rounded">close</span></button>
+                        <h3 class="add-dev-title" data-i18n="app.home.dev.dashboard.developer.add_developer.title"></h3>
+                        <input type="text" class="input add-dev-username" id="dev_username" data-i18n="app.home.dev.dashboard.developer.add_developer.username_placeholder" data-i18n-attr="placeholder">
+                        <input type="text" class="input add-dev-email" id="dev_email" data-i18n="app.home.dev.dashboard.developer.add_developer.email_placeholder" data-i18n-attr="placeholder">
+                        <button class="button add-dev" id="add_dev" data-i18n="app.home.dev.dashboard.developer.add_developer.add_dev"></button>
                     </div>
                 </div>
                 <div class="user-prev" id="user">

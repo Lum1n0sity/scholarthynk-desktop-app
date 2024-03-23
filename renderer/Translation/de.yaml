@@ -89,6 +89,19 @@ app:
           add_school_cancel: Abbrechen
       console:
         input_placeholder: Gebe einen Befehl ein
+      dashboard:
+        active_users: Aktive Benutzer
+        server_uptime: Server Laufzeit (%)
+        resource_usage: Server Resourcen (%)
+        api_usage: API Benutzung
+        db_usage: DB Benutzung
+        developer:
+          title: Developers
+          add_developer:
+            title: Developer Hinzufügen
+            username_placeholder: Benutzername
+            email_placeholder: Email
+            add_dev: Hinzufügen
   discover:
     title: ScholarThynk - Entdecken
     tab_en: Englisch

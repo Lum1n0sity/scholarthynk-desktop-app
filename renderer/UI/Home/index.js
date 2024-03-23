@@ -2,6 +2,7 @@ const rootPathIndex = require('electron-root-path').rootPath;
 const pathIndex = require('path');
 const { fs, getCurrentLine, ipcRenderer, dialog, shell, Store, google, config, Chart } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 const devConsoleClass = require('../console');
+const { create } = require('lodash');
 
 document.addEventListener('DOMContentLoaded', () => {
     const devConsole = new devConsoleClass('console_output');
@@ -13,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const studentFeatures = document.getElementById('student');
     const teacherFeatures = document.getElementById('teacher');
     const devFeatures = document.getElementById('dev');
+
+    const dev_list = document.getElementById('dev_list');
 
     // * User display
     const username_display = document.getElementById('username');
@@ -160,6 +163,67 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         devFeatures.style.display = 'block';
+
+        fetch(`${config.apiUrl}/dev/load-devs`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const usernames = data.usernames;
+
+            usernames.forEach(name => {
+                const developer = document.createElement('p');
+                const remove_dev = document.createElement('button');
+
+                developer.classList.add('developer-list-item');
+                remove_dev.classList.add('remove-dev');
+
+                developer.textContent = name;
+                remove_dev.textContent = 'Remove';
+                
+                const username = name;
+                    
+                remove_dev.addEventListener('click', () => {
+                    const requestDataRemove = ({ username: username });
+                    fetch(`${config.apiUrl}/dev/remove-dev`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(requestDataRemove)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const removed = data.removed;
+
+                        if (removed)
+                        {
+                            const pElements = dev_list.querySelectorAll('p');
+
+                            pElements.forEach(element => {
+                                if (element.textContent.trim() === `${username}Remove`) {
+                                    element.remove();
+                                }
+                            });  
+                        }
+                    })
+                    .catch(err => {
+                        devConsole.error('Fetch error');
+                        console.error('Fetch error', err);
+                    });
+                });
+
+                developer.appendChild(remove_dev);
+                dev_list.appendChild(developer);
+            })
+        })
+        .catch(err => {
+            devConsole.error('Fetch error');
+            console.error('Fetch error', err);
+        });
     }
 
     const background = document.getElementById('background');
@@ -1062,6 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             user_card.style.marginRight = '46%';
             user_options.style.marginRight = '46%';
+            toggle_console.style.zIndex = '6';
 
             // * Load data:
             devConsole.openConsole();
@@ -1069,8 +1134,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (dev_console.style.display == 'none')
         {
-            user_card.style.marginRight = '1%';
-            user_options.style.marginRight = '1%';
+            user_card.style.marginRight = '7%';
+            user_options.style.marginRight = '7%';
+            toggle_console.style.zIndex = '1';
 
             // * Unload data:
             devConsole.closeConsole();
@@ -1087,6 +1153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             user_card.style.marginRight = '46%';
             user_options.style.marginRight = '46%';
+            toggle_console_student.style.zIndex = '6';
 
             // * Load data:
             devConsole.openConsole();
@@ -1094,8 +1161,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (console_student.style.display == 'none')
         {
-            user_card.style.marginRight = '1%';
-            user_options.style.marginRight = '1%';
+            user_card.style.marginRight = '7%';
+            user_options.style.marginRight = '7%';
+            toggle_console_student.style.zIndex = '1';
 
             // * Unload data:
             devConsole.closeConsole();
@@ -1106,13 +1174,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // * Toggle Console Teacher
     toggle_console_teacher.addEventListener('click', () => {
-        console.log('test');
         console_teacher.style.display = console_teacher.style.display === 'flex' ? 'none' : 'flex';
 
         if (console_teacher.style.display == 'flex')
         {
             user_card.style.marginRight = '46%';
             user_options.style.marginRight = '46%';
+            toggle_console_teacher.style.zIndex = '6';
 
             // * Load data:
             devConsole.openConsole();
@@ -1120,8 +1188,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         else if (console_teacher.style.display == 'none')
         {
-            user_card.style.marginRight = '1%';
-            user_options.style.marginRight = '1%';
+            user_card.style.marginRight = '7%';
+            user_options.style.marginRight = '7%';
+            toggle_console_teacher.style.zIndex = '1';
 
             // * Unload data:
             devConsole.closeConsole();
@@ -1162,8 +1231,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         devConsole.switchRole(role);
                         command_input.value = '';
                         dev_console.style.display = 'none';
-                        user_card.style.marginRight = '1%';
-                        user_options.style.marginRight = '1%';
+                        user_card.style.marginRight = '7%';
+                        user_options.style.marginRight = '7%';
                     } 
                     else 
                     {
@@ -1206,8 +1275,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         devConsole.switchRole(role);
                         command_input_student.value = '';
                         console_student.style.display = 'none';
-                        user_card.style.marginRight = '1%';
-                        user_options.style.marginRight = '1%';
+                        user_card.style.marginRight = '7%';
+                        user_options.style.marginRight = '7%';
                     } 
                     else 
                     {
@@ -1250,8 +1319,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         devConsole.switchRole(role);
                         command_input_teacher.value = '';
                         console_teacher.style.display = 'none';
-                        user_card.style.marginRight = '1%';
-                        user_options.style.marginRight = '1%';
+                        user_card.style.marginRight = '7%';
+                        user_options.style.marginRight = '7%';
                     } 
                     else 
                     {
@@ -1480,6 +1549,130 @@ document.addEventListener('DOMContentLoaded', () => {
         labelsUsers = getLastNFullHours(7);
         labelsUptime = getLastNFullHours(5);
         getChartData();
+    });
+
+    // * Developer Management
+    const open_add_dev = document.getElementById('open_add_dev');
+    const add_dev_win = document.getElementById('add_dev_win');
+    const close_dev_win = document.getElementById('close_dev_win');
+    const add_dev = document.getElementById('add_dev');
+
+    open_add_dev.addEventListener('click', () => {
+        add_dev_win.style.display = 'flex';
+        background.style.display = 'block';
+    });
+
+    close_dev_win.addEventListener('click', () => {
+        add_dev_win.style.display = 'none';
+        background.style.display = 'none';
+
+        // * Unload inputs
+        const usernameInput = document.getElementById('dev_username');
+        const emailInput = document.getElementById('dev_email');
+
+        usernameInput.value = '';
+        emailInput.value = '';
+    });
+
+    add_dev.addEventListener('click', () => {
+        const usernameInput = document.getElementById('dev_username').value;
+        const emailInput = document.getElementById('dev_email').value;
+
+        if (usernameInput.length != 0 && emailInput.length != 0);
+        {
+            const requestData = ({ username: usernameInput, email: emailInput });
+
+            fetch(`${config.apiUrl}/dev/add-dev`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const added = data.added;
+
+                if (added)
+                {
+                    add_dev_win.style.display = 'none';
+                    background.style.display = 'none';
+
+                    const developer = document.createElement('p');
+                    const remove_dev = document.createElement('button');
+
+                    developer.classList.add('developer-list-item');
+                    remove_dev.classList.add('remove-dev');
+
+                    developer.textContent = usernameInput;
+                    remove_dev.textContent = 'Remove';
+                    
+                    developer.appendChild(remove_dev);
+                    dev_list.appendChild(developer);
+
+                    const username = usernameInput;
+
+                    remove_dev.addEventListener('click', () => {
+                        const requestDataRemove = ({ username: username });
+
+                        fetch(`${config.apiUrl}/dev/remove-dev`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(requestDataRemove)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            const removed = data.removed;
+
+                            if (removed)
+                            {
+                                const pElements = dev_list.querySelectorAll('p');
+
+                                pElements.forEach(element => {
+                                    if (element.textContent.trim() === `${username}Remove`) {
+                                        element.remove();
+                                    }
+                                });                                
+                            }
+                        })
+                        .catch(err => {
+                            devConsole.error('Fetch error');
+                            console.error('Fetch error', err);
+                        });
+                    });
+
+                    // // * Unload inputs
+                    // const usernameInput = document.getElementById('dev_username');
+                    // const emailInput = document.getElementById('dev_email');
+                    
+                    // usernameInput.value = '';
+                    // emailInput.value = '';
+                }
+            })
+            .catch(err => {
+                devConsole.error('Fetch error');
+                console.error('Fetch error', err);
+            });
+        }
+    }); 
+
+    // * Dev Chat
+    const toggle_dev_chat = document.getElementById('toggle_dev_chat');
+    const dev_chat_win = document.getElementById('dev_chat_win');
+    const close_dev_chat = document.getElementById('close_dev_chat');
+
+    toggle_dev_chat.addEventListener('click', () => {
+        dev_chat_win.style.display = 'flex';
+        background.style.display = 'block';
+
+        // * Load data
+    });
+
+    close_dev_chat.addEventListener('click', () => {
+        dev_chat_win.style.display = 'none';
+        background.style.display = 'none';
     });
 });
 
