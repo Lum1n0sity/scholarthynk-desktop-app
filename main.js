@@ -152,6 +152,23 @@ ipcMain.on('open-file-dialog', () => {
   openFileDialog();
 });
 
+app.on('before-quit', () => {
+  const username = store.get('username');
+  const userData = ({ username: username});
+
+  fetch('http://192.168.5.196:3000/user/updateStatus', {
+      method: 'POST',
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData)
+  })
+  .then(response => response.json())
+  .catch(error => {
+      console.error('Fetch error: ', error);
+  });
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') 
   {

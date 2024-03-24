@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const profile_pic = document.getElementById('profile_pic');
     const settings_user_options = document.getElementById('settings_user_options');
     const feedback_user_options = document.getElementById('feedback_user_options');
+    const feedback_win = document.getElementById('feedback_win');
+    const close_feedback_win = document.getElementById('');
 
     const username = { username: store.get('username') };
 
@@ -192,5 +194,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
 
         window.location.href = '../Settings/settings.html';
+    });
+
+    feedback_user_options.addEventListener('click', () => {
+        
     });
 });

@@ -31,7 +31,8 @@
     "nodemailer": "^6.9.5",
     "path": "^0.12.7",
     "timers": "^0.1.1",
-    "tokenizers": "^0.13.3"
+    "tokenizers": "^0.13.3",
+    "ws": "^8.16.0"
   },
   "devDependencies": {
     "chai": "^4.3.10",

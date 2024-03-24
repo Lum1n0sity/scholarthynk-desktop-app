@@ -1,12 +1,16 @@
 const rootPathIndex = require('electron-root-path').rootPath;
 const pathIndex = require('path');
-const { fs, getCurrentLine, ipcRenderer, dialog, shell, Store, google, config, Chart } = require(pathIndex.join(rootPathIndex, 'utils.js'));
+const { fs, WebSocket, getCurrentLine, ipcRenderer, dialog, shell, Store, google, config, Chart } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 const devConsoleClass = require('../console');
-const { create } = require('lodash');
 
 document.addEventListener('DOMContentLoaded', () => {
     const devConsole = new devConsoleClass('console_output');
     const store = new Store();
+    const ws = new WebSocket(`${config.webSocket}`);
+
+    ws.addEventListener('open', function(event) {
+        ws.send(JSON.stringify({ type: 'login', username: store.get('username') }));
+    });
 
     const role = store.get('role');
     const lang = store.get('lang');
@@ -21,7 +25,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const username_display = document.getElementById('username');
     const orga_role = document.getElementById('school_role');
 
+    let loadedProfilePic;
+
     username_display.textContent = store.get('username');
+
+    const usernameProfilePic = ({ username: store.get('username') });
+
+    fetch(`${config.apiUrl}/get/profilePic`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(usernameProfilePic),
+    })
+    .then(response => {
+        if (!response.ok) 
+        {
+            throw new Error('Network response was not ok');
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const imageUrl = URL.createObjectURL(blob);
+
+        loadedProfilePic = imageUrl;
+    })
+    .catch(error => {
+        console.error('Fetch error: ', error);
+    });  
     
     const orga_role_text = `${store.get('school')} - ${role.charAt(0).toUpperCase() + role.slice(1)}`;
     orga_role.textContent = orga_role_text;
@@ -1233,6 +1264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         dev_console.style.display = 'none';
                         user_card.style.marginRight = '7%';
                         user_options.style.marginRight = '7%';
+                        toggle_console.style.zIndex = '1';
                     } 
                     else 
                     {
@@ -1277,6 +1309,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         console_student.style.display = 'none';
                         user_card.style.marginRight = '7%';
                         user_options.style.marginRight = '7%';
+                        toggle_console_student.style.zIndex = '1';
                     } 
                     else 
                     {
@@ -1321,6 +1354,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         console_teacher.style.display = 'none';
                         user_card.style.marginRight = '7%';
                         user_options.style.marginRight = '7%';
+                        toggle_console_teacher.style.zIndex = '1';
                     } 
                     else 
                     {
@@ -1341,7 +1375,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const refresh_charts = document.getElementById('refresh_charts');
     
     // * Active Users
-    let labelsUsers = getLastNFullHours(7);
+    let labelsUsers = [];
+    getLastNFullHours(7, 'activeUsers');
     let dataUsers = [];
 
     const chartUsers = new Chart(ctxActiveUsers, {
@@ -1369,7 +1404,8 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // * Uptime
-    let labelsUptime = getLastNFullHours(5);
+    let labelsUptime = [];
+    getLastNFullHours(5, 'serverUptime');
     let dataUptime = [];
 
     const chartUptime = new Chart(ctxUptime, {
@@ -1470,26 +1506,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // * Get data
 
-    function getLastNFullHours(numHours) 
+    function getLastNFullHours(numHours, chart) 
     {
-        const lastHours = [];
         const now = new Date();
-
         const currentHour = now.getHours();
+
+        if (chart == 'activeUsers')
+        {
+            labelsUsers = [];
+        }
+        else if (chart == 'serverUptime')
+        {
+            labelsUptime.length = 0;
+        }
 
         for (let i = 0; i < numHours; i++) {
             const hour = (currentHour - i + 24) % 24;
-            lastHours.unshift(`${hour}:00`);
+            if (chart == 'activeUsers')
+            {
+                labelsUsers.unshift(`${hour}:00`);
+            }
+            else if (chart == 'serverUptime')
+            {
+                labelsUptime.unshift(`${hour}:00`);
+            }
         }
-
-        return lastHours;
     }
 
     function getChartData()
     {
         const now = new Date();
         const currentHour = `${now.getHours()} ${now.getDate()} ${now.getMonth() + 1}`;
-        const getChartData = ({ currentHour: currentHour })
+        const getChartData = ({ currentHour: currentHour });
 
         fetch(`${config.apiUrl}/dev/get-chart-data`, {
             method: "POST",
@@ -1515,6 +1563,9 @@ document.addEventListener('DOMContentLoaded', () => {
             dataAPI.splice(0, apiUsageArray.length, ...apiUsageArray);
             dataDB.splice(0, dbUsageArray.length, ...dbUsageArray);
 
+            getLastNFullHours(7, 'activeUsers');
+            getLastNFullHours(5, 'serverUptime');
+
             chartUsers.update();
             chartUptime.update();
             chartResources.update();
@@ -1533,8 +1584,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const millisecondsUntilNextHour = minutesUntilNextHour * 60 * 1000;
         
         setTimeout(() => {
-            labelsUsers = getLastNFullHours(7);
-            labelsUptime = getLastNFullHours(5);
             getChartData();
 
             updateDataAtNextFullHour();
@@ -1545,9 +1594,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDataAtNextFullHour();    
 
     refresh_charts.addEventListener('click', () => {
-        getChartData();
-        labelsUsers = getLastNFullHours(7);
-        labelsUptime = getLastNFullHours(5);
+        // getLastNFullHours(7, 'activeUsers');
+        // getLastNFullHours(5, 'serverUptime');
         getChartData();
     });
 
@@ -1593,11 +1641,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 const added = data.added;
 
+                add_dev_win.style.display = 'none';
+                background.style.display = 'none';
+
                 if (added)
                 {
-                    add_dev_win.style.display = 'none';
-                    background.style.display = 'none';
-
                     const developer = document.createElement('p');
                     const remove_dev = document.createElement('button');
 
@@ -1642,14 +1690,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.error('Fetch error', err);
                         });
                     });
-
-                    // // * Unload inputs
-                    // const usernameInput = document.getElementById('dev_username');
-                    // const emailInput = document.getElementById('dev_email');
-                    
-                    // usernameInput.value = '';
-                    // emailInput.value = '';
                 }
+
+                // * Unload inputs
+                const usernameInput = document.getElementById('dev_username');
+                const emailInput = document.getElementById('dev_email');
+                
+                usernameInput.value = '';
+                emailInput.value = '';
             })
             .catch(err => {
                 devConsole.error('Fetch error');
@@ -1662,115 +1710,210 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle_dev_chat = document.getElementById('toggle_dev_chat');
     const dev_chat_win = document.getElementById('dev_chat_win');
     const close_dev_chat = document.getElementById('close_dev_chat');
+    const contacts_container = document.getElementById('contacts');
+    const message_container = document.getElementById('message_container');
+    const message_input = document.getElementById('message_input');
+    const send_message = document.getElementById('send_message');
+
+    let contactUsername = '';
 
     toggle_dev_chat.addEventListener('click', () => {
         dev_chat_win.style.display = 'flex';
         background.style.display = 'block';
 
-        // * Load data
+        // * Load contacts
+        fetch(`${config.apiUrl}/dev/load-contacts`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const devs = data.devs;
+
+            devs.forEach(dev => {
+                const contact = document.createElement('button');
+                const profilePic = document.createElement('img');
+                const username = document.createElement('p');
+
+                contact.classList.add('contact');
+                profilePic.classList.add('contact-img');
+                username.classList.add('contact-p');
+
+                profilePic.src = loadedProfilePic;
+                username.textContent = `${dev.username} ${dev.devID}`;
+
+                contact.appendChild(profilePic);
+                contact.appendChild(username);
+
+                contact.addEventListener('click', () => {
+                    const contactTextContent = contact.querySelector('p').textContent;
+                    const regex = /^(.*?)(?=\s\d{8})/;
+
+                    const match = contactTextContent.match(regex);
+
+                    if (match) {
+                        const selectedContact = match[1].trim();
+                        contactUsername = selectedContact;
+                        loadChat();
+                    }
+                });
+
+                contacts_container.appendChild(contact);
+            })
+        })
     });
 
     close_dev_chat.addEventListener('click', () => {
+        contacts_container.innerHTML = '';
+        message_container.innerHTML = '';
+        message_input.value = '';
+        message_input.style.display = 'none';
+        send_message.style.display = 'none';
         dev_chat_win.style.display = 'none';
         background.style.display = 'none';
     });
-});
 
-/*
-    * Video feed Functionality
-
-    const rootPathIndex = require('electron-root-path').rootPath;
-    const pathIndex = require('path');
-    const { fs, path, ipcRenderer, dialog, shell, Store, google, config } = require(pathIndex.join(rootPathIndex, 'utils.js'));
-
-    async function getVideos() 
+    function loadChat()
     {
-        const apiKey = 'AIzaSyAvoQu_3_sTw9soEv2w7qtOwVXQSELxqM4';
-      
-        const service = google.youtube({ version: 'v3', auth: apiKey });
-      
-        const request = {
-            part: 'snippet',
-            q: 'funny',
-            type: 'video',
-            maxResults: 50,
-            chart: 'mostPopular',
-            regionCode: 'US',
-            relevanceLanguage: 'en',
-            contentType: 'VIDEO',
-            musicFilter: 1,
-        };     
+        const contactData = ({ username: store.get('username'), contactUsername: contactUsername });
 
-        const response = await service.videos.list(request);
-        const allVideos = response.data.items;
+        fetch(`${config.apiUrl}/dev/load-chat`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(contactData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const messages = data.messages;
 
-        allVideos.forEach((video) => {
-            const videoId = video.id;
-            const videoTitle = video.snippet.title;
-            const thumbnailUrl = video.snippet.thumbnails.medium.url;
-            const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            message_input.style.display = 'block';
+            send_message.style.display = 'block';
 
-            const videoElement = document.createElement('a');
-            videoElement.href = videoUrl;
-            videoElement.className = 'video';
-
-            videoElement.addEventListener('click', (event) => {
-                event.preventDefault();
-                shell.openExternal(videoUrl);
-            });
-
-            const thumbnailElement = document.createElement('img');
-            thumbnailElement.src = thumbnailUrl;
-            thumbnailElement.className = 'thumbnail';
-
-            const titleElement = document.createElement('p');
-            titleElement.textContent = videoTitle;
-            titleElement.className = 'vid_title';
-
-            if (videoTitle.length > 16.8) 
+            if (messages.length != 0)
             {
-                titleElement.style.whiteSpace = 'normal';
+                messages.forEach(message => {
+                    const username = message.username;
+                    const messageText = message.message;
+
+                    if (username == store.get('username'))
+                    {
+                        const message_you = document.createElement('p');
+                        message_you.classList.add('message-you');
+
+                        message_you.textContent = messageText;
+
+                        message_container.appendChild(message_you);
+                        message_container.scrollTop = message_container.scrollHeight;
+                    }
+                    else 
+                    {
+                        const message_other = document.createElement('p');
+                        message_other.classList.add('message-contact');
+
+                        message_other.textContent = messageText;
+
+                        message_container.appendChild(message_container);
+                        message_container.scrollTop = message_container.scrollHeight;
+                    }
+                });
             }
-
-            videoElement.appendChild(thumbnailElement);
-            videoElement.appendChild(titleElement);
-
-            videoContainer.appendChild(videoElement);
+        })
+        .catch(err => {
+            devConsole.error('Fetch error');
+            console.error('Fetch error: ', err);
         });
     }
 
-    getVideos();
-
-    let currentFeedIndex = 0;
-
-    function scrollVideos(direction) 
-    {
-        const videos = document.querySelectorAll('.video');
-        const videoWidth = videos.length > 0 ? videos[0].offsetWidth : 0;
-        const containerWidth = scrollBar.offsetWidth;
-        const maxIndex = videos.length - Math.floor(containerWidth / videoWidth);
-    
-        if (direction == 'left' && currentFeedIndex > 0) 
+    message_input.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter')
         {
-            currentFeedIndex--;
-        } 
-        else if (direction == 'right' && currentFeedIndex < maxIndex) 
-        {
-            currentFeedIndex++;
+            const message = message_input.value;
+            const username = store.get('username');
+
+            const messageData = ({ message: message, sender: username, contactUsername: contactUsername });
+
+            fetch(`${config.apiUrl}/dev/send-message`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(messageData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // const message_you = document.createElement('p');
+                // message_you.classList.add('message-you');
+
+                // message_you.textContent = message;
+
+                // message_container.appendChild(message_you);
+            })
+            .catch(err => {
+                console.error('Fetch error: ', err);
+                devConsole.error('Fetch error');
+            });
         }
-    
-        const newPosition = -currentFeedIndex * videoWidth;
-        videoContainer.style.transform = `translateX(${newPosition}px)`;
-    
-        navigatorLeft.disabled = currentFeedIndex == 0;
-        navigatorRight.disabled = currentFeedIndex == maxIndex;
-    }
-    
-    navigatorLeft.addEventListener('click', () => {
-        scrollVideos('left');
     });
+
+    send_message.addEventListener('click', () => {
+        const message = message_input.value;
+        const username = store.get('username');
+
+        const messageData = ({ message: message, sender: username, contactUsername: contactUsername });
+
+        fetch(`${config.apiUrl}/dev/send-message`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(messageData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // const message_you = document.createElement('p');
+            // message_you.classList.add('message-you');
+
+            // message_you.textContent = message;
+
+            // message_container.appendChild(message_you);
+        })
+        .catch(err => {
+            console.error('Fetch error: ', err);
+            devConsole.error('Fetch error');
+        });
+    });
+
+    ws.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data) ;
+        if (data.type == 'message') {
+            const username = data.sender;
+            const messageText = data.message;
     
-    navigatorRight.addEventListener('click', () => {
-        scrollVideos('right');
-    });    
-*/
+            if (username == store.get('username'))
+            {
+                const message_you = document.createElement('p');
+                message_you.classList.add('message-you');
+
+                message_you.textContent = messageText;
+
+                message_container.appendChild(message_you);
+                message_container.scrollTop = message_container.scrollHeight;
+            }
+            else 
+            {
+                const message_other = document.createElement('p');
+                message_other.classList.add('message-contact');
+
+                message_other.textContent = messageText;
+
+                message_container.appendChild(message_other);
+                message_container.scrollTop = message_container.scrollHeight;
+            }
+        }
+    });
+});
