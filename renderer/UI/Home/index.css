@@ -196,7 +196,7 @@
 }
 
 .student-list-button:hover {
-    background-color: var(--disabled);
+    background-color: var(--selected-primary);
 }
 
 .expanded {
@@ -227,6 +227,9 @@
 .update-students {
     font-size: 1.2vw;
     margin-top: 2.5%;
+    padding: 2%;
+    padding-left: 3%;
+    padding-right: 3%;
 }
 
 .student-manager-div {
@@ -617,51 +620,606 @@
     background-color: var(--warning);
 }
 
-.student-progress-container {
+.assignment-manager-div {
     position: absolute;
-    top: 3.7%;
-    left: 34%;
+    margin-left: 2%;
+    margin-top: 1%;
     width: 30%;
-    height: 35%;
-    background: var(--primary);
-    border-radius: 5px;
+    height: 56%;
+    background-color: var(--primary);
+    border-radius: 6px;
+}
+
+.assignment-manager-div h3 {
+    font-size: 1.6vw;
+    text-align: center;
+    margin-top: 2%;
+}
+
+.add-assignment-open {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+}
+
+.add-assignment-open span {
+    transform: translateY(5%) !important;
+}
+
+.assignment-container {
+    width: 100%;
+    height: 88%;
+    margin-top: 3%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.student-progress-container h3 {
-    font-size: 1.7vw;
-    margin-top: 2%;
-}
-
-.progress-search {
-    width: 90%;
-    margin-top: 2%;
-}
-
-.students {
-    width: 80%;
-    height: 62%;
-    margin-top: 2%;
-    overflow-y: auto;
-}
-
-.students::-webkit-scrollbar {
+.assignment-container::-webkit-scrollbar {
     width: 5px;
 }
 
-.students::-webkit-scrollbar-track {
+.assignment-container::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.students::-webkit-scrollbar-thumb {
+.assignment-container::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 50px;
     width: 5px;;
 }
 
-.students::-webkit-scrollbar-thumb:hover {
+.assignment-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.assignment {
+    font-size: 1.2vw;
+    width: 90%;
+    text-align: start;
+    padding: 2%;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+    margin-top: 1%;
+}
+
+.assignment:hover {
+    background-color: var(--selected-primary);
+}
+
+.assignment p {
+    font-size: 1vw;
+    text-align: start;
+    width: 95%;
+    margin-left: .2%;
+}
+
+.delete-assignment {
+    font-size: 1.1vw;
+    padding: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: transparent;
+    border: 2px solid var(--warning);
+    margin-left: 5%;
+    transition: color .5s linear;
+    position: relative;
+    z-index: 1;
+}
+
+.delete-assignment::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--warning);
+    z-index: -1;
+    transition: transform 1s;
+    transform-origin: 0 0;
+    transform: scaleX(0);
+}
+
+.delete-assignment:hover::before {
+    transform: scaleX(1);
+    transition: transform 1s;
+}
+
+.add-assignment-win {
+    position: absolute;
+    z-index: 6;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--primary);
+    width: 35%;
+    height: 60%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.add-assignment-win h3 {
+    font-size: 1.7vw;
+    margin-top: 2%;
+}
+
+.close-assignment-win {
+    top: 1.3%;
+}
+
+.chip-img {
+    width: 2vw;
+    border-radius: 50%;
+}
+
+.chip-name {
+    display: inline;
+    margin-left: 3%;
+    width: 110%;
+}
+
+.chip-span {
+    transform: translateY(1%);
+    margin-left: 2%;
+    background: var(--message-other);
+    border-radius: 50px;
+    padding: 2%;
+    font-size: 1.2vw !important;
+    transition: .5s;
+}
+
+.chip-select {
+    width: max-content;
+    height: 40%;
+    font-size: 1vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 50px;
+    background: var(--selected-primary);
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+    padding-right: 3%;
+    margin-top: 1%;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.chip-select:hover {
+    background: var(--selected-secondary);
+}
+
+.chip-account {
+    min-width: 46%;
+    width: max-content;
+    height: 100%;
+    font-size: 1vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 50px;
+    background: var(--selected-primary);
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+    padding-right: 1.2%;
+    margin-left: 1%;
+}
+
+.chip-account:hover {
+    background: var(--selected-secondary);
+}
+
+.chip-account:hover .chip-span {
+    background: transparent;
+}
+
+.input-assignment-title {
+    margin-top: 2%;
+    width: 50%;
+    border: none;
+    padding-left: 2%;
+    padding-right: 2%;
+}  
+
+.textarea-assignment {
+    resize: none;
+    width: 60%;
+    height: 40%;
+    margin-top: 2%;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    background: var(--alt-primary);
+    color: var(--text-color);
+    font-size: 1vw;
+    padding: 2%;
+}
+
+.input-dueDate {
+    font-size: 1.2vw;
+    background: var(--alt-primary);
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    margin-top: 1%;
+    border-radius: 6px;
+    padding: 2%;
+    cursor: pointer;
+    text-align: center;
+}
+
+.due-date-assignment {
+    font-size: 1.5vw;
+    width: 42%;
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-top: 2%;
+    text-align: center;
+}
+
+.flatpickr-calendar {
+    background: var(--alt-primary) !important;
+    margin-top: .5% !important;
+}
+
+.flatpickr-current-month {
+    color: var(--text-color) !important;
+}
+
+.numInput {
+    color: var(--text-color) !important;
+}
+
+.arrowUp .arrowDown {
+    color: var(--text-color) !important;
+}
+
+.flatpickr-weekday {
+    color: var(--text-color) !important;
+}
+
+.flatpickr-day {
+    color: var(--text-color) !important;
+}
+
+.flatpickr-disabled {
+    color: var(--disabled) !important;
+}
+
+.flatpickr-next-month svg {
+    fill: var(--text-color) !important;
+}
+
+.flatpickr-prev-month svg {
+    fill: var(--text-color) !important;
+}
+
+.flatpickr-calendar:before, .flatpickr-calendar:after {
+    position: absolute;
+    display: none !important;
+    pointer-events: none;
+    border: solid transparent;
+    content: '';
+    height: 0;
+    width: 0;
+    left: 22px;
+}
+
+.flatpickr-monthDropdown-month {
+    background-color: var(--alt-primary) !important;
+}
+
+.flatpickr-day.inRange, 
+.flatpickr-day.prevMonthDay.inRange, 
+.flatpickr-day.nextMonthDay.inRange, 
+.flatpickr-day.today.inRange, 
+.flatpickr-day.prevMonthDay.today.inRange, 
+.flatpickr-day.nextMonthDay.today.inRange, 
+.flatpickr-day:hover, 
+.flatpickr-day.prevMonthDay:hover, 
+.flatpickr-day.nextMonthDay:hover, 
+.flatpickr-day:focus, 
+.flatpickr-day.prevMonthDay:focus, 
+.flatpickr-day.nextMonthDay:focus {
+    background: var(--selected-secondary) !important;
+    border-color: var(--secondary) !important;
+}
+
+.search-wrapper {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2%;
+}
+
+.search-students-assignment {
+    width: 100%;
+    border: none;
+}
+
+.search-output {
+    width: 50%;
+    max-height: 10vh;
+    background: var(--alt-primary);
+    height: 10vh;
+    position: absolute;
+    bottom: 2%;
+    border-radius: 0px 0px 6px 6px;
+    border: none;
+    outline: none;
+    z-index: 99;
+    display: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 1%;
+}
+
+.search-output::-webkit-scrollbar {
+    width: 5px;
+}
+
+.search-output::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.search-output::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;
+}
+
+.search-output::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.student-display {
+    max-width: 50%;
+    width: 50%;
+    height: 7%;
+    margin-top: 2%;
+    overflow-y: hidden;
+    overflow-x: auto;
+    display: none;
+}
+
+.student-display::-webkit-scrollbar {
+    height: 5px;
+}
+
+.student-display::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.student-display::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    height: 5px;
+}
+
+.student-display::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.create-assignment {
+    margin: 0;
+    transform: none;
+    margin-top: 4.5%;
+}
+
+.remove-assignment-win {
+    width: 20%;
+    height: 15%;
+    background: var(--primary);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    display: none;
+    z-index: 10;
+}
+
+.remove-assignment-win h3 {
+    font-size: 1.5vw;
+    text-align: center;
+    margin-top: 5%;
+}
+
+.cancel-delete {
+    font-size: 1.3vw;
+    padding: 3%;
+    margin-top: 5%;
+    margin-left: 20%;
+}
+
+.delete-warning {
+    font-size: 1.3vw;
+}
+
+.assignment-error-exists {
+    position: absolute;
+    top: 2%;
+    right: 1%;
+    font-size: 1.5vw;
+    z-index: 100;
+    background: var(--primary);
+    padding: 1%;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 27.07%;
+    border-right: 2px solid var(--secondary);
+    transition: .1s;
+    opacity: 0;
+}
+
+.close-error-message {
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    margin-left: 2.5%;
+}
+
+.close-error-message span {
+    transform: translateY(14%);
+    font-size: 1.5vw;
+}
+
+.close-error-message:hover {
+    color: var(--disabled);
+}
+
+.toggle-school-chat {
+    border-radius: 50%;
+    position: absolute;
+    right: 1%;
+    bottom: 3%;
+    width: 4vw;
+    height: 4vw;
+}
+
+.toggle-school-chat span {
+    font-size: 1.5vw;
+    transform: translateY(10%);
+}
+
+.switch-role-container {
+    width: 100%;
+    height: 5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2.5%;
+}
+
+.selected-role {
+    background: var(--secondary) !important;
+}
+
+.switch-role {
+    font-size: 1.3vw;
+    margin: .2%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    color: var(--text-color);
+    background: var(--message-other);
+}
+
+.switch-role-student {
+    padding: 1%;
+    padding-left: 3%;
+    padding-right: 2%;
+    border-radius: 50px 10px 10px 50px;
+}
+
+.switch-role-teacher {
+    padding: 1%;
+    padding-right: 3%;
+    padding-left: 2%;
+    border-radius: 10px 50px 50px 10px;
+}
+
+.search-contacts-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2%;
+}
+
+.search-contacts {
+    width: 80%;
+    padding-left: 2%;
+    padding-right: 2%;
+    border-radius: 10px;
+    height: 2.5vw;
+    transition: .5s;
+}
+
+.start-search-contacts {
+    height: 2.3vw;
+    border: none;
+    outline: none;
+    width: 1%;
+    padding-right: 2.5%;
+    padding-left: .5%;
+    border-radius: 10px 50px 50px 10px;
+    background: var(--alt-primary);
+    color: var(--text-color);
+    margin-left: 17.5%;
+    cursor: pointer;
+    transition: .5s;
+    opacity: 0;
+    position: absolute;
+}
+
+.contacts-container-school {
+    height: 100%;
+    background: transparent;
+    width: 30%;
+    border-right: 2px solid var(--disabled);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.contacts-container-school h3 {
+    font-size: 1.7vw;
+    margin-top: 2%;
+    border-bottom: 2px solid var(--disabled);
+    width: 100%;
+    text-align: center;
+    padding-bottom: 2%;
+}
+
+.contacts-school {
+    width: 100%;
+    height: 100%;
+    margin-top: 1%;
+    overflow-y: auto;
+}
+
+.contacts-school::-webkit-scrollbar {
+    width: 5px;
+}
+
+.contacts-school::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.contacts-school::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.contacts-school::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 

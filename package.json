@@ -18,6 +18,7 @@
     "electron-i18n": "^1.3136.0",
     "electron-root-path": "^1.1.0",
     "electron-store": "^8.1.0",
+    "flatpickr": "^4.6.13",
     "fuzzy-search": "^3.2.1",
     "google-auth-library": "^9.4.1",
     "googleapis": "^129.0.0",
@@ -30,6 +31,7 @@
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.5",
     "path": "^0.12.7",
+    "pdfkit": "^0.15.0",
     "timers": "^0.1.1",
     "tokenizers": "^0.13.3",
     "ws": "^8.16.0"

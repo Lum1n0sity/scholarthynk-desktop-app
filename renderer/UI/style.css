@@ -175,7 +175,7 @@ body {
     transition: .5s;
 }
 
-.button:hover:not(.delete-student, .warning-delete) {
+.button:hover:not(.delete-student, .warning-delete, .delete-assignment) {
     background-color: var(--selected-secondary);
     transition: .5s;
 }

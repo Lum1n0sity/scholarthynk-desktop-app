@@ -10,6 +10,7 @@ const fsBackend = require('i18next-fs-backend');
 const { google } = require('googleapis');
 const Chart = require('chart.js/auto');
 const WebSocket = require('ws');
+const flatpickr = require("flatpickr");
 
 module.exports = {
     Store,
@@ -26,4 +27,5 @@ module.exports = {
     google,
     Chart,
     WebSocket,
+    flatpickr,
 }
