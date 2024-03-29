@@ -756,7 +756,7 @@
 }
 
 .chip-img {
-    width: 2vw;
+    width: 1.5vw;
     border-radius: 50%;
 }
 
@@ -777,6 +777,7 @@
 }
 
 .chip-select {
+    min-width: 45%;
     width: max-content;
     height: 40%;
     font-size: 1vw;
@@ -801,7 +802,7 @@
 }
 
 .chip-account {
-    min-width: 46%;
+    min-width: 50%;
     width: max-content;
     height: 100%;
     font-size: 1vw;
@@ -815,6 +816,7 @@
     color: var(--text-color);
     cursor: pointer;
     transition: .5s;
+    padding: 1%;
     padding-right: 1.2%;
     margin-left: 1%;
 }

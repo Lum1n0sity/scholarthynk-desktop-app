@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('keydown', (event) => {
-        const username = document.getElementById('username_input').value;
+        const username = document.getElementById('username_input').value.trim();
         const password = document.getElementById('password_input').value;
 
         if (event.key == 'Enter' && username.length != 0 && password.length != 0)

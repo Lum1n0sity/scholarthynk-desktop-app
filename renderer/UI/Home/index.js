@@ -3,11 +3,14 @@ const pathIndex = require('path');
 const { fs, flatpickr, WebSocket, getCurrentLine, ipcRenderer, dialog, shell, Store, google, config, Chart } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 const devConsoleClass = require('../console');
 const doc = require('pdfkit');
+const { log } = require('console');
 
 document.addEventListener('DOMContentLoaded', () => {
     const devConsole = new devConsoleClass('console_output');
     const store = new Store();
     const ws = new WebSocket(`${config.webSocket}`);
+
+    store.delete('assignment');
 
     ws.addEventListener('open', function(event) {
         ws.send(JSON.stringify({ type: 'login', username: store.get('username') }));
@@ -25,30 +28,30 @@ document.addEventListener('DOMContentLoaded', () => {
     async function getProfilePic(name) 
     {
         const username = { username: name };
-
-        fetch(`${config.apiUrl}/get/profilePic`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(username),
-        })
-        .then(response => {
+      
+        try 
+        {
+            const response = await fetch(`${config.apiUrl}/get/profilePic`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(username),
+            });
+          
             if (!response.ok) 
             {
                 throw new Error('Network response was not ok');
             }
-
-            return response.blob();
-        })
-        .then(blob => {
+          
+            const blob = await response.blob();
             const imageUrl = URL.createObjectURL(blob);
-
             return imageUrl;
-        })
-        .catch(error => {
-            console.error('Fetch error: ', error);
-        });    
+        } 
+        catch (error) 
+        {
+            return '../../images/avatar.svg';
+        }
     }
 
     // * User display
@@ -292,6 +295,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ! Student:
 
 
+
+    // * -------------------------------------------------------------------------
     // ! Teacher:
     // * Open / Close student manager:
     const update_students = document.getElementById('update_students');
@@ -666,12 +671,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const open_add_school_btns = document.querySelectorAll('.add-student');
+    const open_add_student_btns = document.querySelectorAll('.add-student');
     const add_student_win = document.getElementById('add_student_win');
     const close_student_win = document.getElementById('close_add_student');
     const add_student = document.getElementById('add-student-data');
 
-    open_add_school_btns.forEach(button => {
+    open_add_student_btns.forEach(button => {
         button.addEventListener('click', () => {
             add_student_win.style.display = 'block';
 
@@ -983,17 +988,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    
+    // * --------------------------------------------------------------------------
     // * Assignment Manager
     const assignment_container = document.getElementById('assingnment_container');
+
+    // * Add Assignment vars
     const open_add_assignment = document.getElementById('open_add_assingnment');
     const add_assignment_win = document.getElementById('add_assignment_win');
     const close_add_assignment = document.getElementById('close_add_assignment');
     const create_assignment = document.getElementById('add_assignment');
     const search_student = document.getElementById('search_students_assignment');
     const search_student_output = document.getElementById('search_output');
+
+    // * Delete Assignemnt vars
     const remove_assignment_win = document.getElementById('remove_assignment_win');
     const cancel_delete_assignment = document.getElementById('cancel_delete_assignment');
     const confirm_delete_assignment = document.getElementById('confirm_delete_assignment');
+
+    // * Update Assignment vars
+    const update_assigment_win = document.getElementById('update_assignment_win');
+    const close_update_assignment = document.getElementById('close_update_assignment');
+    const update_assignment = document.getElementById('update_assignment');
+    const search_student_update = document.getElementById('search_students_assignment_update');
+    const search_student_output_update = document.getElementById('search_output_update');
+
+    // * Error Messages Assignments
     const error_assignment_duplicate = document.getElementById('error_assignment_duplicate');
     const close_error_message = document.getElementById('close_error_message');
 
@@ -1005,91 +1025,107 @@ document.addEventListener('DOMContentLoaded', () => {
         dateFormat: 'd.m.Y',
     });
 
-    // * Load Assignments
-    const assignmentsRequestData = ({ school: store.get('school') });
-
-    fetch(`${config.apiUrl}/teacher/get-assignments`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(assignmentsRequestData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        const assignments = data.assignments;
-
-        assignments.forEach(assignment => {
-            const title = assignment.title;
-            
-            const assignmentElement = document.createElement('button');
-
-            assignmentElement.classList.add('assignment');
-            assignmentElement.textContent = title;
-
-            assignmentElement.addEventListener('click', () => {
-                if (assignmentElement.classList.contains('expanded'))
-                {
-                    assignmentElement.classList.remove('expanded');
-                    assignmentElement.style.background = 'transparent';
-
-                    const p_elements = assignmentElement.querySelectorAll('p');
-                    const buttons = assignmentElement.querySelectorAll('button');
-
-                    p_elements.forEach(element => {
-                        element.remove();
-                    });
-
-                    buttons.forEach(element => {
-                        element.remove();
-                    });
-                }
-                else
-                {
-                    assignmentElement.classList.add('expanded');
-                    assignmentElement.style.background = 'var(--selected-primary)';
-
-                    const description = document.createElement('p');
-                    const assignedStudents = document.createElement('p');
-                    const dueDate = document.createElement('p');
-                    const update = document.createElement('button');
-                    const remove = document.createElement('button');
-
-                    description.textContent = assignment.description;
-                    assignedStudents.textContent = assignment.students.join(", ");
-                    dueDate.textContent = assignment.dueDate;
-                    update.textContent = 'Update';
-                    remove.textContent = 'Remove';
-
-                    update.classList.add('button');
-                    remove.classList.add('delete-assignment');
-                    remove.classList.add('button');
-
-                    description.style.marginTop = '1%';
-                    update.style.fontSize = '1.1vw';
-                    update.style.marginTop = '1%';
-
-                    remove.addEventListener('click', () => {
-                        store.set('assignment', assignment.title);
-
-                        remove_assignment_win.style.display = 'block';
-                        background.style.display = 'block';
-                    });
-
-                    assignmentElement.appendChild(description);
-                    assignmentElement.appendChild(assignedStudents);
-                    assignmentElement.appendChild(dueDate);
-                    assignmentElement.appendChild(update);
-                    assignmentElement.appendChild(remove);
-                }
-            });
-
-            assignment_container.appendChild(assignmentElement);
-        }); 
-    })
-    .catch(err => {
-        console.error('Fetch error: ', err);
+    flatpickr('#due_date_assignment_update', {
+        minDate: "today",
+        dateFormat: 'd.m.Y',
     });
+
+    // * Load Assignments
+    function getAssignments()
+    {
+        const assignmentsRequestData = ({ school: store.get('school') });
+
+        fetch(`${config.apiUrl}/teacher/get-assignments`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(assignmentsRequestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const assignments = data.assignments;
+    
+            assignments.forEach(assignment => {
+                const title = assignment.title;
+                
+                const assignmentElement = document.createElement('button');
+    
+                assignmentElement.classList.add('assignment');
+                assignmentElement.textContent = title;
+    
+                assignmentElement.addEventListener('click', () => {
+                    if (assignmentElement.classList.contains('expanded'))
+                    {
+                        assignmentElement.classList.remove('expanded');
+                        assignmentElement.style.background = 'transparent';
+    
+                        const p_elements = assignmentElement.querySelectorAll('p');
+                        const buttons = assignmentElement.querySelectorAll('button');
+    
+                        p_elements.forEach(element => {
+                            element.remove();
+                        });
+    
+                        buttons.forEach(element => {
+                            element.remove();
+                        });
+                    }
+                    else
+                    {
+                        assignmentElement.classList.add('expanded');
+                        assignmentElement.style.background = 'var(--selected-primary)';
+    
+                        const description = document.createElement('p');
+                        const assignedStudents = document.createElement('p');
+                        const dueDate = document.createElement('p');
+                        const update = document.createElement('button');
+                        const remove = document.createElement('button');
+    
+                        description.textContent = assignment.description;
+                        assignedStudents.textContent = assignment.students.join(", ");
+                        dueDate.textContent = assignment.dueDate;
+                        update.textContent = 'Update';
+                        remove.textContent = 'Remove';
+    
+                        update.classList.add('button');
+                        remove.classList.add('delete-assignment');
+                        remove.classList.add('button');
+    
+                        description.style.marginTop = '1%';
+                        update.style.fontSize = '1.1vw';
+                        update.style.marginTop = '1%';
+    
+                        remove.addEventListener('click', () => {
+                            store.set('assignment', assignment.title);
+    
+                            remove_assignment_win.style.display = 'block';
+                            background.style.display = 'block';
+                        });
+    
+                        update.addEventListener('click', () => {
+                            const students = assignment.students;
+    
+                            openUpdateAssignmentWin(assignment.title, description.textContent, dueDate.textContent, students);
+                        });
+    
+                        assignmentElement.appendChild(description);
+                        assignmentElement.appendChild(assignedStudents);
+                        assignmentElement.appendChild(dueDate);
+                        assignmentElement.appendChild(update);
+                        assignmentElement.appendChild(remove);
+                    }
+                });
+    
+                assignment_container.appendChild(assignmentElement);
+            }); 
+        })
+        .catch(err => {
+            console.error('Fetch error: ', err);
+        });
+    }
+
+    getAssignments();
 
     // * Add Assignment:
     open_add_assignment.addEventListener('click', () => {
@@ -1116,16 +1152,13 @@ document.addEventListener('DOMContentLoaded', () => {
         background.style.display = 'none';
     });
 
-    let timeOutId;
-
-    search_student.addEventListener('keyup', () => {
-        if (timeOutId) return;
-
+    search_student.addEventListener('keypress', (event) => {
         search_student.style.borderRadius = '6px';
         search_student_output.innerHTML = '';
         search_student_output.style.display = 'none';
 
-        timeOutId = setTimeout(() => {
+        if (event.key == 'Enter')
+        {
             const search_content = search_student.value;
 
             if (search_content.length != 0)
@@ -1153,6 +1186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (student_display.style.display == 'block')
                     {
                         search_student_output.style.bottom = '6%';
+                        add_assignment_win.style.height = '68%';
                     }
 
                     search_output.forEach((output) => {
@@ -1183,21 +1217,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                           
                             search_student_output.appendChild(chip);
-                        })
-                        .catch((error) => {
-                            console.error('Error fetching profile pic:', error);
-                            
-                            chip.appendChild(chipProfilePic);
-                            chip.appendChild(chipName);
-                            
-                            chip.addEventListener('click', () => {
-                                search_student.style.borderRadius = '6px';
-                                search_student_output.innerHTML = '';
-                                search_student_output.style.display = 'none';
-                                assignmentAddStudent(name, profilePic);
-                            });
-                          
-                            search_student_output.appendChild(chip);
                         });
                     });
 
@@ -1207,9 +1226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Fetch error: ', err);
                 });
             }
-
-            timeOutId = null;
-        }, 2000);
+        }
     });
 
     function assignmentAddStudent(name, profilePic)
@@ -1350,6 +1367,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             remove_assignment_win.style.display = 'block';
                             background.style.display = 'block';
                         });
+
+                        update.addEventListener('click', () => {
+                            const students = assignedStudents;
+
+                            openUpdateAssignmentWin(title_assignment_added, desc_assignmentAdded, due_date_assignmentAdded, students)
+                        });
     
                         assignmentElement.appendChild(description);
                         assignmentElement.appendChild(assignedStudents);
@@ -1415,6 +1438,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (deleted)
             {
+                store.delete('assignment');
                 const childElements = assignment_container.children;
 
                 for (let i = 0; i < childElements.length; i++) 
@@ -1436,7 +1460,202 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // * Update Assignment
 
+    function openUpdateAssignmentWin(title, desc, dueDate, students) {
+        update_assigment_win.style.height = '68%';
+        store.set('selectedAssignment', title);
+        update_assignment_win.style.display = 'flex';
+        background.style.display = 'block';        
+        
+        // * Load data:
+        const title_assignment = document.getElementById('input_title_update');
+        const desc_assignment = document.getElementById('input_description_update');
+        const due_date_assignment = document.getElementById('due_date_assignment_update');
+        const student_display = document.getElementById('student_display_update');
+
+        student_display.style.display = 'inline-flex';
+
+        title_assignment.value = title;
+        desc_assignment.value = desc;
+        due_date_assignment.value = dueDate;
+
+        students.forEach(student => {
+            const chip = document.createElement('button');
+            const chipProfilePic = document.createElement('img');
+            const chipName = document.createElement('p');
+            const chipRemove = document.createElement('span');
+    
+            chip.classList.add('chip-account');
+            chipProfilePic.classList.add('chip-img');
+            chipName.classList.add('chip-name');
+            chipRemove.classList.add('material-symbols-rounded');
+            chipRemove.classList.add('chip-span');
+
+            getProfilePic(student)
+            .then((profilePic) => {
+                chipProfilePic.src = profilePic;
+                chipName.textContent = student;
+                chipRemove.textContent = 'close';
+              
+                chip.appendChild(chipProfilePic);
+                chip.appendChild(chipName);
+                chip.appendChild(chipRemove);
+        
+                chip.addEventListener('click', () => {
+                    chip.remove();
+                });
+        
+                student_display.appendChild(chip);
+            });
+        });
+    }
+
+    search_student_update.addEventListener('keypress', (event) => {
+        search_student_update.style.borderRadius = '6px';
+        search_student_output_update.innerHTML = '';
+        search_student_output_update.style.display = 'none';
+
+        if (event.key == 'Enter')
+        {
+            const search_content = search_student_update.value;
+
+            if (search_content.length != 0)
+            {
+                timeOutId = null;
+
+                // * Prepare data for Request
+                const school = store.get('school');
+                
+                const searchData = ({ school: school, search: search_content });
+
+                fetch(`${config.apiUrl}/teacher/assignment/search-student`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(searchData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const search_output = data.searchResults;
+                    search_student_update.style.borderRadius = '6px 6px 0px 0px';
+                    search_student_output_update.style.display = 'block';
+                    search_student_output_update.style.bottom = '6%';
+
+                    search_output.forEach((output) => {
+                        const name = output.name;
+
+                        const chip = document.createElement('button');
+
+                        const chipProfilePic = document.createElement('img');
+                        const chipName = document.createElement('p');
+                        
+                        chip.classList.add('chip-select');
+                        chipProfilePic.classList.add('chip-img');
+                        chipName.classList.add('chip-name');
+
+                        chipName.textContent = name;
+
+                        getProfilePic(name)
+                        .then((profilePic) => {
+                            chipProfilePic.src = profilePic;
+                            chip.appendChild(chipProfilePic);
+                            chip.appendChild(chipName);
+                            
+                            chip.addEventListener('click', () => {
+                                search_student_update.style.borderRadius = '6px';
+                                search_student_output_update.innerHTML = '';
+                                search_student_output_update.style.display = 'none';
+                                assignmentAddStudent(name, profilePic);
+                            });
+                          
+                            search_student_output_update.appendChild(chip);
+                        });
+                    });
+
+                    console.log(data);
+                })
+                .catch(err => {
+                    console.error('Fetch error: ', err);
+                });
+            }
+        }
+    });
+
+    update_assignment.addEventListener('click', () => {
+        let title = document.getElementById('input_title_update').value;
+        let desc = document.getElementById('input_description_update').value;
+        let dueDate = document.getElementById('due_date_assignment_update').value;
+        let student_display = document.getElementById('student_display_update');
+
+        const chips = student_display.children;
+
+        const students = [];
+
+        for (let i = 0; i < chips.length; i++) 
+        {
+            const chip = chips[i];
+            const name = chip.children[1].textContent;
+            students.push(name);
+        }
+
+        const oldTitle = store.get('selectedAssignment');
+
+        // * Prepare data for request
+        const school = store.get('school');
+        const updatedAssignmentData = ({ school: school, title: title, description: desc, dueDate: dueDate, students: students, oldTitle: oldTitle })
+
+        fetch(`${config.apiUrl}/teacher/update-assignment`, { 
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedAssignmentData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const updated = data.updated;
+
+            if (updated)
+            {
+                title = '';
+                desc = '';
+                dueDate = '';
+                student_display.innerHTML = '';
+                students.lenght = 0;
+
+                assignment_container.innerHTML = '';
+
+                update_assigment_win.style.display = 'none';
+                background.style.display = 'none';
+
+                getAssignments();
+            }
+        })
+        .catch(err => {
+            console.error('Fetch error: ', err);
+        });
+    });
+
+    close_update_assignment.addEventListener('click', () => {
+        update_assignment_win.style.display = 'none';
+        background.style.display = 'none';
+
+        // * Unload data
+        const title_assignment = document.getElementById('input_title_update');
+        const desc_assignment = document.getElementById('input_description_update');
+        const due_date_assignment = document.getElementById('due_date_assignment_update');
+        const student_display = document.getElementById('student_display_update');
+
+        title_assignment.value = '';
+        desc_assignment.value = '';
+        due_date_assignment.value = '';
+        student_display.innerHTML = '';
+    });
+
+
+    // * --------------------------------------------------------------------------
     // * School Chat:
     const toggle_school_chat = document.getElementById('toggle_school_chat');
     const school_chat_win = document.getElementById('school_chat_win');
@@ -1518,6 +1737,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+    // * --------------------------------------------------------------------------
     // ! Developer:
 
     // * Add School:
@@ -1700,6 +1921,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+    // * --------------------------------------------------------------------------
     // * Dev Console:
     const toggle_console = document.getElementById('toggle_console');
 
@@ -1929,6 +2152,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+    // * --------------------------------------------------------------------------
     // * Monitoring
     const ctxUptime = document.getElementById('serverUptimeChart').getContext('2d');
     const ctxActiveUsers = document.getElementById('activeUsersChart').getContext('2d');
@@ -2163,6 +2388,8 @@ document.addEventListener('DOMContentLoaded', () => {
         getChartData();
     });
 
+
+    // * --------------------------------------------------------------------------
     // * Developer Management
     const open_add_dev = document.getElementById('open_add_dev');
     const add_dev_win = document.getElementById('add_dev_win');
@@ -2270,6 +2497,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }); 
 
+
+    // * --------------------------------------------------------------------------
     // * Dev Chat
     const toggle_dev_chat = document.getElementById('toggle_dev_chat');
     const dev_chat_win = document.getElementById('dev_chat_win');
