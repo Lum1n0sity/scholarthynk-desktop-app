@@ -79,6 +79,26 @@ app:
         title: Sind Sie sicher?
         cancel: Abbrechen
         delete: Löschen
+      assignments:
+        title: 
+        add_assignment: Aufgaben
+          title: Aufgabe Erstellen
+          placeholder_title: Titel
+          placeholder_description: Beschreibung
+          placeholder_deadline: Abgabefrist
+          placeholder_search: Suche Schüler
+          create: Erstellen
+        update_assignment:
+          title: Aufgabe updaten
+          placeholder_title: Title
+          placeholder_description: Beschreibung
+          placeholder_deadline: Abgabefrist
+          placeholder_search: Suche schüler
+          update: Update
+        delete_warning:
+          title: Sind Sie sicher?
+          cancel: Abbrechen
+          delete: Löschen
     dev:
       schools:
         schools_title: Schulen

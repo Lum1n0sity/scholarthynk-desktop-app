@@ -1739,6 +1739,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // * --------------------------------------------------------------------------
+    // * Gradebook:
+    
+
+
+    // * --------------------------------------------------------------------------
     // ! Developer:
 
     // * Add School:
@@ -2386,6 +2391,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // getLastNFullHours(7, 'activeUsers');
         // getLastNFullHours(5, 'serverUptime');
         getChartData();
+    });
+
+    window.addEventListener('resize', () => {
+        chartUsers.resize();
+        chartUptime.resize();
+        chartResources.resize();
+        chartAPI.resize();
+        chartDB.resize();
     });
 
 

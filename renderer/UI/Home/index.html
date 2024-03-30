@@ -60,46 +60,46 @@
                         <button id="update_students" class="update-students button" data-i18n="app.home.teacher.manage_students.update_students"></button>
                     </div>
                     <div class="assignment-manager-div">
-                        <h3>Assignments</h3>
+                        <h3 data-i18n="app.home.teacher.assignments.title"></h3>
                         <button class="add add-assignment-open" id="open_add_assingnment"><span class="material-symbols-rounded">add</span></button>
                         <div class="assignment-container" id="assingnment_container">
                             
                         </div>
                     </div>
                     <div class="add-assignment-win" id="add_assignment_win">
-                        <h3>Add Assignment</h3>
+                        <h3 data-i18n="app.home.teacher.assignments.add_assignment.title"></h3>
                         <button class="close close-assignment-win" id="close_add_assignment"><span class="material-symbols-rounded">close</span></button>
-                        <input type="text" class="input input-assignment-title" id="input_title" placeholder="Title">
-                        <textarea id="input_description" class="textarea-assignment" cols="30" rows="10"></textarea>
-                        <input type="text" placeholder="Select a Due Date" id="due_date_assignment" class="input due-date-assignment" data-input>
+                        <input type="text" class="input input-assignment-title" id="input_title" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_title" data-i18n-attr="placeholder">
+                        <textarea id="input_description" class="textarea-assignment" cols="30" rows="10" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_description" data-i18n-attr="placeholder"></textarea>
+                        <input type="text" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_deadline" data-i18n-attr="placeholder" id="due_date_assignment" class="input due-date-assignment" data-input>
                         <div class="search-wrapper">
-                            <input type="text" class="input search-students-assignment" id="search_students_assignment" placeholder="Add Student">
+                            <input type="text" class="input search-students-assignment" id="search_students_assignment" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_search" data-i18n-attr="placeholder">
                             <div class="search-output" id="search_output">
                             </div>
                         </div>
                         <div class="student-display" id="student_display">
                         </div>
-                        <button class="button submit create-assignment" id="add_assignment">Create</button>
+                        <button class="button submit create-assignment" id="add_assignment" data-i18n="app.home.teacher.assignments.add_assignment.create"></button>
                     </div>
                     <div class="remove-assignment-win" id="remove_assignment_win">
-                        <h3>Remove Assignment</h3>
-                        <button class="button cancel-delete" id="cancel_delete_assignment">Cancel</button>
-                        <button class="button delete-assignment delete-warning" id="confirm_delete_assignment">Delete</button>
+                        <h3 data-i18n="app.home.teacher.assignments.delete_warning.title"></h3>
+                        <button class="button cancel-delete" id="cancel_delete_assignment" data-i18n="app.home.teacher.assignments.delete_warning.cancel"></button>
+                        <button class="button delete-assignment delete-warning" id="confirm_delete_assignment" data-i18n="app.home.teacher.assignments.delete_warning.delete"></button>
                     </div>
                     <div class="add-assignment-win" id="update_assignment_win">
-                        <h3>Update Assignment</h3>
+                        <h3 data-i18n="app.home.teacher.assignments.update_assignment.title"></h3>
                         <button class="close close-assignment-win" id="close_update_assignment"><span class="material-symbols-rounded">close</span></button>
-                        <input type="text" class="input input-assignment-title" id="input_title_update" placeholder="Title">
-                        <textarea id="input_description_update" class="textarea-assignment" cols="30" rows="10"></textarea>
-                        <input type="text" placeholder="Select a Due Date" id="due_date_assignment_update" class="input due-date-assignment" data-input>
+                        <input type="text" class="input input-assignment-title" id="input_title_update" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_title" data-i18n-attr="placeholder">
+                        <textarea id="input_description_update" class="textarea-assignment" cols="30" rows="10" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_description" data-i18n-attr="placeholder"></textarea>
+                        <input type="text" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_deadline" data-i18n-attr="placeholder" id="due_date_assignment_update" class="input due-date-assignment" data-input>
                         <div class="search-wrapper">
-                            <input type="text" class="input search-students-assignment" id="search_students_assignment_update" placeholder="Add Student">
+                            <input type="text" class="input search-students-assignment" id="search_students_assignment_update" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_search" data-i18n-attr="placeholder">
                             <div class="search-output" id="search_output_update">
                             </div>
                         </div>
                         <div class="student-display" id="student_display_update">
                         </div>
-                        <button class="button submit create-assignment" id="update_assignment">Update</button>
+                        <button class="button submit create-assignment" id="update_assignment" data-i18n="app.home.teacher.assignments.update_assignment.update"></button>
                     </div>
                     <p class="assignment-error-exists" id="error_assignment_duplicate">
                         Assignment title already exists
@@ -310,8 +310,10 @@
                         <div class="chat-container">
                             <div class="message-container" id="message_container">
                             </div>
-                            <input type="text" placeholder="Enter message" class="input message-input" id="message_input">
-                            <button class="send-message" id="send_message"><span class="material-symbols-rounded">send</span></button>
+                            <div class="chat-container-footer">
+                                <input type="text" placeholder="Enter message" class="input message-input" id="message_input">
+                                <button class="send-message" id="send_message"><span class="material-symbols-rounded">send</span></button>
+                            </div>
                         </div>
                     </div>
                     <div class="add-dev-win" id="add_dev_win">

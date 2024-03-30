@@ -81,6 +81,26 @@ app:
         title: Are you sure?
         cancel: Cancel
         delete: Delete
+      assignments:
+        title: Assignments
+        add_assignment: 
+          title: Add Assignments
+          placeholder_title: Title
+          placeholder_description: Description
+          placeholder_deadline: Deadline
+          placeholder_search: Search student
+          create: Create
+        update_assignment:
+          title: Update Assignment
+          placeholder_title: Title
+          placeholder_description: Description
+          placeholder_deadline: Deadline
+          placeholder_search: Search student
+          update: Update
+        delete_warning:
+          title: Are you sure?
+          cancel: Cancel
+          delete: Delete
     dev:
       schools:
         schools_title: Schools
@@ -104,6 +124,9 @@ app:
             username_placeholder: Username
             email_placeholder: Email
             add_dev: Add
+        chat:
+          contacts: Contacts
+          message_placeholder: Enter a message
   discover:
     title: ScholarThynk - Discover
     tab_en: English
