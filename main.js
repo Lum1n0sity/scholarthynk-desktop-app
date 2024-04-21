@@ -1,6 +1,8 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const Store = require('electron-store');
 const store = new Store();
+const path = require('path');
+const fs = require('fs');
 
 let mainWindow;
 let pwResetWin;
@@ -96,9 +98,6 @@ function openFileDialog()
   const options = {
     title: 'Select a File',
     filters: [
-      { name: 'PNG Files', extensions: ['png'] },
-      { name: 'JSON Files', extensions: ['json'] },
-      { name: 'Text Files', extensions: ['txt'] },
       { name: 'All Files', extensions: ['*'] },
     ],
     properties: ['openFile'],
@@ -154,7 +153,7 @@ ipcMain.on('open-file-dialog', () => {
 
 app.on('before-quit', () => {
   const username = store.get('username');
-  const userData = ({ username: username});
+  const userData = ({ username: username });
 
   fetch('http://192.168.5.196:3000/user/updateStatus', {
       method: 'POST',
@@ -186,4 +185,10 @@ ipcMain.on('verify-teacher', () => {
 
 ipcMain.on('verify-dev', () => {
   devVerification();
+});
+
+ipcMain.on('download-file', (event, content, fileName) => {
+  const filePath = path.join(app.getPath('downloads'), fileName);
+  fs.writeFileSync(filePath, content);
+  event.sender.send('download-ready', fileName, filePath);
 });

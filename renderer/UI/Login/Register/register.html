@@ -68,8 +68,21 @@
             <h3 data-i18n="app.register.switch_text"></h3>
             <button id="register_switch" data-i18n="app.register.switch_btn"></button>
         </div>
-        <p id="error_msg" data-i18n="app.register.error_username"></p>
-        <p id="error_msg_undefined" data-i18n="app.register.error_undefined"></p>
-        <p id="connection_error">Unable to connect to the server! <br> Try again later</p>
+        <div class="error-main" id="error_register_username">
+            <p data-i18n="app.register.error_username"></p>
+            <button class="close-error-message" id="close_error_message_username"><span class="material-symbols-rounded">close</span></button>
+        </div>
+        <div class="error-main" id="error_register_undefined">
+            <p data-i18n="app.register.error_undefined"></p>
+            <button class="close-error-message" id="close_error_message_undefined"><span class="material-symbols-rounded">close</span></button>
+        </div>
+        <div class="error-main" id="error_register_connection">
+            <p data-i18n="app.register.error_connection"></p>
+            <button class="close-error-message" id="close_error_message_connection"><span class="material-symbols-rounded">close</span></button>
+        </div>
+        <div class="error-main" id="error_register_student">
+            <p data-i18n="app.register.error_email"></p>
+            <button class="close-error-message" id="close_error_message_student"><span class="material-symbols-rounded">close</span></button>
+        </div>
     </body>
 </html>

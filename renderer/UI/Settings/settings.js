@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let updated = false;
     let filePathProfilePic = null;
+    let pictureDisplayedPrev = false;
 
     // * Settings navbar:
 
@@ -146,20 +147,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     uploadButton.addEventListener('click', () => {
+        pictureDisplayedPrev = false;
         filePathProfilePic = null;
         profilePicPrev.innerHTML = '';
 
         ipcRenderer.send('open-file-dialog');
 
         ipcRenderer.on('selected-file', (event, filePath) => {
-            filePathProfilePic = filePath;
+            while(!pictureDisplayedPrev) {
+                filePathProfilePic = filePath;
 
-            const prevImg = document.createElement('img');
+                const prevImg = document.createElement('img');
 
-            prevImg.src = filePath;
-            prevImg.classList.add('profilePrevImg');
+                prevImg.src = filePath;
+                prevImg.classList.add('profilePrevImg');
 
-            profilePicPrev.appendChild(prevImg);
+                profilePicPrev.appendChild(prevImg);
+                pictureDisplayedPrev = true;
+            }
         });
     });
 

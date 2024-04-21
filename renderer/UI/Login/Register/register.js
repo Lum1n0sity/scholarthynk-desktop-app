@@ -31,6 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadButton = document.getElementById('upload');
     const next = document.getElementById('next');
 
+    const errorRegisterUsername = document.getElementById('error_register_username');
+    const closeErrorRegisterUsername = document.getElementById('close_error_message_username');
+
+    const errorRegisterUndefined = document.getElementById('error_register_undefined');
+    const closeErrorRegisterUndefined = document.getElementById('close_error_message_undefined');
+
+    const errorRegisterConnection = document.getElementById('error_register_connection');
+    const closeErrorRegisterConnection = document.getElementById('close_error_message_connection');
+
+    const errorStudentVerify = document.getElementById('error_register_student');
+    const closeErrorStudentVerify = document.getElementById('close_error_message_student');
+
     let isPWVisible = false;
     let selectedSchool = '';
     let selectedTab = 'tos';
@@ -40,8 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filePathPP = path.join(rootPathRegister, 'privacy_policy.txt');
     
     show_pw.addEventListener('click', () => {
-        if (!isPWVisible)
-        {
+        if (!isPWVisible) {
             pw_input.type = 'text';
             isPWVisible = true;
             show_pw.style.display = 'none';
@@ -50,8 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     hide_pw.addEventListener('click', () => {
-        if (isPWVisible)
-        {
+        if (isPWVisible) {
             pw_input.type = 'password';
             isPWVisible = false;
             show_pw.style.display = 'block';
@@ -67,8 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('keydown', (event) => {
-        if (event.key = 'Escape')
-        {
+        if (event.key = 'Escape') {
             input_school.style.borderRadius = '6px 6px 6px 6px';
             search_output.innerHTML = '';
             search_output.style.display = 'none';
@@ -76,8 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     input_school.addEventListener('keyup', (event) => {
-        if (event.key === 'Enter') 
-        {
+        if (event.key === 'Enter') {
             search_output.style.display = 'none';
             input_school.style.borderRadius = '6px 6px 6px 6px';
 
@@ -85,8 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const inputValue = input_school.value;
     
-            if (inputValue !== '') 
-            {
+            if (inputValue !== '') {
                 const dataToSendSearchSchool = { input: inputValue };
     
                 fetch(`${config.apiUrl}/search-school`, {
@@ -100,8 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     const results = data.result;
 
-                    if (results.length != 0)
-                    {
+                    if (results.length != 0) {
                         input_school.style.borderRadius = '6px 6px 0px 0px';
                         search_output.style.display = 'block';
 
@@ -130,10 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch(error => {
                     console.error('Fetch error: ', error);
+                    errorRegisterConnection.style.display = 'flex';
+
+                    closeErrorRegisterConnection.addEventListener('click', () => { errorRegisterConnection.style.display = 'none'; });
                 });
             } 
-            else 
-            {
+            else {
                 console.error('var input is empty or undefined!');
             }
         }
@@ -149,14 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const document_viewer = document.getElementById('document-view');
 
         fs.readFile(filePathToS, 'utf-8', (err, data) => {
-            if (err)
-            {
+            if (err) {
                 console.error('Error reading file: ', err);
                 document_viewer.value = 'Error loading the Terms of Service! Please contact us under raphael221@outlook.de';
                 accept.disabled = true;
             }
-            else
-            {
+            else {
                 document_viewer.value = data;
             }
         });
@@ -172,8 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     tab_tos.addEventListener('click', () => {
-        if (selectedTab != 'tos')
-        {
+        if (selectedTab != 'tos') {
             tab_pp.classList.remove('selected');
             tab_tos.classList.add('selected');
 
@@ -181,14 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedTab = 'tos';
 
             fs.readFile(filePathToS, 'utf-8', (err, data) => {
-                if (err)
-                {
+                if (err) {
                     console.error('Error reading file: ', err);
                     document_viewer.value = 'Error loading the Terms of Service! Please contact us under raphael221@outlook.de';
                     accept.disabled = true;
                 }
-                else
-                {
+                else {
                     document_viewer.value = data;
                 }
             });
@@ -196,8 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     tab_pp.addEventListener('click', () => {
-        if (selectedTab != 'pp')
-        {
+        if (selectedTab != 'pp') {
             tab_tos.classList.remove('selected');
             tab_pp.classList.add('selected');
 
@@ -246,66 +248,63 @@ document.addEventListener('DOMContentLoaded', () => {
         const role_select = document.getElementById('role_select');
         const roleI = role_select.selectedIndex;
         const role = role_select.options[roleI].value;
-        
+
         if (selectedSchool.length == 0) {
             selectedSchool = input_school.value;
         }
-        
+
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
         formData.append('email', email);
         formData.append('role', role);
         formData.append('school', selectedSchool);
-        
-        if (filePathProfilePic != null && filePathProfilePic.length != 0) 
-        {
+
+        if (filePathProfilePic != null && filePathProfilePic.length != 0) {
             const fileContent = fs.readFileSync(filePathProfilePic);
             const fileName = pathRegister.basename(filePathProfilePic);
             const fileType = pathRegister.extname(filePathProfilePic).toLowerCase();
-        
+
             const mimeType =
                 fileType === '.jpg' || fileType === '.jpeg'
                     ? 'image/jpeg'
                     : fileType === '.png'
                     ? 'image/png'
                     : null;
-        
-            if (mimeType) 
-            {
+
+            if (mimeType) {
                 formData.append('profilePic', new Blob([fileContent], { type: mimeType }), fileName);
             }
-        } 
-        else 
-        {
+        }
+        else {
             const canvas = document.createElement('canvas');
             canvas.width = 100;
             canvas.height = 100;
             const ctx = canvas.getContext('2d');
-        
+
             const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
             ctx.fillStyle = randomColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
+
             ctx.font = '24px Arial';
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-        
+
             const initials = username
                 .split(' ')
                 .map((word) => word.charAt(0))
                 .join('');
-        
+
             const textX = canvas.width / 2;
             const textY = canvas.height / 2;
-        
+
             ctx.fillText(initials.toUpperCase(), textX, textY);
-        
+
             const blob = await new Promise((resolve) => {
                 canvas.toBlob((b) => resolve(b), 'image/png');
             });
-        
+
             formData.append('profilePic', blob, `profile_pic_${username}.png`);
         }
 
@@ -318,45 +317,36 @@ document.addEventListener('DOMContentLoaded', () => {
             body: formData,
         })
         .then (response => {
-            const register_error_message = document.getElementById('error_msg');
-            const error_msg_undefined = document.getElementById('error_msg_undefined');
-
-            if (response.status === 401)
-            {
+            if (response.status === 401) {
                 background.style.display = 'none';
-                register_error_message.style.right = '2%';
                 loader.style.display = 'none';
+                errorRegisterUsername.style.display = 'flex';
 
-                setTimeout(() => {
-                    register_error_message.style.right = '-35%';
-                }, 10000);
-
-                return;
+                closeErrorRegisterUsername.addEventListener('click', () => { errorRegisterUsername.style.display = 'none'; });
             }
-            else if (response.status === 500)
-            {
+            else if (response.status === 500) {
                 background.style.display = 'none';
-                error_msg_undefined.style.right = '2%';
                 loader.style.display = 'none';
+                errorRegisterUndefined.style.display = 'flex';
 
-                setTimeout(() => {
-                    error_msg_undefined.style.right = '-35%';
-                }, 10000);
+                closeErrorRegisterUndefined.addEventListener('click', () => { errorRegisterUndefined.style.display = 'none'; });
             }
-            else if (response.status === 400)
-            {
+            else if (response.status === 400) {
                 background.style.display = 'none';
-                error_msg_undefined.style.right = '2%';
                 loader.style.display = 'none';
+                errorRegisterUndefined.style.display = 'flex';
 
-                setTimeout(() => {
-                    error_msg_undefined.style.right = '-35%';
-                }, 10000);
+                closeErrorRegisterUndefined.addEventListener('click', () => { errorRegisterUndefined.style.display = 'none'; });
             }
-            else if (response.status === 308)
-            {
-                if (role == 'teacher')
-                {
+            else if (response.status === 404) {
+                background.style.display = 'none';
+                loader.style.display = 'none';
+                errorStudentVerify.style.display = 'flex';
+
+                closeErrorStudentVerify.addEventListener('click', () => { errorStudentVerify.style.display = 'none'; });
+            }
+            else if (response.status === 308) {
+                if (role == 'teacher') {
                     store.set('tempUsername', username);
                     store.set('tempPassword', password);
                     store.set('tempEmail', email);
@@ -365,8 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     ipcRenderer.send('verify-teacher');
                 }
-                else if (role == 'developer')
-                {
+                else if (role == 'developer') {
                     ipcRenderer.send('verify-dev');
                 }
             }
@@ -378,33 +367,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const userToken = data != null ? data.token : null;
             const role = "student";
 
-            if (accountCreated == true)
-            {
-                store.set('username', username);                                                                          
+            if (accountCreated == true) {
+                store.set('username', username);
                 store.set('role', role);
                 store.set('school', selectedSchool);
 
-                if (remember_checkbox.checked)
-                {                    
+                if (remember_checkbox.checked) {
                     store.set('authToken', userToken);
                     store.set('loggedIn', true);
 
                     window.location.href = '../../Home/index.html';
                 }
-                else
-                {
+                else {
                     window.location.href = '../../Home/index.html';
                 }
             }
         })
         .catch(error => {
             background.style.display = 'none';
+            loader.style.display = 'none';
             console.error('Fetch error: ', error);
-            connection_error.style.right = '2%';
+            errorRegisterConnection.style.display = 'flex';
 
-            setTimeout(() => {
-                connection_error.style.right = '-35%';
-            }, 10000);
+            closeErrorRegisterConnection.addEventListener('click', () => { errorRegisterConnection.style.display = 'none'; });
         });
     });
 

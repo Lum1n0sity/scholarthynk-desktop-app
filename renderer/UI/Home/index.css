@@ -116,6 +116,144 @@
     transition: .5s;
 }
 
+/** Student features styling */
+/** Assignments */
+.assignment-viewer {
+    background: var(--primary);
+    width: 30%;
+    height: 93%;
+    margin-left: 2%;
+    margin-top: 2%;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.assignments-title {
+    font-size: 1.6vw;
+    margin-top: 3%;
+}
+
+.assignment-display {
+    width: 100%;
+    height: 100%;
+    margin-top: 3%;
+}
+
+.assignment-display::-webkit-scrollbar {
+    width: 5px;
+}
+
+.assignment-display::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.assignment-display::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.assignment-display::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.assignments-subject-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 2%;
+}
+
+.subject-separator-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.subject-separator-p1 {
+    height: 0.5vh;
+    width: 50%;
+    background: white;
+    margin-left: 3%;
+    border-radius: 50px;
+}
+
+.subject-separator-p {
+    font-size: 1vw;
+    margin-left: 1%;
+    width: -webkit-fill-available;
+    max-width: 32%;
+    text-align: center;
+}
+
+.subject-separator-p2 {
+    width: 50%;
+    height: 0.5vh;
+    background: white;
+    margin-right: 3%;
+    margin-left: 1%;
+    border-radius: 50px;
+}
+
+.file-div {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 95%;
+    margin-top: 1%;
+    background-color: transparent;
+    display: -webkit-box;
+}
+
+.file-div::-webkit-scrollbar {
+    height: 5px;
+}
+
+.file-div::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.file-div::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    height: 5px;
+}
+
+.file-div::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.file-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .5s;
+    width: auto;
+    padding-right: 4%;
+    background: var(--disabled);
+    color: var(--text-color);
+    border: none;
+    margin-right: 2%;
+}
+
+.file-button p {
+    display: inline-block;
+    font-size: 1vw;
+    margin-left: 2%;
+}
+
+.file-button img {
+    width: 2vw;
+}
+
 /** Teacher features styling */
 
 .manage-students-container {
@@ -174,7 +312,7 @@
 .students-list::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 50px;
-    width: 5px;;
+    width: 5px;
 }
 
 .students-list::-webkit-scrollbar-thumb:hover {
@@ -706,7 +844,7 @@
     padding-bottom: 8px;
     background: transparent;
     border: 2px solid var(--warning);
-    margin-left: 5%;
+    margin-left: 2%;
     transition: color .5s linear;
     position: relative;
     z-index: 1;
@@ -739,7 +877,7 @@
     transform: translate(-50%, -50%);
     background: var(--primary);
     width: 35%;
-    height: 60%;
+    height: 70%;
     display: none;
     flex-direction: column;
     align-items: center;
@@ -849,6 +987,15 @@
     color: var(--text-color);
     font-size: 1vw;
     padding: 2%;
+}
+
+.select-assignment-subject {
+    padding: 1%;
+    font-size: 1.4vw;
+    margin-top: 2%;
+    width: 61%;
+    height: auto;
+    cursor: pointer;
 }
 
 .input-dueDate {
@@ -992,7 +1139,7 @@
 .student-display {
     max-width: 50%;
     width: 50%;
-    height: 7%;
+    height: 4.5%;
     margin-top: 2%;
     overflow-y: hidden;
     overflow-x: auto;
@@ -1089,6 +1236,255 @@
 
 .close-error-message:hover {
     color: var(--disabled);
+}
+
+.results-assignment-win {
+    position: absolute;
+    background: var(--primary);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 80%;
+    width: 85%;
+    z-index: 100;
+    border-radius: 5px;
+    display: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.close-results-assignment-win {
+    top: 1%;
+    right: .7%;
+}
+
+.students-results {
+    width: 30%;
+    border-right: 1px solid var(--alt-primary);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.students-results h3 {
+    font-size: 1.3vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 3%;
+    text-align: center;
+}
+
+.results-display {
+    margin-top: 2%;
+    height: 93%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.student-result {
+    display: flex;
+    align-items: center;
+    font-size: 1.1vw;
+    margin-left: 5%;
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 2%;
+}
+
+.documents {
+    width: 70%;
+    border-radius: 0px 5px 0px 5px;
+}
+
+.document-tabs {
+    border-radius: 0px 5px 0px 0px;
+    background: var(--message-other);
+    height: 9%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+}
+
+.document-tab {
+    width: max-content;
+    background: var(--message-other);
+    height: 90%;
+    padding-left: 2%;
+    padding-right: 2%;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--disabled);
+    border-radius: 2px;
+    border-right: 1px solid var(--alt-primary);
+    border-left: 1px solid var(--alt-primary);
+    cursor: pointer;
+    border-top: none;
+    outline: none;
+    color: var(--text-color);
+    font-size: 1vw;
+    transition: .5s;
+}
+
+.document-tab:hover:not(.tab-selected) {
+    background: var(--selected-primary);
+}
+
+.tab-selected {
+    background: var(--primary) !important;
+    border-bottom: 2px solid var(--message-you) !important;
+}
+
+.document-viewer-container {
+    background: var(--alt-primary);
+    width: 100%;
+    height: 91%;
+    border-radius: 0px 0px 5px 0px;
+}
+
+.grade-book-section {
+    background: var(--primary);
+    position: absolute;
+    left: 33%;
+    top: 3.6%;
+    width: 30vw;
+    height: 35vh;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grade-book-section h3 {
+    font-size: 1.7vw;
+    text-align: center;
+    margin-top: 2%;
+}
+
+.grade-book-list {
+    width: 100%;
+    height: 100%;
+    margin-top: 1%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grade-book-student {
+    font-size: 1.2vw;
+    width: 90%;
+    text-align: start;
+    padding: 2%;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .5s;
+    margin-top: 1%;
+}
+
+.grade-book-student:hover {
+    background: var(--selected-primary);
+}
+
+.grade-book-win {
+    position: absolute;
+    background: var(--primary);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 70vh;
+    border-radius: 6px;
+    display: flex;
+    z-index: 100;
+}
+
+.grade-book-win-header {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grade-book-win-header h3 {
+    font-size: 1.4vw;
+    margin-top: 1.5%;
+}
+
+.close-gradebook-win {
+    top: 1%;
+}
+
+.subject-list {
+    height: 90%;
+    position: absolute;
+    top: 10%;
+    width: 30%;
+    padding-top: 1%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.subject-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.subject-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.subject-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;
+}
+
+.subject-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.subject {
+    font-size: 1.2vw;
+    width: 90%;
+    margin-left: 5%;
+    background: transparent;
+    outline: none;
+    border: none;
+    color: var(--text-color);
+    padding-top: 2%;
+    padding-bottom: 2%;
+    cursor: pointer;
+    transition: .5s;
+    border-radius: 0px;
+    margin-bottom: 1%;
+}
+
+.subject:hover {
+    border-radius: 50px;
+    background: var(--selected-primary);
+}
+
+.selected-subject {
+    border-radius: 50px;
+    background: var(--selected-primary);
+}
+
+.grade-book-main-view {
+    background: var(--alt-primary);
+    position: absolute;
+    left: 30%;
+    bottom: 0;
+    width: 70%;
+    height: 90%;
+    border-radius: 6px 0px 6px 0px;
 }
 
 .toggle-school-chat {
@@ -1421,7 +1817,7 @@
     outline: none;
     transition: .5s;
     color: var(--text-color);
-    z-index: 1;
+    z-index: 9999999;
 }
 
 .toggle-console span {

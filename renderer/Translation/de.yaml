@@ -10,8 +10,8 @@ app:
     switch_btn: Erstellen
     error_username: Benutzername exestiert schon!
     error_undefined: Konto konnte nicht erstellt werden!
-    error_server: Keine Verbindung zum Server!
-    error_server_try_again: Versuche es später erneut
+    error_connection: Verbindungs Fehler!
+    error_email: Invalid email!
   verification:
     teacher:
       placeholder_school: Tragen Sie Ihre Schule ein.

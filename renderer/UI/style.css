@@ -186,7 +186,7 @@ body {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.493);
     z-index: 1;
-    display: none;
+    display: block;
 }
 
 .console-output {
@@ -219,4 +219,47 @@ body {
     border-top: 1px solid var(--error-border);
     border-bottom: 1px solid var(--error-border);
     padding: 5px;
+}
+
+.error-main {
+    position: absolute;
+    top: 2%;
+    right: 1%;
+    font-size: 1.5vw;
+    z-index: 100;
+    background: var(--primary);
+    padding: 1%;
+    border-radius: 6px;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 20%;
+    border-right: 2px solid var(--secondary);
+    transition: .1s;
+}
+
+.error-main p {
+    cursor: default;
+}
+
+.close-error-message {
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: .5s;
+    margin-left: 4%;
+    display: block;
+}
+
+.close-error-message span {
+    transform: translateY(14%);
+    font-size: 1.5vw;
+}
+
+.close-error-message:hover {
+    color: var(--disabled);
 }

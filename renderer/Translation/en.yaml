@@ -10,6 +10,8 @@ app:
     switch_btn: Sign In
     error_username: Username already exists!
     error_undefined: Unable to create account!
+    error_connection: Unable to connect to the server!
+    error_email: Invalid email!
   verification:
     teacher:
       placeholder_school: Enter your school
@@ -42,6 +44,8 @@ app:
         announcements_title: Announcements
       assignments:
         assignments_title: Assignments
+        submit:
+          invalid_file_error: Forbidden file type!
       grades:
         grades_title: Grades
     teacher:
@@ -89,6 +93,21 @@ app:
           placeholder_description: Description
           placeholder_deadline: Deadline
           placeholder_search: Search student
+          subjects:
+            german: German
+            math: Math
+            english: English
+            geography: Geography
+            physic: Physic
+            chemistry: Chemistry
+            pe: Physical Education
+            art: Art
+            music: Music
+            computer_science: Computer Science
+            economics: Home Economics
+            religion: Religious Studies/Ethics
+            design_and_tech: Design and Technology
+            career_education: Career Education
           create: Create
         update_assignment:
           title: Update Assignment
@@ -101,6 +120,24 @@ app:
           title: Are you sure?
           cancel: Cancel
           delete: Delete
+      grade_book:
+        title: Gradebook
+        grade_book_win:
+          subjects:
+            german: German
+            math: Math
+            english: English
+            geography: Geography
+            physic: Physic
+            chemistry: Chemistry
+            pe: Physical Education
+            art: Art
+            music: Music
+            computer_science: Computer Science
+            economics: Home Economics
+            religion: Religious Studies/Ethics
+            design_and_tech: Design and Technology
+            career_education: Career Education
     dev:
       schools:
         schools_title: Schools

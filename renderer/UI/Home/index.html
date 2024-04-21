@@ -31,14 +31,10 @@
             </nav>
             <div id="page_content">
                 <div id="student" class="role-div">
-                    <div class="announcements-school section">
-                        <h3 class="section-title" data-i18n="app.home.student.announcements.announcements_title"></h3>
-                    </div>
-                    <div class="assignments section">
-                        <h3 class="section-title" data-i18n="app.home.student.assignments.assignments_title"></h3>
-                    </div>
-                    <div class="grades section">
-                        <h3 class="section-title" data-i1j8n="app.home.student.grades.grades_title"></h3>
+                    <div class="assignment-viewer">
+                        <h3 class="assignments-title" data-i18n="app.home.student.assignments.assignments_title"></h3>
+                        <div class="assignment-display" id="assignment_container">
+                        </div>
                     </div>
                     <button class="toggle-console" id="toggle_console_student"><span class="material-symbols-rounded">terminal</span></button>
                     <div class="dev-console-student" id="dev-console-student">
@@ -46,6 +42,10 @@
                             
                         </div>
                         <input type="text" class="command-input" id="command_input_student" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
+                    </div>
+                    <div class="error-main" id="error_student_invalid_file">
+                        <p data-i18n="app.home.student.assignments.submit.invalid_file_error"></p>
+                        <button class="close-error-message" id="close_error_message_invalid_file"><span class="material-symbols-rounded">close</span></button>
                     </div>
                 </div>
                 <div id="teacher" class="role-div">
@@ -71,6 +71,22 @@
                         <button class="close close-assignment-win" id="close_add_assignment"><span class="material-symbols-rounded">close</span></button>
                         <input type="text" class="input input-assignment-title" id="input_title" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_title" data-i18n-attr="placeholder">
                         <textarea id="input_description" class="textarea-assignment" cols="30" rows="10" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_description" data-i18n-attr="placeholder"></textarea>
+                        <select class="input select-assignment-subject" id="add_assignment_select">
+                            <option value="german" data-i18n="app.home.teacher.assignments.add_assignment.subjects.german"></option>
+                            <option value="math" data-i18n="app.home.teacher.assignments.add_assignment.subjects.math"></option>
+                            <option value="english" data-i18n="app.home.teacher.assignments.add_assignment.subjects.english"></option>
+                            <option value="geography" data-i18n="app.home.teacher.assignments.add_assignment.subjects.geography"></option>
+                            <option value="physic" data-i18n="app.home.teacher.assignments.add_assignment.subjects.physic"></option>
+                            <option value="chemistry" data-i18n="app.home.teacher.assignments.add_assignment.subjects.chemistry"></option>
+                            <option value="pe" data-i18n="app.home.teacher.assignments.add_assignment.subjects.pe"></option>
+                            <option value="art" data-i18n="app.home.teacher.assignments.add_assignment.subjects.art"></option>
+                            <option value="music" data-i18n="app.home.teacher.assignments.add_assignment.subjects.music"></option>
+                            <option value="computer_science" data-i18n="app.home.teacher.assignments.add_assignment.subjects.computer_science"></option>
+                            <option value="economics" data-i18n="app.home.teacher.assignments.add_assignment.subjects.economics"></option>
+                            <option value="religion" data-i18n="app.home.teacher.assignments.add_assignment.subjects.religion"></option>
+                            <option value="design_and_tech" data-i18n="app.home.teacher.assignments.add_assignment.subjects.design_and_tech"></option>
+                            <option value="career_education" data-i18n="app.home.teacher.assignments.add_assignment.subjects.career_education"></option>
+                        </select>
                         <input type="text" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_deadline" data-i18n-attr="placeholder" id="due_date_assignment" class="input due-date-assignment" data-input>
                         <div class="search-wrapper">
                             <input type="text" class="input search-students-assignment" id="search_students_assignment" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_search" data-i18n-attr="placeholder">
@@ -91,6 +107,22 @@
                         <button class="close close-assignment-win" id="close_update_assignment"><span class="material-symbols-rounded">close</span></button>
                         <input type="text" class="input input-assignment-title" id="input_title_update" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_title" data-i18n-attr="placeholder">
                         <textarea id="input_description_update" class="textarea-assignment" cols="30" rows="10" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_description" data-i18n-attr="placeholder"></textarea>
+                        <select class="input select-assignment-subject" id="update_assignment_select">
+                            <option value="german" data-i18n="app.home.teacher.assignments.add_assignment.subjects.german"></option>
+                            <option value="math" data-i18n="app.home.teacher.assignments.add_assignment.subjects.math"></option>
+                            <option value="english" data-i18n="app.home.teacher.assignments.add_assignment.subjects.english"></option>
+                            <option value="geography" data-i18n="app.home.teacher.assignments.add_assignment.subjects.geography"></option>
+                            <option value="physic" data-i18n="app.home.teacher.assignments.add_assignment.subjects.physic"></option>
+                            <option value="chemistry" data-i18n="app.home.teacher.assignments.add_assignment.subjects.chemistry"></option>
+                            <option value="pe" data-i18n="app.home.teacher.assignments.add_assignment.subjects.pe"></option>
+                            <option value="art" data-i18n="app.home.teacher.assignments.add_assignment.subjects.art"></option>
+                            <option value="music" data-i18n="app.home.teacher.assignments.add_assignment.subjects.music"></option>
+                            <option value="computer_science" data-i18n="app.home.teacher.assignments.add_assignment.subjects.computer_science"></option>
+                            <option value="economics" data-i18n="app.home.teacher.assignments.add_assignment.subjects.economics"></option>
+                            <option value="religion" data-i18n="app.home.teacher.assignments.add_assignment.subjects.religion"></option>
+                            <option value="design_and_tech" data-i18n="app.home.teacher.assignments.add_assignment.subjects.design_and_tech"></option>
+                            <option value="career_education" data-i18n="app.home.teacher.assignments.add_assignment.subjects.career_education"></option>
+                        </select>
                         <input type="text" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_deadline" data-i18n-attr="placeholder" id="due_date_assignment_update" class="input due-date-assignment" data-input>
                         <div class="search-wrapper">
                             <input type="text" class="input search-students-assignment" id="search_students_assignment_update" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_search" data-i18n-attr="placeholder">
@@ -101,10 +133,55 @@
                         </div>
                         <button class="button submit create-assignment" id="update_assignment" data-i18n="app.home.teacher.assignments.update_assignment.update"></button>
                     </div>
+                    <div class="results-assignment-win" id="results_assignment_win">
+                        <button class="close close-results-assignment-win" id="close_results_assignment_win"><span class="material-symbols-rounded">close</span></button>
+                        <div class="students-results">
+                            <h3>Submissions</h3>
+                            <div class="results-display" id="results_display">
+                            </div>
+                        </div>
+                        <div class="documents">
+                            <div class="document-tabs" id="document_tabs">
+                            </div>
+                            <div class="document-viewer-container" id="document_viewer">
+                            </div>
+                        </div>
+                    </div>
                     <p class="assignment-error-exists" id="error_assignment_duplicate">
                         Assignment title already exists
                         <button class="close-error-message" id="close_error_message"><span class="material-symbols-rounded">close</span></button>
                     </p>
+                    <div class="grade-book-section">
+                        <h3>Gradebook</h3>
+                        <div class="grade-book-list" id="grade_book_list">
+                        </div>
+                    </div>
+                    <div class="grade-book-win" id="grade_book_win">
+                        <div class="grade-book-win-header">
+                            <h3>Gradebook of N/A</h3>
+                            <button class="close close-gradebook-win" id="close_gradebook_win"><span class="material-symbols-rounded">close</span></button>
+                        </div>
+                        <div class="subject-list">
+                            <button class="subject selected-subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.german"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.math"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.english"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.geography"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.physic"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.chemistry"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.pe"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.art"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.music"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.music"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.computer_science"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.economics"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.religion"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.design_and_tech"></button>
+                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.career_education"></button>
+                        </div>
+                        <div class="grade-book-main-view" id="gradebook_main_view">
+
+                        </div>
+                    </div>
                     <div class="student-manager-div" id="student_manager">
                         <div class="student-manager-header">
                             <h3 class="student-manager-title" data-i18n="app.home.teacher.student_manager.student_manager_title"></h3>
