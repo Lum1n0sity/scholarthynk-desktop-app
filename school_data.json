@@ -1,28 +1,36 @@
 {
-    "schoolName":"Montessori Forchheim",
-    "emailEnding": "@montessori-forchheim.de",
+    "schoolName":"Development School",
+    "emailEnding": "@dev-school.com",
     "students": [
         {
-            "name": "Student 1",
+            "name": "Raphael",
             "grade": 9,
-            "expectedGraduationYear": 2025
+            "expectedGraduationYear": 2024,
+            "email": "raphael221@outlook.de"
         },
         {
-            "name": "Student 2",
-            "grade": 10,
-            "expectedGraduationYear": 2024
+            "name": "Kevin",
+            "grade": 9,
+            "expectedGraduationYear": 2024,
+            "email": "kevin@outlook.de"
+        },
+        {
+            "name": "Hannah",
+            "grade": 9,
+            "expectedGraduationYear": 2024,
+            "email": "hannah@outlook.de"
         }
     ],
     "teachers": [
         {
-            "name": "Teacher 1",
-            "subject": "Math",
+            "name": "Laura Rampe",
+            "subject": "Math, German, English, CS",
             "class": 9
         },
         {
-            "name": "Teacher 2",
-            "subject": "English",
-            "class": 10
+            "name": "Astrid Romanowski",
+            "subject": "CS, WiK",
+            "class": 9
         }
     ]
 }

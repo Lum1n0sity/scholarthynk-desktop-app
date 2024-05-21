@@ -1402,7 +1402,7 @@
     width: 60vw;
     height: 70vh;
     border-radius: 6px;
-    display: flex;
+    display: none;
     z-index: 100;
 }
 
@@ -1429,8 +1429,13 @@
     top: 10%;
     width: 30%;
     padding-top: 1%;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
+    transition: .5s;
+}
+
+.subject-list:hover {
+    overflow-y: auto;
 }
 
 .subject-list::-webkit-scrollbar {
@@ -1470,6 +1475,11 @@
 .subject:hover {
     border-radius: 50px;
     background: var(--selected-primary);
+}
+
+.subject:hover .subject-list {
+    overflow-y: auto;
+    transition: .5s;
 }
 
 .selected-subject {
@@ -1744,6 +1754,10 @@
     text-align: center;
 }
 
+#cancel_adding_school {
+    margin-left: 15%;
+}
+
 .delete-school-container {
     background-color: var(--primary);
     position: absolute;
@@ -1751,7 +1765,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 30%;
-    height: 20%;
+    height: 23%;
     border-radius: 6px;
     z-index: 2;
     display: none;

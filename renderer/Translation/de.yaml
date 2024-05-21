@@ -1,5 +1,5 @@
 app:
-  register: 
+  register:
     title: Account erstellen
     placeholder_email: E-Mail
     placeholder_username: Benutzername
@@ -18,7 +18,7 @@ app:
       title_code: Geben Sie den Bestätigungscode ein
       code_tries_display: Versuche übrich
       code_return_start: Zurück zum Login
-  login: 
+  login:
     title: Login
     placeholder_username: Benutzername
     placeholder_password: Passwort
@@ -80,8 +80,8 @@ app:
         cancel: Abbrechen
         delete: Löschen
       assignments:
-        title: 
-        add_assignment: Aufgaben
+        title:
+        add_assignment:
           title: Aufgabe Erstellen
           placeholder_title: Titel
           placeholder_description: Beschreibung
@@ -143,18 +143,18 @@ app:
       delete_topic_overlay:
         cancel: Abbrechen
         delete: Löschen
-      add_vocab: 
+      add_vocab:
         title: Neu wörter hinzufügen
         placeholder_german: Deutsch
         placeholder_english: Englisch
         add_word: Wörter hinzufügen
-      delete_vocab: 
+      delete_vocab:
         title: Wörter löschen
         default_select: Wähle Wörter zum löschen
         delete: Löschen
   settings:
     title: ScholarThynk - Settings
-    nav:  
+    nav:
       account: Benutzer
       privacy_and_safety: Privatsphähre & Sicherheit
       log: Was ist neu
@@ -206,14 +206,14 @@ app:
         title: Informationen zur Einwilligung in die Datenverarbeitung
         content: N/A
       privacy_policy: Datenschutzbestimmungen
-      notifactions: 
+      notifactions:
         title: Einstellungen für Benachrichtigungen
-      2FA: 
+      2FA:
         title: Zwei-Faktoren-Authentifizierung
         label: Zwei-Faktor-Authentifizierung ein-/ausschalten
     appearance:
       title: Appearance
-      theme: 
+      theme:
         title: Theme
         light: Light
         dark: Dark

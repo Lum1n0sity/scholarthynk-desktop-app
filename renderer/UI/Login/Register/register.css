@@ -55,7 +55,7 @@ body {
     padding: 10px;
     outline: none;
     transition: .5s;
-}   
+}
 
 #email_input:focus {
     border-left: 2px solid var(--secondary);
@@ -455,7 +455,7 @@ input[type="checkbox"]:checked:after {
     background-color: var(--disabled);
     border-radius: 50px;
 }
-    
+
 .view {
     height: 100%;
 }
@@ -491,7 +491,7 @@ input[type="checkbox"]:checked:after {
 .document-view::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-    
+
 .footer {
     display: flex;
     flex-direction: row;
@@ -618,7 +618,7 @@ input[type="checkbox"]:checked:after {
 
 .loader::after,
 .loader::before {
-    content: '';  
+    content: '';
     box-sizing: border-box;
     width: 16px;
     height: 16px;
@@ -636,18 +636,18 @@ input[type="checkbox"]:checked:after {
     animation-delay: 0.4s;
     left: 60px;
 }
-  
+
 @keyframes animloader {
     0% {
-      top: 0;
-      color: white;
+        top: 0;
+        color: white;
     }
     50% {
-      top: 30px;
-      color: rgba(255, 255, 255, 0.2);
+        top: 30px;
+        color: rgba(255, 255, 255, 0.2);
     }
     100% {
-      top: 0;
-      color: white;
+        top: 0;
+        color: white;
     }
 }      

@@ -1,5 +1,5 @@
 app:
-  register: 
+  register:
     title: Sign Up
     placeholder_email: Enter your school E-Mail
     placeholder_username: Enter your full name
@@ -87,7 +87,7 @@ app:
         delete: Delete
       assignments:
         title: Assignments
-        add_assignment: 
+        add_assignment:
           title: Add Assignments
           placeholder_title: Title
           placeholder_description: Description
@@ -185,7 +185,7 @@ app:
       delete_topic_overlay:
         cancel: Cancel
         delete: Delete
-      add_vocab: 
+      add_vocab:
         title: Add new words
         placeholder_german: German
         placeholder_english: English
@@ -196,7 +196,7 @@ app:
         delete: Delete
   settings:
     title: ScholarThynk - Settings
-    nav:  
+    nav:
       account: Account
       privacy_and_safety: Privacy & Safety
       log: What's New
@@ -229,7 +229,7 @@ app:
         delete_btn: Delete Account
       warning:
         title: WARNING!
-        message: You are about to delete your Account FOR EVER. 
+        message: You are about to delete your Account FOR EVER.
         question: Do you really want to do that?
         cancel: Cancel
         delete: Delete
@@ -248,14 +248,14 @@ app:
         title: Data Processing Consent Information
         content: N/A
       privacy_policy: Privacy Policy
-      notifactions: 
+      notifactions:
         title: Notification Settings
-      2FA: 
+      2FA:
         title: Two-Factor Authentication
         label: Turn on/off Two-Factor Authentication
     appearance:
       title: Appearance
-      theme: 
+      theme:
         title: Theme
         light: Light
         dark: Dark

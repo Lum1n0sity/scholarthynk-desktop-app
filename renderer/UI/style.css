@@ -186,7 +186,7 @@ body {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.493);
     z-index: 1;
-    display: block;
+    display: none;
 }
 
 .console-output {

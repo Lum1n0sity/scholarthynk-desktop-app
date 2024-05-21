@@ -9,8 +9,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const api_addr = "http://192.168.5.21:3000";
     const root = document.documentElement;
 
-    // * Load dark/light mode:
-
+    /**
+     * Switches the appearance mode of the application between light and dark.
+     *
+     * This function retrieves the current mode from the store and toggles the appearance
+     * of various elements in the application based on the mode. If no mode is set in the store,
+     * it defaults to the dark mode.
+     */
     function switchAppearance()
     {
         const mode = store.get('mode');
@@ -47,7 +52,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     switchAppearance();
 
     // * Load language:
-    
+    /**
+     * Updates the user interface language based on the translations provided by i18next.
+     * This function selects elements with the 'data-i18n' attribute and updates their content or attributes
+     * with the corresponding translation from i18next.
+     */
     function updateUILanguage() 
     {
         document.querySelectorAll('[data-i18n]').forEach((element) => {

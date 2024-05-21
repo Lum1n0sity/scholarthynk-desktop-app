@@ -1,419 +1,551 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title data-i18n="app.home.title"></title>
-        <link rel="stylesheet" href="../style.css">
-        <link rel="stylesheet" href="index.css">
-        <script src="../renderer.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="app.home.title"></title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="../renderer.js"></script>
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
-        <link rel="stylesheet" href="path/to/flatpickr.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    </head>
-    <body> 
-        <script src="index.js"></script>
-        <div id="main_grid">
-            <nav id="nav_bar">
-                <img src="Images/Logo.png" id="nav_logo">
-                <button id="nav_home"><span class="material-symbols-rounded">home</span><br><p data-i18n="app.nav_bar.home"></p></button>
-                <button id="nav_discover"><span class="material-symbols-rounded">search</span><br><p data-i18n="app.nav_bar.discover"></p></button>
-                <button id="nav_courses"><span class="material-symbols-rounded">play_circle</span><br><p data-i18n="app.nav_bar.courses"></p></button>
-                <button id="nav_plan"><span class="material-symbols-rounded">menu_book</span><br><p data-i18n="app.nav_bar.study_plan"></p></button>
-                <button id="nav_dates"><span class="material-symbols-rounded">calendar_month</span><br><p data-i18n="app.nav_bar.dates"></p></button>
-                <button id="nav_learn"><span class="material-symbols-rounded">neurology</span><br><p data-i18n="app.nav_bar.learn"></p></button>
-                <div id="nav_lower">
-                    <button id="nav_notification"><span class="material-symbols-rounded">notifications</span></button>
-                    <button id="nav_logout"><span class="material-symbols-rounded">logout</span><br><p data-i18n="app.nav_bar.logout"></p></button>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <link rel="stylesheet" href="path/to/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+<script src="index.js"></script>
+<div id="main_grid">
+    <nav id="nav_bar">
+        <img src="Images/Logo.png" id="nav_logo">
+        <button id="nav_home"><span class="material-symbols-rounded">home</span><br>
+            <p data-i18n="app.nav_bar.home"></p></button>
+        <button id="nav_discover"><span class="material-symbols-rounded">search</span><br>
+            <p data-i18n="app.nav_bar.discover"></p></button>
+        <button id="nav_courses"><span class="material-symbols-rounded">play_circle</span><br>
+            <p data-i18n="app.nav_bar.courses"></p></button>
+        <button id="nav_plan"><span class="material-symbols-rounded">menu_book</span><br>
+            <p data-i18n="app.nav_bar.study_plan"></p></button>
+        <button id="nav_dates"><span class="material-symbols-rounded">calendar_month</span><br>
+            <p data-i18n="app.nav_bar.dates"></p></button>
+        <button id="nav_learn"><span class="material-symbols-rounded">neurology</span><br>
+            <p data-i18n="app.nav_bar.learn"></p></button>
+        <div id="nav_lower">
+            <button id="nav_notification"><span class="material-symbols-rounded">notifications</span></button>
+            <button id="nav_logout"><span class="material-symbols-rounded">logout</span><br>
+                <p data-i18n="app.nav_bar.logout"></p></button>
+        </div>
+    </nav>
+    <div id="page_content">
+        <div id="student" class="role-div">
+            <div class="assignment-viewer">
+                <h3 class="assignments-title" data-i18n="app.home.student.assignments.assignments_title"></h3>
+                <div class="assignment-display" id="assignment_container">
                 </div>
-            </nav>
-            <div id="page_content">
-                <div id="student" class="role-div">
-                    <div class="assignment-viewer">
-                        <h3 class="assignments-title" data-i18n="app.home.student.assignments.assignments_title"></h3>
-                        <div class="assignment-display" id="assignment_container">
-                        </div>
-                    </div>
-                    <button class="toggle-console" id="toggle_console_student"><span class="material-symbols-rounded">terminal</span></button>
-                    <div class="dev-console-student" id="dev-console-student">
-                        <div class="console-output" id="console_output">
-                            
-                        </div>
-                        <input type="text" class="command-input" id="command_input_student" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
-                    </div>
-                    <div class="error-main" id="error_student_invalid_file">
-                        <p data-i18n="app.home.student.assignments.submit.invalid_file_error"></p>
-                        <button class="close-error-message" id="close_error_message_invalid_file"><span class="material-symbols-rounded">close</span></button>
-                    </div>
-                </div>
-                <div id="teacher" class="role-div">
-                    <div class="manage-students-container">
-                        <h3 class="manage-students-title" data-i18n="app.home.teacher.manage_students.manage_students_title"></h3>
-                        <div class="manage-students-list">
-                            <input type="text" id="search_student_input" class="input search-students" data-i18n="app.home.teacher.manage_students.search_student_placeholder" data-i18n-attr="placeholder">
-                            <div class="students-list" id="students-list">
-                                <!-- Here are the students going -->
-                            </div>
-                        </div>
-                        <button id="update_students" class="update-students button" data-i18n="app.home.teacher.manage_students.update_students"></button>
-                    </div>
-                    <div class="assignment-manager-div">
-                        <h3 data-i18n="app.home.teacher.assignments.title"></h3>
-                        <button class="add add-assignment-open" id="open_add_assingnment"><span class="material-symbols-rounded">add</span></button>
-                        <div class="assignment-container" id="assingnment_container">
-                            
-                        </div>
-                    </div>
-                    <div class="add-assignment-win" id="add_assignment_win">
-                        <h3 data-i18n="app.home.teacher.assignments.add_assignment.title"></h3>
-                        <button class="close close-assignment-win" id="close_add_assignment"><span class="material-symbols-rounded">close</span></button>
-                        <input type="text" class="input input-assignment-title" id="input_title" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_title" data-i18n-attr="placeholder">
-                        <textarea id="input_description" class="textarea-assignment" cols="30" rows="10" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_description" data-i18n-attr="placeholder"></textarea>
-                        <select class="input select-assignment-subject" id="add_assignment_select">
-                            <option value="german" data-i18n="app.home.teacher.assignments.add_assignment.subjects.german"></option>
-                            <option value="math" data-i18n="app.home.teacher.assignments.add_assignment.subjects.math"></option>
-                            <option value="english" data-i18n="app.home.teacher.assignments.add_assignment.subjects.english"></option>
-                            <option value="geography" data-i18n="app.home.teacher.assignments.add_assignment.subjects.geography"></option>
-                            <option value="physic" data-i18n="app.home.teacher.assignments.add_assignment.subjects.physic"></option>
-                            <option value="chemistry" data-i18n="app.home.teacher.assignments.add_assignment.subjects.chemistry"></option>
-                            <option value="pe" data-i18n="app.home.teacher.assignments.add_assignment.subjects.pe"></option>
-                            <option value="art" data-i18n="app.home.teacher.assignments.add_assignment.subjects.art"></option>
-                            <option value="music" data-i18n="app.home.teacher.assignments.add_assignment.subjects.music"></option>
-                            <option value="computer_science" data-i18n="app.home.teacher.assignments.add_assignment.subjects.computer_science"></option>
-                            <option value="economics" data-i18n="app.home.teacher.assignments.add_assignment.subjects.economics"></option>
-                            <option value="religion" data-i18n="app.home.teacher.assignments.add_assignment.subjects.religion"></option>
-                            <option value="design_and_tech" data-i18n="app.home.teacher.assignments.add_assignment.subjects.design_and_tech"></option>
-                            <option value="career_education" data-i18n="app.home.teacher.assignments.add_assignment.subjects.career_education"></option>
-                        </select>
-                        <input type="text" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_deadline" data-i18n-attr="placeholder" id="due_date_assignment" class="input due-date-assignment" data-input>
-                        <div class="search-wrapper">
-                            <input type="text" class="input search-students-assignment" id="search_students_assignment" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_search" data-i18n-attr="placeholder">
-                            <div class="search-output" id="search_output">
-                            </div>
-                        </div>
-                        <div class="student-display" id="student_display">
-                        </div>
-                        <button class="button submit create-assignment" id="add_assignment" data-i18n="app.home.teacher.assignments.add_assignment.create"></button>
-                    </div>
-                    <div class="remove-assignment-win" id="remove_assignment_win">
-                        <h3 data-i18n="app.home.teacher.assignments.delete_warning.title"></h3>
-                        <button class="button cancel-delete" id="cancel_delete_assignment" data-i18n="app.home.teacher.assignments.delete_warning.cancel"></button>
-                        <button class="button delete-assignment delete-warning" id="confirm_delete_assignment" data-i18n="app.home.teacher.assignments.delete_warning.delete"></button>
-                    </div>
-                    <div class="add-assignment-win" id="update_assignment_win">
-                        <h3 data-i18n="app.home.teacher.assignments.update_assignment.title"></h3>
-                        <button class="close close-assignment-win" id="close_update_assignment"><span class="material-symbols-rounded">close</span></button>
-                        <input type="text" class="input input-assignment-title" id="input_title_update" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_title" data-i18n-attr="placeholder">
-                        <textarea id="input_description_update" class="textarea-assignment" cols="30" rows="10" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_description" data-i18n-attr="placeholder"></textarea>
-                        <select class="input select-assignment-subject" id="update_assignment_select">
-                            <option value="german" data-i18n="app.home.teacher.assignments.add_assignment.subjects.german"></option>
-                            <option value="math" data-i18n="app.home.teacher.assignments.add_assignment.subjects.math"></option>
-                            <option value="english" data-i18n="app.home.teacher.assignments.add_assignment.subjects.english"></option>
-                            <option value="geography" data-i18n="app.home.teacher.assignments.add_assignment.subjects.geography"></option>
-                            <option value="physic" data-i18n="app.home.teacher.assignments.add_assignment.subjects.physic"></option>
-                            <option value="chemistry" data-i18n="app.home.teacher.assignments.add_assignment.subjects.chemistry"></option>
-                            <option value="pe" data-i18n="app.home.teacher.assignments.add_assignment.subjects.pe"></option>
-                            <option value="art" data-i18n="app.home.teacher.assignments.add_assignment.subjects.art"></option>
-                            <option value="music" data-i18n="app.home.teacher.assignments.add_assignment.subjects.music"></option>
-                            <option value="computer_science" data-i18n="app.home.teacher.assignments.add_assignment.subjects.computer_science"></option>
-                            <option value="economics" data-i18n="app.home.teacher.assignments.add_assignment.subjects.economics"></option>
-                            <option value="religion" data-i18n="app.home.teacher.assignments.add_assignment.subjects.religion"></option>
-                            <option value="design_and_tech" data-i18n="app.home.teacher.assignments.add_assignment.subjects.design_and_tech"></option>
-                            <option value="career_education" data-i18n="app.home.teacher.assignments.add_assignment.subjects.career_education"></option>
-                        </select>
-                        <input type="text" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_deadline" data-i18n-attr="placeholder" id="due_date_assignment_update" class="input due-date-assignment" data-input>
-                        <div class="search-wrapper">
-                            <input type="text" class="input search-students-assignment" id="search_students_assignment_update" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_search" data-i18n-attr="placeholder">
-                            <div class="search-output" id="search_output_update">
-                            </div>
-                        </div>
-                        <div class="student-display" id="student_display_update">
-                        </div>
-                        <button class="button submit create-assignment" id="update_assignment" data-i18n="app.home.teacher.assignments.update_assignment.update"></button>
-                    </div>
-                    <div class="results-assignment-win" id="results_assignment_win">
-                        <button class="close close-results-assignment-win" id="close_results_assignment_win"><span class="material-symbols-rounded">close</span></button>
-                        <div class="students-results">
-                            <h3>Submissions</h3>
-                            <div class="results-display" id="results_display">
-                            </div>
-                        </div>
-                        <div class="documents">
-                            <div class="document-tabs" id="document_tabs">
-                            </div>
-                            <div class="document-viewer-container" id="document_viewer">
-                            </div>
-                        </div>
-                    </div>
-                    <p class="assignment-error-exists" id="error_assignment_duplicate">
-                        Assignment title already exists
-                        <button class="close-error-message" id="close_error_message"><span class="material-symbols-rounded">close</span></button>
-                    </p>
-                    <div class="grade-book-section">
-                        <h3>Gradebook</h3>
-                        <div class="grade-book-list" id="grade_book_list">
-                        </div>
-                    </div>
-                    <div class="grade-book-win" id="grade_book_win">
-                        <div class="grade-book-win-header">
-                            <h3>Gradebook of N/A</h3>
-                            <button class="close close-gradebook-win" id="close_gradebook_win"><span class="material-symbols-rounded">close</span></button>
-                        </div>
-                        <div class="subject-list">
-                            <button class="subject selected-subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.german"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.math"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.english"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.geography"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.physic"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.chemistry"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.pe"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.art"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.music"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.music"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.computer_science"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.economics"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.religion"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.design_and_tech"></button>
-                            <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.career_education"></button>
-                        </div>
-                        <div class="grade-book-main-view" id="gradebook_main_view">
+            </div>
+            <button class="toggle-console" id="toggle_console_student"><span
+                    class="material-symbols-rounded">terminal</span></button>
+            <div class="dev-console-student" id="dev-console-student">
+                <div class="console-output" id="console_output">
 
-                        </div>
-                    </div>
-                    <div class="student-manager-div" id="student_manager">
-                        <div class="student-manager-header">
-                            <h3 class="student-manager-title" data-i18n="app.home.teacher.student_manager.student_manager_title"></h3>
-                            <button class="close" id="close_student_manager"><span class="material-symbols-rounded">close</span></button>
-                        </div>
-                        <div class="main-body valid-drop-target">
-                            <div class="grade" id="grade_1">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_1"></p>
-                                <button class="add-student grade_1"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_2">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_2"></p>
-                                <button class="add-student grade_2"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_3">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_3"></p>
-                                <button class="add-student grade_3"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_4">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_4"></p>
-                                <button class="add-student grade_4"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_5">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_5"></p>
-                                <button class="add-student grade_5"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_6" >
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_6"></p>
-                                <button class="add-student grade_6"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_7">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_7"></p>
-                                <button class="add-student grade_7"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_8">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_8"></p>
-                                <button class="add-student grade_8"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade valid-drop-target" id="grade_9">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_9"></p>
-                                <button class="add-student grade_9"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                            <div class="grade end-grade valid-drop-target" id="grade_10">
-                                <p id="grade_title" class="grade-title" data-i18n="app.home.teacher.student_manager.grade_10"></p>
-                                <button class="add-student grade_10"><span class="material-symbols-rounded">add</span> <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="add-student-win" id="add_student_win">
-                        <div class="add-student-win-header">
-                            <h3 data-i18n="app.home.teacher.add_student.title"></h3>
-                            <button class="close-add-student" id="close_add_student"><span class="material-symbols-rounded">close</span></button>
-                        </div>
-                        <div class="student-info">
-                            <input type="text" data-i18n="app.home.teacher.add_student.placeholder_name" data-i18n-attr="placeholder" id="student_name" class="input student-name">
-                            <input type="text" data-i18n="app.home.teacher.add_student.placeholder_grade" data-i18n-attr="placeholder" id="student_grade" class="input student-grade">
-                        </div>
-                        <button class="submit button" id="add-student-data" data-i18n="app.home.teacher.add_student.add"></button>
-                    </div>
-                    <div class="edit-student-win" id="edit_student_win">
-                        <div class="edit-student-win-header">
-                            <h3 data-i18n="app.home.teacher.edit_student.title"></h3>
-                            <button class="close-edit-student" id="close_edit_student"><span class="material-symbols-rounded">close</span></button>
-                        </div>
-                        <div class="student-info">
-                            <div class="row_1">
-                                <p class="label name-edit" data-i18n="app.home.teacher.edit_student.label_name"></p>
-                                <p class="label grade-edit" data-i18n="app.home.teacher.edit_student.label_grade"></p>
-                            </div>
-                            <div class="row_2">
-                                <input type="text" id="student_name_edit" class="input student-name-edit" readonly>
-                                <input type="text" id="student_grade_edit" class="input student-grade-edit">
-                            </div>
-                            <p class="label year" data-i18n="app.home.teacher.edit_student.label_year"></p>
-                            <input type="text" id="student_grad_year_edit" class="input student-grad-year-edit">
-                        </div>
-                        <button class="edit button" id="edit-student-data" data-i18n="app.home.teacher.edit_student.update"></button>
-                    </div>
-                    <div class="delete-student-warning" id="delete_warning">
-                        <h3 data-i18n="app.home.teacher.delete_warning.title"></h3>
-                        <div>
-                            <button data-i18n="app.home.teacher.delete_warning.cancel" class="warning-cancel button" id="delete_warning_cancel"></button>
-                            <button data-i18n="app.home.teacher.delete_warning.delete" class="warning-delete" id="delete_warning_delete"></button>
-                        </div>
-                    </div>
-                    <button class="toggle-console toggle-console-teacher" id="toggle_console_teacher"><span class="material-symbols-rounded">terminal</span></button>
-                    <div class="dev-console-teacher" id="dev-console-teacher">
-                        <div class="console-output" id="console_output">
-                            
-                        </div>
-                        <input type="text" class="command-input" id="command_input_teacher" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
-                    </div>
-                    <button class="button toggle-school-chat" id="toggle_school_chat"><span class="material-symbols-rounded">chat</span></button>
-                    <div class="chat-window" id="school_chat_win">
-                        <button class="close close-chat-win" id="close_school_chat"><span class="material-symbols-rounded">close</span></button>
-                        <div class="contacts-container-school" id="contacts_container_school">
-                            <h3>Contacts</h3>
-                            <div class="switch-role-container">
-                                <button class="selected-role switch-role switch-role-student" id="switch_role_student">Student</button>
-                                <button class="switch-role switch-role-teacher" id="switch_role_teacher">Teacher</button>
-                            </div>
-                            <div class="search-contacts-container">
-                                <input type="text" class="input search-contacts" id="search_contacts" placeholder="Search contact">
-                                <button class="start-search-contacts" id="start_search_contacts"><span class="material-symbols-rounded">search</span></button>
-                            </div>
-                            <div id="contacts_school" class="contacts-school">
-                                
-                            </div>
-                        </div>
-                        <div class="chat-container">
-                            <div class="message-container" id="message_container_school">
-                            </div>
-                            <input type="text" placeholder="Enter message" class="input message-input" id="message_input_school">
-                            <button class="send-message" id="send_message_school"><span class="material-symbols-rounded">send</span></button>
-                        </div>
-                    </div>
                 </div>
-                <div id="dev" class="role-div">
-                    <div class="row">
-                        <div class="schools-container">
-                            <h3 class="schools-title" data-i18n="app.home.dev.schools.schools_title"></h3>
-                            <div id="schools_list" class="schools-list">
-                                <!-- Here are the schools going -->
-                            </div>
-                            <div class="options-div">
-                                <button class="add" id="add-school"><span class="material-symbols-rounded">add</span></button>
-                                <button class="delete" id="delete-school"><span class="material-symbols-rounded">delete</span></button>
-                            </div>
-                        </div>
-                        <div class="chart">
-                            <h2 data-i18n="app.home.dev.dashboard.active_users"></h2>
-                            <div style="width: 100%;">
-                                <canvas id="activeUsersChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="chart">
-                            <h2 data-i18n="app.home.dev.dashboard.server_uptime"></h2>
-                            <div style="width: 100%;">
-                                <canvas id="serverUptimeChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="chart resources">
-                            <h2 data-i18n="app.home.dev.dashboard.resource_usage"></h2>
-                            <div style="width: 100%;">
-                                <canvas id="serverResourceChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="chart">
-                            <h2 data-i18n="app.home.dev.dashboard.api_usage"></h2>
-                            <div style="width: 100%;">
-                                <canvas id="apiUsageChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="chart">
-                            <h2 data-i18n="app.home.dev.dashboard.db_usage"></h2>
-                            <div style="width: 100%;">
-                                <canvas id="dbUsageChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dev-list-container">
-                        <h3 class="dev-list-title" data-i18n="app.home.dev.dashboard.developer.title"></h3>
-                        <button class="add add-dev-open" id="open_add_dev"><span class="material-symbols-rounded">add</span></button>
-                        <div class="dev-list" id="dev_list">
-                            <!-- Devs go here -->
-                        </div>
-                    </div>
-                    <button class="button refresh" id="refresh_charts"><span class="material-symbols-rounded">refresh</span></button>
-                    <div class="add-school-container" id="add-school-win">
-                        <h3 class="add-school-title" data-i18n="app.home.dev.schools.add_school.add_school_title"></h3>
-                        <button id="load_school_data" class="get-school-data button"><span class="material-symbols-rounded">description</span> <p data-i18n="app.home.dev.schools.add_school.load_school_data"></p></button>
-                        <div class="options-div">
-                            <button id="submit_data" class="submit button" data-i18n="app.home.dev.schools.add_school.submit_data"></button>
-                            <button id="cancel_adding_school" class="cancel button" data-i18n="app.home.dev.schools.add_school.add_school_cancel"></button>
-                        </div>
-                    </div>
-                    <div class="delete-school-container" id="delete_school_win">
-                        <h3 class="delete-school-title">Delete School</h3>
-                        <input type="text" placeholder="School name" class="input school-name" id="school_name">
-                        <div class="delete-school-wrapper">
-                            <button class="button cancel cancel-school" id="cancel_delete_school">Cancel</button>
-                            <button class="button delete-school" id="delete_school">Delete</button>
-                        </div>
-                    </div>
-                    <button class="toggle-console" id="toggle_console"><span class="material-symbols-rounded">terminal</span></button>
-                    <div class="dev-console" id="dev-console">
-                        <div class="console-output" id="console_output">
-                            
-                        </div>
-                        <input type="text" class="command-input" id="command_input" data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
-                    </div>
-                    <button class="button toggle-dev-chat" id="toggle_dev_chat"><span class="material-symbols-rounded">chat</span></button>
-                    <div class="chat-window" id="dev_chat_win">
-                        <button class="close close-chat-win" id="close_dev_chat"><span class="material-symbols-rounded">close</span></button>
-                        <div class="contacts-container" id="contacts_container">
-                            <h3>Contacts</h3>
-                            <div id="contacts">
-                                
-                            </div>
-                        </div>
-                        <div class="chat-container">
-                            <div class="message-container" id="message_container">
-                            </div>
-                            <div class="chat-container-footer">
-                                <input type="text" placeholder="Enter message" class="input message-input" id="message_input">
-                                <button class="send-message" id="send_message"><span class="material-symbols-rounded">send</span></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="add-dev-win" id="add_dev_win">
-                        <button class="close close-add-dev" id="close_dev_win"><span class="material-symbols-rounded">close</span></button>
-                        <h3 class="add-dev-title" data-i18n="app.home.dev.dashboard.developer.add_developer.title"></h3>
-                        <input type="text" class="input add-dev-username" id="dev_username" data-i18n="app.home.dev.dashboard.developer.add_developer.username_placeholder" data-i18n-attr="placeholder">
-                        <input type="text" class="input add-dev-email" id="dev_email" data-i18n="app.home.dev.dashboard.developer.add_developer.email_placeholder" data-i18n-attr="placeholder">
-                        <button class="button add-dev" id="add_dev" data-i18n="app.home.dev.dashboard.developer.add_developer.add_dev"></button>
-                    </div>
-                </div>
-                <div class="user-prev" id="user">
-                    <img src="Images/testuserimg.png" class="profile-pic" id="profile_pic">
-                    <div class="user-info">
-                        <h3 id="username">Username</h3>
-                        <p id="school_role">Organization - Role</p>
-                    </div>
-                </div>
-                <div id="user_options" class="user-options">
-                    <button id="feedback_user_options" class="feedback user-options-buttons button"><span class="material-symbols-rounded">feedback</span> <p>Feedback</p></button>
-                    <button id="settings_user_options" class="settings user-options-buttons button"><span class="material-symbols-rounded">settings</span> <p>Settings</p></button>
-                </div>
-                <div class="background" id="background"></div>
+                <input type="text" class="command-input" id="command_input_student"
+                       data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
+            </div>
+            <div class="error-main" id="error_student_invalid_file">
+                <p data-i18n="app.home.student.assignments.submit.invalid_file_error"></p>
+                <button class="close-error-message" id="close_error_message_invalid_file"><span
+                        class="material-symbols-rounded">close</span></button>
             </div>
         </div>
-    </body>
+        <div id="teacher" class="role-div">
+            <div class="manage-students-container">
+                <h3 class="manage-students-title"
+                    data-i18n="app.home.teacher.manage_students.manage_students_title"></h3>
+                <div class="manage-students-list">
+                    <input type="text" id="search_student_input" class="input search-students"
+                           data-i18n="app.home.teacher.manage_students.search_student_placeholder"
+                           data-i18n-attr="placeholder">
+                    <div class="students-list" id="students-list">
+                        <!-- Here are the students going -->
+                    </div>
+                </div>
+                <button id="update_students" class="update-students button"
+                        data-i18n="app.home.teacher.manage_students.update_students"></button>
+            </div>
+            <div class="assignment-manager-div">
+                <h3 data-i18n="app.home.teacher.assignments.title"></h3>
+                <button class="add add-assignment-open" id="open_add_assingnment"><span
+                        class="material-symbols-rounded">add</span></button>
+                <div class="assignment-container" id="assingnment_container">
+
+                </div>
+            </div>
+            <div class="add-assignment-win" id="add_assignment_win">
+                <h3 data-i18n="app.home.teacher.assignments.add_assignment.title"></h3>
+                <button class="close close-assignment-win" id="close_add_assignment"><span
+                        class="material-symbols-rounded">close</span></button>
+                <input type="text" class="input input-assignment-title" id="input_title"
+                       data-i18n="app.home.teacher.assignments.add_assignment.placeholder_title"
+                       data-i18n-attr="placeholder">
+                <textarea id="input_description" class="textarea-assignment" cols="30" rows="10"
+                          data-i18n="app.home.teacher.assignments.add_assignment.placeholder_description"
+                          data-i18n-attr="placeholder"></textarea>
+                <select class="input select-assignment-subject" id="add_assignment_select">
+                    <option value="german"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.german"></option>
+                    <option value="math" data-i18n="app.home.teacher.assignments.add_assignment.subjects.math"></option>
+                    <option value="english"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.english"></option>
+                    <option value="geography"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.geography"></option>
+                    <option value="physic"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.physic"></option>
+                    <option value="chemistry"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.chemistry"></option>
+                    <option value="pe" data-i18n="app.home.teacher.assignments.add_assignment.subjects.pe"></option>
+                    <option value="art" data-i18n="app.home.teacher.assignments.add_assignment.subjects.art"></option>
+                    <option value="music"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.music"></option>
+                    <option value="computer_science"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.computer_science"></option>
+                    <option value="economics"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.economics"></option>
+                    <option value="religion"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.religion"></option>
+                    <option value="design_and_tech"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.design_and_tech"></option>
+                    <option value="career_education"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.career_education"></option>
+                </select>
+                <input type="text" data-i18n="app.home.teacher.assignments.add_assignment.placeholder_deadline"
+                       data-i18n-attr="placeholder" id="due_date_assignment" class="input due-date-assignment"
+                       data-input>
+                <div class="search-wrapper">
+                    <input type="text" class="input search-students-assignment" id="search_students_assignment"
+                           data-i18n="app.home.teacher.assignments.add_assignment.placeholder_search"
+                           data-i18n-attr="placeholder">
+                    <div class="search-output" id="search_output">
+                    </div>
+                </div>
+                <div class="student-display" id="student_display">
+                </div>
+                <button class="button submit create-assignment" id="add_assignment"
+                        data-i18n="app.home.teacher.assignments.add_assignment.create"></button>
+            </div>
+            <div class="remove-assignment-win" id="remove_assignment_win">
+                <h3 data-i18n="app.home.teacher.assignments.delete_warning.title"></h3>
+                <button class="button cancel-delete" id="cancel_delete_assignment"
+                        data-i18n="app.home.teacher.assignments.delete_warning.cancel"></button>
+                <button class="button delete-assignment delete-warning" id="confirm_delete_assignment"
+                        data-i18n="app.home.teacher.assignments.delete_warning.delete"></button>
+            </div>
+            <div class="add-assignment-win" id="update_assignment_win">
+                <h3 data-i18n="app.home.teacher.assignments.update_assignment.title"></h3>
+                <button class="close close-assignment-win" id="close_update_assignment"><span
+                        class="material-symbols-rounded">close</span></button>
+                <input type="text" class="input input-assignment-title" id="input_title_update"
+                       data-i18n="app.home.teacher.assignments.update_assignment.placeholder_title"
+                       data-i18n-attr="placeholder">
+                <textarea id="input_description_update" class="textarea-assignment" cols="30" rows="10"
+                          data-i18n="app.home.teacher.assignments.update_assignment.placeholder_description"
+                          data-i18n-attr="placeholder"></textarea>
+                <select class="input select-assignment-subject" id="update_assignment_select">
+                    <option value="german"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.german"></option>
+                    <option value="math" data-i18n="app.home.teacher.assignments.add_assignment.subjects.math"></option>
+                    <option value="english"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.english"></option>
+                    <option value="geography"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.geography"></option>
+                    <option value="physic"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.physic"></option>
+                    <option value="chemistry"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.chemistry"></option>
+                    <option value="pe" data-i18n="app.home.teacher.assignments.add_assignment.subjects.pe"></option>
+                    <option value="art" data-i18n="app.home.teacher.assignments.add_assignment.subjects.art"></option>
+                    <option value="music"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.music"></option>
+                    <option value="computer_science"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.computer_science"></option>
+                    <option value="economics"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.economics"></option>
+                    <option value="religion"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.religion"></option>
+                    <option value="design_and_tech"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.design_and_tech"></option>
+                    <option value="career_education"
+                            data-i18n="app.home.teacher.assignments.add_assignment.subjects.career_education"></option>
+                </select>
+                <input type="text" data-i18n="app.home.teacher.assignments.update_assignment.placeholder_deadline"
+                       data-i18n-attr="placeholder" id="due_date_assignment_update" class="input due-date-assignment"
+                       data-input>
+                <div class="search-wrapper">
+                    <input type="text" class="input search-students-assignment" id="search_students_assignment_update"
+                           data-i18n="app.home.teacher.assignments.update_assignment.placeholder_search"
+                           data-i18n-attr="placeholder">
+                    <div class="search-output" id="search_output_update">
+                    </div>
+                </div>
+                <div class="student-display" id="student_display_update">
+                </div>
+                <button class="button submit create-assignment" id="update_assignment"
+                        data-i18n="app.home.teacher.assignments.update_assignment.update"></button>
+            </div>
+            <div class="results-assignment-win" id="results_assignment_win">
+                <button class="close close-results-assignment-win" id="close_results_assignment_win"><span
+                        class="material-symbols-rounded">close</span></button>
+                <div class="students-results">
+                    <h3>Submissions</h3>
+                    <div class="results-display" id="results_display">
+                    </div>
+                </div>
+                <div class="documents">
+                    <div class="document-tabs" id="document_tabs">
+                    </div>
+                    <div class="document-viewer-container" id="document_viewer">
+                    </div>
+                </div>
+            </div>
+            <p class="assignment-error-exists" id="error_assignment_duplicate">
+                Assignment title already exists
+                <button class="close-error-message" id="close_error_message"><span class="material-symbols-rounded">close</span>
+                </button>
+            </p>
+            <div class="grade-book-win" id="grade_book_win">
+                <div class="grade-book-win-header">
+                    <h3 id="gradebook_title">Gradebook of N/A</h3>
+                    <button class="close close-gradebook-win" id="close_gradebook_win"><span
+                            class="material-symbols-rounded">close</span></button>
+                </div>
+                <div class="subject-list">
+                    <button class="subject selected-subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.german"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.math"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.english"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.geography"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.physic"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.chemistry"></button>
+                    <button class="subject" data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.pe"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.art"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.music"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.music"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.computer_science"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.economics"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.religion"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.design_and_tech"></button>
+                    <button class="subject"
+                            data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.career_education"></button>
+                </div>
+                <div class="grade-book-main-view" id="gradebook_main_view">
+
+                </div>
+            </div>
+            <div class="student-manager-div" id="student_manager">
+                <div class="student-manager-header">
+                    <h3 class="student-manager-title"
+                        data-i18n="app.home.teacher.student_manager.student_manager_title"></h3>
+                    <button class="close" id="close_student_manager"><span class="material-symbols-rounded">close</span>
+                    </button>
+                </div>
+                <div class="main-body valid-drop-target">
+                    <div class="grade" id="grade_1">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_1"></p>
+                        <button class="add-student grade_1"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_2">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_2"></p>
+                        <button class="add-student grade_2"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_3">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_3"></p>
+                        <button class="add-student grade_3"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_4">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_4"></p>
+                        <button class="add-student grade_4"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_5">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_5"></p>
+                        <button class="add-student grade_5"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_6">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_6"></p>
+                        <button class="add-student grade_6"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_7">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_7"></p>
+                        <button class="add-student grade_7"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_8">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_8"></p>
+                        <button class="add-student grade_8"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade valid-drop-target" id="grade_9">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_9"></p>
+                        <button class="add-student grade_9"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                    <div class="grade end-grade valid-drop-target" id="grade_10">
+                        <p id="grade_title" class="grade-title"
+                           data-i18n="app.home.teacher.student_manager.grade_10"></p>
+                        <button class="add-student grade_10"><span class="material-symbols-rounded">add</span>
+                            <p data-i18n="app.home.teacher.student_manager.add_student"></p></button>
+                    </div>
+                </div>
+            </div>
+            <div class="add-student-win" id="add_student_win">
+                <div class="add-student-win-header">
+                    <h3 data-i18n="app.home.teacher.add_student.title"></h3>
+                    <button class="close-add-student" id="close_add_student"><span class="material-symbols-rounded">close</span>
+                    </button>
+                </div>
+                <div class="student-info">
+                    <input type="text" data-i18n="app.home.teacher.add_student.placeholder_name"
+                           data-i18n-attr="placeholder" id="student_name" class="input student-name">
+                    <input type="text" data-i18n="app.home.teacher.add_student.placeholder_grade"
+                           data-i18n-attr="placeholder" id="student_grade" class="input student-grade">
+                </div>
+                <button class="submit button" id="add-student-data"
+                        data-i18n="app.home.teacher.add_student.add"></button>
+            </div>
+            <div class="edit-student-win" id="edit_student_win">
+                <div class="edit-student-win-header">
+                    <h3 data-i18n="app.home.teacher.edit_student.title"></h3>
+                    <button class="close-edit-student" id="close_edit_student"><span class="material-symbols-rounded">close</span>
+                    </button>
+                </div>
+                <div class="student-info">
+                    <div class="row_1">
+                        <p class="label name-edit" data-i18n="app.home.teacher.edit_student.label_name"></p>
+                        <p class="label grade-edit" data-i18n="app.home.teacher.edit_student.label_grade"></p>
+                    </div>
+                    <div class="row_2">
+                        <input type="text" id="student_name_edit" class="input student-name-edit" readonly>
+                        <input type="text" id="student_grade_edit" class="input student-grade-edit">
+                    </div>
+                    <p class="label year" data-i18n="app.home.teacher.edit_student.label_year"></p>
+                    <input type="text" id="student_grad_year_edit" class="input student-grad-year-edit">
+                </div>
+                <button class="edit button" id="edit-student-data"
+                        data-i18n="app.home.teacher.edit_student.update"></button>
+            </div>
+            <div class="delete-student-warning" id="delete_warning">
+                <h3 data-i18n="app.home.teacher.delete_warning.title"></h3>
+                <div>
+                    <button data-i18n="app.home.teacher.delete_warning.cancel" class="warning-cancel button"
+                            id="delete_warning_cancel"></button>
+                    <button data-i18n="app.home.teacher.delete_warning.delete" class="warning-delete"
+                            id="delete_warning_delete"></button>
+                </div>
+            </div>
+            <button class="toggle-console toggle-console-teacher" id="toggle_console_teacher"><span
+                    class="material-symbols-rounded">terminal</span></button>
+            <div class="dev-console-teacher" id="dev-console-teacher">
+                <div class="console-output" id="console_output">
+
+                </div>
+                <input type="text" class="command-input" id="command_input_teacher"
+                       data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
+            </div>
+            <button class="button toggle-school-chat" id="toggle_school_chat"><span class="material-symbols-rounded">chat</span>
+            </button>
+            <div class="chat-window" id="school_chat_win">
+                <button class="close close-chat-win" id="close_school_chat"><span
+                        class="material-symbols-rounded">close</span></button>
+                <div class="contacts-container-school" id="contacts_container_school">
+                    <h3>Contacts</h3>
+                    <div class="switch-role-container">
+                        <button class="selected-role switch-role switch-role-student" id="switch_role_student">Student
+                        </button>
+                        <button class="switch-role switch-role-teacher" id="switch_role_teacher">Teacher</button>
+                    </div>
+                    <div class="search-contacts-container">
+                        <input type="text" class="input search-contacts" id="search_contacts"
+                               placeholder="Search contact">
+                        <button class="start-search-contacts" id="start_search_contacts"><span
+                                class="material-symbols-rounded">search</span></button>
+                    </div>
+                    <div id="contacts_school" class="contacts-school">
+
+                    </div>
+                </div>
+                <div class="chat-container">
+                    <div class="message-container" id="message_container_school">
+                    </div>
+                    <input type="text" placeholder="Enter message" class="input message-input"
+                           id="message_input_school">
+                    <button class="send-message" id="send_message_school"><span
+                            class="material-symbols-rounded">send</span></button>
+                </div>
+            </div>
+        </div>
+        <div id="dev" class="role-div">
+            <div class="row">
+                <div class="schools-container">
+                    <h3 class="schools-title" data-i18n="app.home.dev.schools.schools_title"></h3>
+                    <div id="schools_list" class="schools-list">
+                        <!-- Here are the schools going -->
+                    </div>
+                    <div class="options-div">
+                        <button class="add" id="add-school"><span class="material-symbols-rounded">add</span></button>
+                        <button class="delete" id="delete-school"><span class="material-symbols-rounded">delete</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart">
+                    <h2 data-i18n="app.home.dev.dashboard.active_users"></h2>
+                    <div style="width: 100%;">
+                        <canvas id="activeUsersChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart">
+                    <h2 data-i18n="app.home.dev.dashboard.server_uptime"></h2>
+                    <div style="width: 100%;">
+                        <canvas id="serverUptimeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="chart resources">
+                    <h2 data-i18n="app.home.dev.dashboard.resource_usage"></h2>
+                    <div style="width: 100%;">
+                        <canvas id="serverResourceChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart">
+                    <h2 data-i18n="app.home.dev.dashboard.api_usage"></h2>
+                    <div style="width: 100%;">
+                        <canvas id="apiUsageChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart">
+                    <h2 data-i18n="app.home.dev.dashboard.db_usage"></h2>
+                    <div style="width: 100%;">
+                        <canvas id="dbUsageChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="dev-list-container">
+                <h3 class="dev-list-title" data-i18n="app.home.dev.dashboard.developer.title"></h3>
+                <button class="add add-dev-open" id="open_add_dev"><span class="material-symbols-rounded">add</span>
+                </button>
+                <div class="dev-list" id="dev_list">
+                    <!-- Devs go here -->
+                </div>
+            </div>
+            <button class="button refresh" id="refresh_charts"><span class="material-symbols-rounded">refresh</span>
+            </button>
+            <div class="add-school-container" id="add-school-win">
+                <h3 class="add-school-title" data-i18n="app.home.dev.schools.add_school.add_school_title"></h3>
+                <button id="load_school_data" class="get-school-data button"><span class="material-symbols-rounded">description</span>
+                    <p data-i18n="app.home.dev.schools.add_school.load_school_data"></p></button>
+                <div class="options-div">
+                    <button id="submit_data" class="submit button"
+                            data-i18n="app.home.dev.schools.add_school.submit_data"></button>
+                    <button id="cancel_adding_school" class="cancel button"
+                            data-i18n="app.home.dev.schools.add_school.add_school_cancel"></button>
+                </div>
+            </div>
+            <div class="delete-school-container" id="delete_school_win">
+                <h3 class="delete-school-title">Delete School</h3>
+                <input type="text" placeholder="School name" class="input school-name" id="school_name">
+                <div class="delete-school-wrapper">
+                    <button class="button cancel cancel-school" id="cancel_delete_school">Cancel</button>
+                    <button class="button delete-school" id="delete_school">Delete</button>
+                </div>
+            </div>
+            <button class="toggle-console" id="toggle_console"><span class="material-symbols-rounded">terminal</span>
+            </button>
+            <div class="dev-console" id="dev-console">
+                <div class="console-output" id="console_output">
+
+                </div>
+                <input type="text" class="command-input" id="command_input"
+                       data-i18n="app.home.dev.console.input_placeholder" data-i18n-attr="placeholder">
+            </div>
+            <button class="button toggle-dev-chat" id="toggle_dev_chat"><span
+                    class="material-symbols-rounded">chat</span></button>
+            <div class="chat-window" id="dev_chat_win">
+                <button class="close close-chat-win" id="close_dev_chat"><span
+                        class="material-symbols-rounded">close</span></button>
+                <div class="contacts-container" id="contacts_container">
+                    <h3>Contacts</h3>
+                    <div id="contacts">
+
+                    </div>
+                </div>
+                <div class="chat-container">
+                    <div class="message-container" id="message_container">
+                    </div>
+                    <div class="chat-container-footer">
+                        <input type="text" placeholder="Enter message" class="input message-input" id="message_input">
+                        <button class="send-message" id="send_message"><span
+                                class="material-symbols-rounded">send</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="add-dev-win" id="add_dev_win">
+                <button class="close close-add-dev" id="close_dev_win"><span
+                        class="material-symbols-rounded">close</span></button>
+                <h3 class="add-dev-title" data-i18n="app.home.dev.dashboard.developer.add_developer.title"></h3>
+                <input type="text" class="input add-dev-username" id="dev_username"
+                       data-i18n="app.home.dev.dashboard.developer.add_developer.username_placeholder"
+                       data-i18n-attr="placeholder">
+                <input type="text" class="input add-dev-email" id="dev_email"
+                       data-i18n="app.home.dev.dashboard.developer.add_developer.email_placeholder"
+                       data-i18n-attr="placeholder">
+                <button class="button add-dev" id="add_dev"
+                        data-i18n="app.home.dev.dashboard.developer.add_developer.add_dev"></button>
+            </div>
+        </div>
+        <div class="user-prev" id="user">
+            <img src="Images/testuserimg.png" class="profile-pic" id="profile_pic">
+            <div class="user-info">
+                <h3 id="username">Username</h3>
+                <p id="school_role">Organization - Role</p>
+            </div>
+        </div>
+        <div id="user_options" class="user-options">
+            <button id="feedback_user_options" class="feedback user-options-buttons button"><span
+                    class="material-symbols-rounded">feedback</span>
+                <p>Feedback</p></button>
+            <button id="settings_user_options" class="settings user-options-buttons button"><span
+                    class="material-symbols-rounded">settings</span>
+                <p>Settings</p></button>
+        </div>
+        <div class="background" id="background"></div>
+    </div>
+</div>
+</body>
 </html>
