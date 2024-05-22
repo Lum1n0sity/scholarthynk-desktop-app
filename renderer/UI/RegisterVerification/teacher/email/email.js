@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				})
 					.then(response => response.json())
 					.then(data => {
-						const emailEnding = data.ending[0].emailEnding;
+						const emailEnding = data.ending;
 
 						const emailPart2 = document.getElementById('part2-email');
 						emailPart2.textContent = emailEnding;
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							results.forEach(result => {
 								const school = document.createElement('button');
 
-								const name = result.name;
+								const name = result.schoolName;
 
 								school.classList.add('school-button');
 								school.textContent = name;

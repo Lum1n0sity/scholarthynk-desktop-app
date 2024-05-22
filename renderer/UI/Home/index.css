@@ -1497,6 +1497,274 @@
     border-radius: 6px 0px 6px 0px;
 }
 
+.main-view-operations {
+    width: 20%;
+    background: var(--background);
+    border-radius: 50px;
+    position: absolute;
+    right: .5%;
+    top: 1%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.gradebook-operation {
+    background-color: transparent;
+    width: 3vw;
+    height: 3vw;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.gradebook-operation span {
+    transform: translateY(10%);
+    font-size: 1.5vw;
+}
+
+.gradebook-operation:hover {
+    color: var(--selected-secondary);
+    background-color: transparent;
+}
+
+.gradebook-main-view-item-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.gradebook-main-view-item-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.gradebook-main-view-item-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.gradebook-main-view-item-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.gradebook-main-view-item-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.gradebook-item {
+    width: 80%;
+    height: max-content;
+    background: var(--primary);
+    margin-top: 5%;
+    padding: 2%;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.gradebook-item-header {
+    width: 100%;
+}
+
+.gradebook-item-title {
+    display: inline-block;
+}
+
+.gradebook-item-timestamp {
+    display: inline-block;
+    margin-left: 80%;
+}
+
+.gradebook-item-content {
+    margin-top: 1%;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.gradebook-item-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.gradebook-item-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.gradebook-item-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+    width: 5px;;
+}
+
+.gradebook-item-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.gradebook-item-content-teacher {
+    font-size: 110%;
+    display: inline-block;
+}
+
+.gradebook-item-content-assignment {
+    margin-left: 1%;
+    display: none;
+    width: max-content;
+}
+
+.gradebook-add-win {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--primary);
+    width: 50%;
+    height: 50%;
+    border-radius: 6px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 500;
+}
+
+.gradebook-add-win-header {
+    width: 100%;
+    height: 12%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.gradebook-add-win-title {
+    font-size: 1.5vw;
+}
+
+.gradebook-add-win-cancel {
+    position: absolute;
+    right: .5%;
+    background-color: transparent;
+    width: 3vw;
+    height: 3vw;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.gradebook-add-win-cancel span {
+    transform: translateY(10%);
+    font-size: 1.5vw;
+}
+
+.gradebook-add-win-cancel:hover {
+    color: var(--selected-secondary);
+}
+
+.gradebook-add-main-body {
+    width: 100%;
+    height: 100%;
+}
+
+.gradebook-add-sub-title {
+    font-size: 1.2vw;
+}
+
+.gradebook-add-main-body-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: max-content;
+}
+
+.gradebook-add-title {
+    position: absolute;
+    left: 5%;
+    top: 14%;
+}
+
+.gradebook-add-title-input {
+    width: 12vw;
+    border: none;
+    padding: 1%;
+    height: 2.2vw;
+    font-size: 1.2vw;
+    margin-top: 2%;
+    padding-left: 2%;
+}
+
+.gradebook-add-type {
+    position: absolute;
+    left: 5%;
+    top: 33%;
+}
+
+.gradebook-add-select-type {
+    width: 12vw;
+    border: none;
+    font-size: 1.2vw;
+    height: 2.2vw;
+    padding: 2%;
+    margin-top: 2%;
+}
+
+.gradebook-add-assignment {
+    position: absolute;
+    left: 5%;
+    top: 53%;
+    display: none;
+}
+
+.gradebook-add-select-assignment {
+    font-size: 1.2vw;
+    padding: 2%;
+    height: 2.2vw;
+    width: 12vw;
+    border: none;
+    margin-top: 2%;
+}
+
+.gradebook-add-note {
+    position: absolute;
+    right: 5%;
+    top: 13%;
+    width: 50%;
+    height: 60%;
+}
+
+.gradebook-add-note-textarea {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background: var(--alt-primary);
+    margin-top: 2%;
+    color: var(--text-color);
+    font-size: 1.2vw;
+    padding: 2%;
+}
+
+.gradebook-add-submit {
+    position: absolute;
+    bottom: 8%;
+    right: 5%;
+    font-size: 1.3vw;
+    margin-left: 0%;
+    margin-top: 0%;
+    transform: translateX(0);
+}
+
 .toggle-school-chat {
     border-radius: 50%;
     position: absolute;

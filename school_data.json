@@ -25,12 +25,16 @@
         {
             "name": "Laura Rampe",
             "subject": "Math, German, English, CS",
-            "class": 9
+            "class": 9,
+            "email": "raphael221@outlook.de",
+            "code": ""
         },
         {
             "name": "Astrid Romanowski",
             "subject": "CS, WiK",
-            "class": 9
+            "class": 9,
+            "email": "romanowskiTEST@outlook.de",
+            "code": ""
         }
     ]
 }

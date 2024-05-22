@@ -251,7 +251,44 @@
                             data-i18n="app.home.teacher.grade_book.grade_book_win.subjects.career_education"></button>
                 </div>
                 <div class="grade-book-main-view" id="gradebook_main_view">
-
+                    <div class="main-view-operations">
+                        <button class="gradebook-operation" id="gradebook_add_note"><span
+                                class="material-symbols-rounded">add</span></button>
+                        <button class="gradebook-operation" id="gradebook_generate_report"><span
+                                class="material-symbols-rounded">description</span></button>
+                    </div>
+                    <div class="gradebook-main-view-item-container" id="gradebook_main_view_item_container">
+                    </div>
+                </div>
+            </div>
+            <div class="gradebook-add-win" id="gradebook_add_win">
+                <div class="gradebook-add-win-header">
+                    <h3 class="gradebook-add-win-title">Add new note</h3>
+                    <button class="gradebook-add-win-cancel" id="gradebook_add_win_cancel"><span
+                            class="material-symbols-rounded">close</span></button>
+                </div>
+                <div class="gradebook-add-main-body">
+                    <div class="gradebook-add-main-body-section gradebook-add-title">
+                        <p class="gradebook-add-sub-title">Title</p>
+                        <input type="text" class="gradebook-add-title-input input" id="gradebook_add_title">
+                    </div>
+                    <div class="gradebook-add-main-body-section gradebook-add-type">
+                        <p class="gradebook-add-sub-title">Type</p>
+                        <select class="input gradebook-add-select-type" id="gradebook_add_type">
+                            <option value="note">General Note</option>
+                            <option value="assignment">Assignment</option>
+                        </select>
+                    </div>
+                    <div class="gradebook-add-main-body-section gradebook-add-assignment" id="gradebook_add_assignment_section">
+                        <p class="gradebook-add-sub-title">Assignment</p>
+                        <select class="input gradebook-add-select-assignment" id="gradebook_add_assignment">
+                        </select>
+                    </div>
+                    <div class="gradebook-add-main-body-section gradebook-add-note">
+                        <p class="gradebook-add-sub-title">Note content</p>
+                        <textarea class="gradebook-add-note-textarea" id="gradebook_add_note_input" cols="30" rows="10"></textarea>
+                    </div>
+                    <button class="button submit gradebook-add-submit" id="gradebook_add_submit">Add</button>
                 </div>
             </div>
             <div class="student-manager-div" id="student_manager">

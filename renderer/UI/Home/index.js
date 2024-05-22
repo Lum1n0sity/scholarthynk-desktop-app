@@ -11,6 +11,7 @@ const {
 	shell
 } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 const devConsoleClass = require('../console');
+const { timeStamp } = require('console');
 document.addEventListener('DOMContentLoaded', () => {
 	const devConsole = new devConsoleClass('console_output');
 	const store = new Store();
@@ -365,6 +366,20 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		return textContent;
+	}
+
+	/**
+ 	* Returns the current date in the format DD.MM.YY.
+ 	*
+ 	* @returns {string} The current date in the format DD.MM.YY.
+ 	*/
+	function getCurrentDate() {
+		const date = new Date();
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+		const year = String(date.getFullYear()).slice(-2); // Get the last two digits of the year
+	
+		return `${day}.${month}.${year}`;
 	}
 
 
@@ -2412,33 +2427,70 @@ document.addEventListener('DOMContentLoaded', () => {
 	const gradebookWin = document.getElementById('grade_book_win');
 	const closeGradebookWin = document.getElementById('close_gradebook_win');
 	const gradebookMainView = document.getElementById('gradebook_main_view');
+	const gradebookMainViewContainer = document.getElementById('gradebook_main_view_item_container');
+	const gradebookAddNote = document.getElementById('gradebook_add_note');
+	const gradebookAddNoteWin = document.getElementById('gradebook_add_win');
+	const gradebookAddNoteWinClose = document.getElementById('gradebook_add_win_cancel');
+	const gradebookAddSelectType = document.getElementById('gradebook_add_type');
+	const gradebookAddAssignmentSection = document.getElementById('gradebook_add_assignment_section');
+	const gradebookAddSelectAssignment = document.getElementById('gradebook_add_assignment');
+	const gradebookGenerateReport = document.getElementById('gradebook_generate_report');
+	const gradebookAddSubmit = document.getElementById('gradebook_add_submit');
 
+	let gradebookStudent = '';
 	let selectedSubject = 'german';
+	let addNoteTitle = '';
+	let addNoteType = 'note';
+	let addNoteAssignment = '';
+	let addNoteNote = '';
 
-	// * Get Students
-	const getStudentData = ({school: store.get('school')});
+	function loadGradebookEntry(title, teacher, assignment, note, timestamp) {
+		const gradebookItem = document.createElement('div');
+		const gradebookItemHeader = document.createElement('div');
+		const gradebookItemTitle = document.createElement('h3');
+		const gradebookItemTimeStamp = document.createElement('p');
+		const gradebookItemContentContainer = document.createElement('div');
+		const gradebookItemTeacher = document.createElement('p');
+		const gradebookItemAssignment = document.createElement('p');
+		const gradebookItemNote = document.createElement('p');
 
-	// ! REPLACE WITH FUNCTION
-	fetch(`${config.apiUrl}/teacher/get-students`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(getStudentData)
-	})
-		.then(response => response.json())
-		.then(data => {
-			const students = data.students;
+		gradebookItem.classList.add('gradebook-item');
+		gradebookItemHeader.classList.add('gradebook-item-header');
+		gradebookItemTitle.classList.add('gradebook-item-title');
+		gradebookItemTimeStamp.classList.add('gradebook-item-timestamp');
+        gradebookItemContentContainer.classList.add('gradebook-item-content');
+        gradebookItemTeacher.classList.add('gradebook-item-content-teacher');
+        gradebookItemAssignment.classList.add('gradebook-item-content-teacher');
+		gradebookItemAssignment.classList.add('gradebook-item-content-assignment');
+        gradebookItemNote.classList.add('gradebook-item-content');
 
+		gradebookItemTitle.textContent = title;
+		gradebookItemTimeStamp.textContent = timestamp;
+        gradebookItemTeacher.textContent = teacher;
 
-		})
-		.catch(err => {
-			console.error('Fetch error: ', err);
-		});
+		if (assignment.length != 0) {
+			gradebookItemAssignment.style.display = 'inline-block';
+			gradebookItemAssignment.textContent = `Assignment: ${assignment}`;
+		}
+
+        gradebookItemNote.textContent = note;
+
+		gradebookItem.appendChild(gradebookItemHeader);
+		gradebookItemHeader.appendChild(gradebookItemTitle);
+		gradebookItemHeader.appendChild(gradebookItemTimeStamp);
+        gradebookItem.appendChild(gradebookItemContentContainer);
+        gradebookItemContentContainer.appendChild(gradebookItemTeacher);
+        gradebookItemContentContainer.appendChild(gradebookItemAssignment);
+        gradebookItem.appendChild(gradebookItemNote);
+
+		gradebookMainViewContainer.appendChild(gradebookItem);
+	}
 
 	async function openGradebook(name) {
 		gradebookWin.style.display = 'flex';
 		background.style.display = 'block';
+
+		gradebookStudent = name;
 
 		const title = document.getElementById('gradebook_title');
 		title.textContent = `Gradebook of ${name}`;
@@ -2454,7 +2506,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		})
 			.then(response => response.json())
 			.then(data => {
-				console.log(data);
+				const entries = data.entries;
+
+				console.log(entries);
+
+				entries.forEach(entry => {
+					loadGradebookEntry(entry.title, entry.teacher, entry.assignment, entry.note, entry.timestamp);
+				});
 			})
 			.catch(err => {
 				console.error('Fetch err: ', err);
@@ -2464,8 +2522,116 @@ document.addEventListener('DOMContentLoaded', () => {
 	closeGradebookWin.addEventListener('click', () => {
 		gradebookWin.style.display = 'none';
 		background.style.display = 'none';
-		gradebookMainView.innerHTML = '';
 	});
+
+	gradebookAddNote.addEventListener('click', () => {
+		gradebookAddNoteWin.style.display = 'flex';
+		background.style.zIndex = '499';
+	});
+
+	gradebookAddNoteWinClose.addEventListener('click', () => {
+        gradebookAddNoteWin.style.display = 'none';
+        background.style.zIndex = '1';
+
+		
+		gradebookAddSelectType.value = "note";
+		addNoteType = '';
+		gradebookAddAssignmentSection.style.display = 'none';
+		gradebookAddSelectAssignment.innerHTML = '';
+    });
+
+	gradebookAddSelectType.addEventListener('change', async () => {
+		const type = gradebookAddSelectType.value;
+
+		if (type === "assignment") {
+			addNoteType = 'assignment';
+			gradebookAddAssignmentSection.style.display = 'flex';
+
+			await loadAssignments(selectedSubject, gradebookStudent);
+		}
+	});
+
+	gradebookAddSelectAssignment.addEventListener('change', () => {
+		addNoteAssignment = gradebookAddSelectAssignment.value;
+	});
+
+	async function loadAssignments(subject, student) {
+		const data = ({ school: store.get('school'), student: student, subject: subject });
+
+		fetch(`${config.apiUrl}/teacher/gradebook/get-assignments`, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data)
+		})
+			.then(response => response.json())
+			.then(data => {
+				const assignments = data.assignments;
+
+				addNoteAssignment = assignments[0];
+
+				assignments.forEach(assignment => {
+					const option = document.createElement('option');
+					option.value = assignment;
+					option.textContent = assignment;
+					gradebookAddSelectAssignment.appendChild(option);
+				});
+			})
+			.catch(err => {
+				console.error("Fetch error: ", err);
+			});
+	}
+
+	gradebookAddSubmit.addEventListener('click', () => {
+		addNoteTitle = document.getElementById('gradebook_add_title').value;
+        addNoteNote = document.getElementById('gradebook_add_note_input').value;
+
+		const data = { school: store.get('school') , student: gradebookStudent, teacher: store.get('username'), title: addNoteTitle, type: addNoteType, assignment: addNoteAssignment, note: addNoteNote, timeStamp: getCurrentDate(), subject: selectedSubject };
+
+		if (validateData(data)) {
+			fetch(`${config.apiUrl}/teacher/gradebook/add-note`, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data)
+			})
+				.then(response => response.json())
+				.then(data => {
+					const added = data.added;
+					const teacher = data.teacher;
+
+					if (added) {
+						gradebookAddNoteWin.style.display = 'none';
+						background.style.zIndex = '1';
+
+						loadGradebookEntry(addNoteTitle, teacher, addNoteAssignment, addNoteNote, getCurrentDate());
+
+						addNoteTitle = '';
+						addNoteAssignment = '';
+						addNoteType = '';
+						addNoteTitle = '';
+					}
+				})
+				.catch(err => {
+					console.error("Fetch error: ", err);
+				});
+		}
+	});
+
+	function isNotEmpty(value) {
+		return value !== undefined && value !== null && value !== '';
+	}
+	
+	function validateData(data) {
+		for (const key in data) {
+		  if (key !== 'assignment' && !isNotEmpty(data[key])) {
+			return false;
+		  }
+		}
+		return true;
+	}
 
 	// * --------------------------------------------------------------------------
 	// ! Developer:
