@@ -1,249 +1,235 @@
-const { ipcRenderer } = require('electron');
+const {ipcRenderer} = require('electron');
 const Store = require('electron-store');
 
 document.addEventListener('DOMContentLoaded', () => {
-    const api_addr = "http://192.168.5.196:3000";
-    const store = new Store();
-    let authToken = store.get('authToken');
-    const loggedOut = store.get('loggedOut');
-        
-    if (authToken != null)
-    {
-        authToken = JSON.parse(authToken);
+	const api_addr = 'http://192.168.5.196:3000';
+	const store = new Store();
+	let authToken = store.get('authToken');
+	const loggedOut = store.get('loggedOut');
 
-        authToken = authToken.value;
-    }
+	if (authToken != null) {
+		authToken = JSON.parse(authToken);
 
-    const root = document.documentElement;
-    
-    function switchAppearance()
-    {
-        const mode = store.get('mode');
+		authToken = authToken.value;
+	}
 
-        if (mode == null)
-        {
-            root.style.setProperty('--background', '#161616');
-            root.style.setProperty('--primary', '#2F2F2F');
-            root.style.setProperty('--selected-primary', '#454545c7');
-            root.style.setProperty('--text-color', '#ffffff');
-            root.style.setProperty('--alt-primary', '#1C1C1C');
-        }
-        else
-        {
-            if (mode === 'light')
-            {
-                root.style.setProperty('--background', '#E0E0E0');
-                root.style.setProperty('--primary', '#CCCCCC');
-                root.style.setProperty('--selected-primary', '#A0A0A0C7');
-                root.style.setProperty('--text-color', '#000000');
-                root.style.setProperty('--alt-primary', '#D8D8D8');
-            }
-            else
-            {
-                root.style.setProperty('--background', '#161616');
-                root.style.setProperty('--primary', '#2F2F2F');
-                root.style.setProperty('--selected-primary', '#454545c7');
-                root.style.setProperty('--text-color', '#ffffff');
-                root.style.setProperty('--alt-primary', '#1C1C1C');
-            }
-        }
-    }
+	const root = document.documentElement;
 
-    switchAppearance();
+	/**
+	 * Switches the appearance mode of the application between light and dark.
+	 *
+	 * This function retrieves the current mode from the store and toggles the appearance
+	 * of various elements in the application based on the mode. If no mode is set in the store,
+	 * it defaults to the dark mode.
+	 */
+	function switchAppearance() {
+		const mode = store.get('mode');
 
-    const connection_error = document.getElementById('connection_error');
-    const login_error_message = document.getElementById('error_msg');
+		if (mode == null) {
+			root.style.setProperty('--background', '#161616');
+			root.style.setProperty('--primary', '#2F2F2F');
+			root.style.setProperty('--selected-primary', '#454545c7');
+			root.style.setProperty('--text-color', '#ffffff');
+			root.style.setProperty('--alt-primary', '#1C1C1C');
+		} else {
+			if (mode === 'light') {
+				root.style.setProperty('--background', '#E0E0E0');
+				root.style.setProperty('--primary', '#CCCCCC');
+				root.style.setProperty('--selected-primary', '#A0A0A0C7');
+				root.style.setProperty('--text-color', '#000000');
+				root.style.setProperty('--alt-primary', '#D8D8D8');
+			} else {
+				root.style.setProperty('--background', '#161616');
+				root.style.setProperty('--primary', '#2F2F2F');
+				root.style.setProperty('--selected-primary', '#454545c7');
+				root.style.setProperty('--text-color', '#ffffff');
+				root.style.setProperty('--alt-primary', '#1C1C1C');
+			}
+		}
+	}
 
-    const login_container = document.getElementById('login_container');
+	switchAppearance();
 
-    if (authToken != null && loggedOut == false)
-    {
-        const dataToSendAutoLogin = ({ token: authToken });
-        connection_error.style.display = 'none';
+	const connection_error = document.getElementById('connection_error');
+	const login_error_message = document.getElementById('error_msg');
 
-        fetch(`${api_addr}/user/auth`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSendAutoLogin)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            const allowLogin = data.allowLogin;
-            const username = data.username;
+	const login_container = document.getElementById('login_container');
 
-            if (allowLogin == true) 
-            {
-                store.set('username', username);                                                                          
+	if (authToken != null && loggedOut == false) {
+		const dataToSendAutoLogin = ({token: authToken});
+		connection_error.style.display = 'none';
 
-                store.set('loggedIn', true);
+		fetch(`${api_addr}/user/auth`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(dataToSendAutoLogin)
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log(data);
+				const allowLogin = data.allowLogin;
+				const username = data.username;
 
-                window.location.href = '../Home/index.html';
-            }
-        })
-        .catch(error => {
-            login_container.style.borderRadius = '10px 0px 0px 0px';
-            connection_error.style.display = 'block';
-        });
-    }
+				if (allowLogin == true) {
+					store.set('username', username);
 
-    const sign_in = document.getElementById('login');
-    const switch_sign_up = document.getElementById('register_switch');
+					store.set('loggedIn', true);
 
-    const show_pw = document.getElementById('show_pw');
-    const hide_pw = document.getElementById('hide_pw');
-    const pw_input = document.getElementById('password_input');
+					window.location.href = '../Home/index.html';
+				}
+			})
+			.catch(error => {
+				login_container.style.borderRadius = '10px 0px 0px 0px';
+				connection_error.style.display = 'block';
+			});
+	}
 
-    const remember_checkbox = document.getElementById('remember_checkbox');
+	const sign_in = document.getElementById('login');
+	const switch_sign_up = document.getElementById('register_switch');
 
-    let isPWVisible = false;
+	const show_pw = document.getElementById('show_pw');
+	const hide_pw = document.getElementById('hide_pw');
+	const pw_input = document.getElementById('password_input');
 
-    show_pw.addEventListener('click', () => {
-        if (!isPWVisible)
-        {
-            pw_input.type = 'text';
-            isPWVisible = true;
-            show_pw.style.display = 'none';
-            hide_pw.style.display = 'block';
-        }
-    });
+	const remember_checkbox = document.getElementById('remember_checkbox');
 
-    hide_pw.addEventListener('click', () => {
-        if (isPWVisible)
-        {
-            pw_input.type = 'password';
-            isPWVisible = false;
-            show_pw.style.display = 'block';
-            hide_pw.style.display = 'none';
-        }
-    });
+	let isPWVisible = false;
 
-    switch_sign_up.addEventListener('click', (event) => {
-        event.preventDefault();
+	show_pw.addEventListener('click', () => {
+		if (!isPWVisible) {
+			pw_input.type = 'text';
+			isPWVisible = true;
+			show_pw.style.display = 'none';
+			hide_pw.style.display = 'block';
+		}
+	});
 
-        window.location.href = './Register/register.html';
-    });
+	hide_pw.addEventListener('click', () => {
+		if (isPWVisible) {
+			pw_input.type = 'password';
+			isPWVisible = false;
+			show_pw.style.display = 'block';
+			hide_pw.style.display = 'none';
+		}
+	});
 
-    document.addEventListener('keydown', (event) => {
-        const username = document.getElementById('username_input').value.trim();
-        const password = document.getElementById('password_input').value;
+	switch_sign_up.addEventListener('click', (event) => {
+		event.preventDefault();
 
-        if (event.key == 'Enter' && username.length != 0 && password.length != 0)
-        {
-            connection_error.style.display = 'none';
-            login_error_message.style.display = 'none';
-            login_container.style.borderRadius = '10px 0px 0px 10px';
-            
-            const dataToSendLogin = ({ username: username, password: password });
-            
-            fetch(`${api_addr}/user/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(dataToSendLogin),
-            })
-            .then (response => {
-                if (response.status === 401)
-                {
-                    login_container.style.borderRadius = '10px 0px 0px 0px';
-                    login_error_message.style.display = 'block';
-                    return;
-                }
-            
-                return response.json();
-            })
-            .then(data => {
-                const allowLogin = data != null ? data.allowLogin : null;
-                const userToken = data != null ? data.token : null;
-                const role = data != null ? data.role : null;
-                const school = data != null ? data.school : null;
-            
-                if (allowLogin != null && userToken != null)
-                {
-                    if (allowLogin == true)
-                    {
-                        store.set('username', username);                                                                          
-                        store.set('role', role);
-                        store.set('school', school);
-                    
-                        if (remember_checkbox.checked)
-                        {                    
-                            const data = { value: userToken };
-                            store.set('authToken', JSON.stringify(data));
-                            store.set('loggedIn', true);
-                        }
-                    
-                        window.location.href = '../Home/index.html';
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Fetch error: ', error);
-                login_container.style.borderRadius = '10px 0px 0px 0px';
-                connection_error.style.display = 'block';
-            });
-        }
-    });
-    
-    sign_in.addEventListener('click', () => {
-        const username = document.getElementById('username_input').value;
-        const password = document.getElementById('password_input').value;
+		window.location.href = './Register/register.html';
+	});
 
-        connection_error.style.display = 'none';
-        login_error_message.style.display = 'none';
-        login_container.style.borderRadius = '10px 0px 0px 10px';
+	document.addEventListener('keydown', (event) => {
+		const username = document.getElementById('username_input').value.trim();
+		const password = document.getElementById('password_input').value;
 
-        const dataToSendLogin = ({ username: username, password: password });
+		if (event.key == 'Enter' && username.length != 0 && password.length != 0) {
+			connection_error.style.display = 'none';
+			login_error_message.style.display = 'none';
+			login_container.style.borderRadius = '10px 0px 0px 10px';
 
-        fetch(`${api_addr}/user/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSendLogin),
-        })
-        .then (response => {
-            if (response.status === 401)
-            {
-                login_container.style.borderRadius = '10px 0px 0px 0px';
-                login_error_message.style.display = 'block';
-                return;
-            }
+			const dataToSendLogin = ({username: username, password: password});
 
-            return response.json();
-        })
-        .then(data => {
-            const allowLogin = data != null ? data.allowLogin : null;
-            const userToken = data != null ? data.token : null;
-            const role = data != null ? data.role : null;
-            const school = data != null ? data.school : null;
+			fetch(`${api_addr}/user/login`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(dataToSendLogin),
+			})
+				.then(response => {
+					if (response.status === 401) {
+						login_container.style.borderRadius = '10px 0px 0px 0px';
+						login_error_message.style.display = 'block';
+						return;
+					}
 
-            if (allowLogin != null && userToken != null)
-            {
-                if (allowLogin == true)
-                {
-                    store.set('username', username);                                                                          
-                    store.set('role', role);
-                    store.set('school', school);
+					return response.json();
+				})
+				.then(data => {
+					const allowLogin = data != null ? data.allowLogin : null;
+					const userToken = data != null ? data.token : null;
+					const role = data != null ? data.role : null;
+					const school = data != null ? data.school : null;
 
-                    if (remember_checkbox.checked)
-                    {                    
-                        const data = { value: userToken };
-                        store.set('authToken', JSON.stringify(data));
-                        store.set('loggedIn', true);
-                    }
+					if (allowLogin != null && userToken != null) {
+						if (allowLogin == true) {
+							store.set('username', username);
+							store.set('role', role);
+							store.set('school', school);
 
-                    window.location.href = '../Home/index.html';
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error: ', error);
-            login_container.style.borderRadius = '10px 0px 0px 0px';
-            connection_error.style.display = 'block';
-        });
-    });
+							if (remember_checkbox.checked) {
+								const data = {value: userToken};
+								store.set('authToken', JSON.stringify(data));
+								store.set('loggedIn', true);
+							}
+
+							window.location.href = '../Home/index.html';
+						}
+					}
+				})
+				.catch(error => {
+					console.error('Fetch error: ', error);
+					login_container.style.borderRadius = '10px 0px 0px 0px';
+					connection_error.style.display = 'block';
+				});
+		}
+	});
+
+	sign_in.addEventListener('click', () => {
+		const username = document.getElementById('username_input').value;
+		const password = document.getElementById('password_input').value;
+
+		connection_error.style.display = 'none';
+		login_error_message.style.display = 'none';
+		login_container.style.borderRadius = '10px 0px 0px 10px';
+
+		const dataToSendLogin = ({username: username, password: password});
+
+		fetch(`${api_addr}/user/login`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(dataToSendLogin),
+		})
+			.then(response => {
+				if (response.status === 401) {
+					login_container.style.borderRadius = '10px 0px 0px 0px';
+					login_error_message.style.display = 'block';
+					return;
+				}
+
+				return response.json();
+			})
+			.then(data => {
+				const allowLogin = data != null ? data.allowLogin : null;
+				const userToken = data != null ? data.token : null;
+				const role = data != null ? data.role : null;
+				const school = data != null ? data.school : null;
+
+				if (allowLogin != null && userToken != null) {
+					if (allowLogin == true) {
+						store.set('username', username);
+						store.set('role', role);
+						store.set('school', school);
+
+						if (remember_checkbox.checked) {
+							const data = {value: userToken};
+							store.set('authToken', JSON.stringify(data));
+							store.set('loggedIn', true);
+						}
+
+						window.location.href = '../Home/index.html';
+					}
+				}
+			})
+			.catch(error => {
+				console.error('Fetch error: ', error);
+				login_container.style.borderRadius = '10px 0px 0px 0px';
+				connection_error.style.display = 'block';
+			});
+	});
 });

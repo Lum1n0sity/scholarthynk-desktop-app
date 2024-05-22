@@ -351,7 +351,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     store.set('tempPassword', password);
                     store.set('tempEmail', email);
                     store.set('remember', remember_checkbox.checked);
-                    store.set('')
 
                     ipcRenderer.send('verify-teacher');
                 }
@@ -371,10 +370,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 store.set('username', username);
                 store.set('role', role);
                 store.set('school', selectedSchool);
+                store.set('loggedIn', true);
 
                 if (remember_checkbox.checked) {
                     store.set('authToken', userToken);
-                    store.set('loggedIn', true);
 
                     window.location.href = '../../Home/index.html';
                 }
