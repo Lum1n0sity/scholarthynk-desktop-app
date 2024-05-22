@@ -2437,6 +2437,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const gradebookGenerateReport = document.getElementById('gradebook_generate_report');
 	const gradebookAddSubmit = document.getElementById('gradebook_add_submit');
 
+	const subjectButtons = document.querySelectorAll('.subject');
+
 	let gradebookStudent = '';
 	let selectedSubject = 'german';
 	let addNoteTitle = '';
@@ -2444,6 +2446,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	let addNoteAssignment = '';
 	let addNoteNote = '';
 
+	/**
+     * Loads a gradebook entry into the gradebook view.
+     *
+     * @param {string} title - The title of the gradebook entry.
+     * @param {string} teacher - The teacher associated with the gradebook entry.
+     * @param {string} assignment - The assignment associated with the gradebook entry.
+     * @param {string} note - The note associated with the gradebook entry.
+     * @param {string} timestamp - The timestamp of the gradebook entry.
+    */
 	function loadGradebookEntry(title, teacher, assignment, note, timestamp) {
 		const gradebookItem = document.createElement('div');
 		const gradebookItemHeader = document.createElement('div');
@@ -2486,17 +2497,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		gradebookMainViewContainer.appendChild(gradebookItem);
 	}
 
-	async function openGradebook(name) {
-		gradebookWin.style.display = 'flex';
-		background.style.display = 'block';
+	async function getGradebookEntries(name) {
+		const getData = ({school: store.get('school'), student: name, subject: selectedSubject});
 
-		gradebookStudent = name;
-
-		const title = document.getElementById('gradebook_title');
-		title.textContent = `Gradebook of ${name}`;
-
-		const getData = ({school: store.get('school'), student: name});
-
+		/**
+     	* Fetches gradebook entries for a specific student from the server.
+     	*
+     	* @param {object} getData - The data object containing the school and student name.
+     	* @returns {Promise<Response>} - The fetch promise.
+     	*/
 		fetch(`${config.apiUrl}/teacher/get-gradebook`, {
 			method: 'POST',
 			headers: {
@@ -2518,6 +2527,47 @@ document.addEventListener('DOMContentLoaded', () => {
 				console.error('Fetch err: ', err);
 			});
 	}
+
+	/**
+	 * Opens the gradebook window and loads the gradebook entries for a specific student.
+	 *
+	 * @param {string} name - The name of the student whose gradebook will be opened.
+	 * @returns {void}
+	*/
+	async function openGradebook(name) {
+		gradebookWin.style.display = 'flex';
+		background.style.display = 'block';
+
+		gradebookStudent = name;
+
+		const title = document.getElementById('gradebook_title');
+		title.textContent = `Gradebook of ${name}`;
+
+		await getGradebookEntries(name);
+	}
+
+	async function swtichSubject(subject) {
+		selectedSubject = subject;
+
+		gradebookMainViewContainer.innerHTML = '';
+		await getGradebookEntries(gradebookStudent);
+	}
+
+	subjectButtons.forEach(function(button) {
+		button.addEventListener('click', async () => {
+			subjectButtons.forEach(function(btn) {
+				btn.classList.remove('selected-subject');
+			});
+
+			button.classList.add('selected-subject');
+			const i18nKey = button.getAttribute('data-i18n');
+			const subject = i18nKey.split('.').pop();
+
+			console.log(subject);
+
+			await swtichSubject(subject);
+		});
+	});
 
 	closeGradebookWin.addEventListener('click', () => {
 		gradebookWin.style.display = 'none';
