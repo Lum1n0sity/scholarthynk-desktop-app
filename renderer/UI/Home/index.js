@@ -11,7 +11,7 @@ const {
 	shell
 } = require(pathIndex.join(rootPathIndex, 'utils.js'));
 const devConsoleClass = require('../console');
-const { timeStamp } = require('console');
+
 document.addEventListener('DOMContentLoaded', () => {
 	const devConsole = new devConsoleClass('console_output');
 	const store = new Store();
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	store.delete('assignment');
 
-	const forbiddenExtensions = ['.exe', '.sh', '.bat', '.cmd', '.com', '.jar'];
+	const forbiddenExtensions = ['.exe', '.sh', '.bat', '.cmd', '.com', '.jar', '.py', '.c', '.cpp', '.js', '.cs'];
 
 	ws.addEventListener('open', function (event) {
 		ws.send(JSON.stringify({type: 'login', username: store.get('username')}));
@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const role = store.get('role');
 	const lang = store.get('lang');
+
+	console.log(store.get('school'));
 
 	const studentFeatures = document.getElementById('student');
 	const teacherFeatures = document.getElementById('teacher');
@@ -245,9 +247,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	const background = document.getElementById('background');
+	const view_block = document.getElementById('view_block');
 
 	// * -------------------------------------------------------------------------
 	// * General functions / Most used requests
+
+	ipcRenderer.on('file-dialog-opened', (event) => {
+		view_block.style.display = 'block';
+	});
+
+	ipcRenderer.on('selected-file', (event) => {
+		view_block.style.display = 'none';
+	});
+
+	ipcRenderer.on('file-dialog-canceled', (event) => {
+		view_block.style.display = 'none';
+	});
+
 	/**
 	 * Returns the profile picture URL for a given username.
 	 *
@@ -550,13 +566,14 @@ document.addEventListener('DOMContentLoaded', () => {
 							const addFileHandler = () => {
 
 								ipcRenderer.send('open-file-dialog');
+								background.style.display = 'block';
 
 								const fileButton = document.createElement('button');
 								fileButton.classList.add('file-button');
 								fileButton.classList.add('ignore');
 
 								ipcRenderer.once('selected-file', (event, filePath) => {
-
+									background.style.display = 'none';
 									if (filePath != null && filePath.length != 0) {
 										const fileContent = fs.readFileSync(filePath);
 										const fileName = pathIndex.basename(filePath);
@@ -646,6 +663,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 										closeErrorInvalidFileType.addEventListener('click', () => { errorInvalidFileType.style.display = 'none'; });
 									}
+								});
+
+								ipcRenderer.on('file-dialog-canceled', (event) => {
+									background.style.display = 'none';
 								});
 							};
 
@@ -2657,9 +2678,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	load_school_data.addEventListener('click', () => {
 		ipcRenderer.send('open-file-dialog');
+		background.style.display = 'block';
 
 		ipcRenderer.on('selected-file', (event, filePath) => {
 			schoolDataFile = filePath;
+			background.style.display = 'none';
 		});
 
 		ipcRenderer.on('file-dialog-canceled', (event) => {

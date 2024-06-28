@@ -110,6 +110,8 @@ function devVerification() {
  * @returns {void}
  */
 function openFileDialog() {
+	mainWindow.webContents.send('file-dialog-opened');
+
 	const options = {
 		title: 'Select a File',
 		filters: [

@@ -1,8 +1,15 @@
-const {ipcRenderer} = require('electron');
-const Store = require('electron-store');
+const rootPathLogin = require('electron-root-path').rootPath;
+const pathLogin = require('path');
+const {
+  fs,
+  WebSocket,
+  ipcRenderer,
+  Store,
+  config,
+  shell
+} = require(pathLogin.join(rootPathLogin, 'utils.js'));
 
 document.addEventListener('DOMContentLoaded', () => {
-	const api_addr = 'http://192.168.5.196:3000';
 	const store = new Store();
 	let authToken = store.get('authToken');
 	const loggedOut = store.get('loggedOut');
@@ -59,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const dataToSendAutoLogin = ({token: authToken});
 		connection_error.style.display = 'none';
 
-		fetch(`${api_addr}/user/auth`, {
+		fetch(`${config.apiUrl}/user/auth`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -132,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			const dataToSendLogin = ({username: username, password: password});
 
-			fetch(`${api_addr}/user/login`, {
+			fetch(`${config.apiUrl}/user/login`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -188,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		const dataToSendLogin = ({username: username, password: password});
 
-		fetch(`${api_addr}/user/login`, {
+		fetch(`${config.apiUrl}/user/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

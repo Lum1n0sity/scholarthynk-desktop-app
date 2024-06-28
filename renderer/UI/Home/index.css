@@ -29,6 +29,10 @@
     margin-left: 5%;
 }
 
+#school_role {
+    font-size: 1vw;
+}
+
 .user-options {
     position: absolute;
     justify-self: end;
@@ -55,6 +59,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: 100%;
+    justify-content: center;
 }
 
 .feedback:hover {
@@ -66,6 +72,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: 100%;
+    justify-content: center;
 }
 
 .settings:hover {
@@ -882,6 +890,7 @@
     flex-direction: column;
     align-items: center;
     border-radius: 6px;
+    padding-bottom: 1%;
 }
 
 .add-assignment-win h3 {
@@ -1772,11 +1781,13 @@
     bottom: 3%;
     width: 4vw;
     height: 4vw;
+    display: grid;
+    align-items: center;
+    justify-content: center;
 }
 
 .toggle-school-chat span {
     font-size: 1.5vw;
-    transform: translateY(10%);
 }
 
 .switch-role-container {
