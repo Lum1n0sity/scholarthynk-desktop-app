@@ -248,8 +248,8 @@ input[type="checkbox"]:checked:after {
 }
 
 #login {
-    font-size: 2vw;
-    padding: 1vw;
+    font-size: 1.5vw;
+    padding: 3%;
     padding-left: 2.5vw;
     padding-right: 2.5vw;
     border-radius: 50px;
@@ -259,15 +259,17 @@ input[type="checkbox"]:checked:after {
     color: var(--text-color);
     font-weight: bold;
     position: absolute;
-    top: 70%;
-    left: 25%;
+    top: 78%;
+    left: 30%;
     cursor: pointer;
     transition: .5s;
+    display: flex;
+    align-items: center;
 }
 
 #login span {
     font-size: 2vw;
-    transform: translateY(20%);
+    transform: translate(10%, 5%);
 }
 
 #login:hover {
